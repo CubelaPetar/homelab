@@ -1,0 +1,25 @@
+---
+- name: install samba
+  apt:
+    pkg: samba
+    state: present
+  notify: start samba service
+
+- name: install samba config
+  copy:
+    src: etc/samba/smb.conf
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+  notify:
+    - restart samba service
+
+## nfs
+- name: Ensure nfs root exists
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    state: directory
+  loop:
+    - "{{ nfs_root_path }}"

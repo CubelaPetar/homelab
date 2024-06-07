@@ -1,0 +1,9 @@
+---
+- name: Shutdown k3s_cluster
+  hosts: k3s_cluster
+  gather_facts: true
+  tasks:
+    - name: Shutdown the nodes (and wait one 1 min)
+      become: true
+      community.general.shutdown:
+        delay: 60

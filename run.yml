@@ -1,0 +1,29 @@
+---
+#- hosts: kazcynski
+#  become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    - role: security
+#    #- role: snapraid
+#    #- role: geerlingguy.docker
+#    #- role: geerlingguy.nfs
+#    - role: containers-kazcynski
+#    #- role: smtp
+#    #- role: samba
+
+#- hosts: k3s_cluster
+#  become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    - role: geerlingguy.security
+#    - role: geerlingguy.ntp
+
+- hosts: landau
+  become: yes
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    - role: geerlingguy.security
+    #- role: geerlingguy.ntp # Proxmox docs uses chrony

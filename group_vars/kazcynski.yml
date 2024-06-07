@@ -1,0 +1,43 @@
+hostname: kazcynski.reliyya.xyz
+
+domain_base: kazcynski.reliyya.xyz
+
+storage_mp: /mnt/disk1
+appdata_path: /mnt/disk1/appdata
+download_path: /mnt/disk1/downloads
+nfs_root_path: /srv/nfs
+
+# geerlingguy.nfs
+nfs_exports:
+  ["{{ nfs_root_path }}    10.56.1.0/24(rw,sync,no_root_squash,fsid=0)"]
+
+package_list:
+  - bash-completion
+  - curl
+  - rsync
+  - git
+  - htop
+  - iftop
+  - iotop
+  - lm-sensors
+  - net-tools
+  - nfs-kernel-server
+  - nmap
+  - openssh-server
+  - python3
+  - smartmontools
+  - sudo
+  - vim
+  - tree
+  - wget
+  - unattended-upgrades
+  - apticron
+  - apt-listchanges
+  - libsensors5
+  - figlet
+  - wakeonlan
+  - ethtool
+  - libpam-tmpdir
+  - apt-listbugs
+  - needrestart
+    #- fail2ban

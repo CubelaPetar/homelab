@@ -1,0 +1,7 @@
+---
+roles:
+  #- name: geerlingguy.pip
+  - name: geerlingguy.docker
+  - name: geerlingguy.nfs
+  - name: geerlingguy.security
+  - name: geerlingguy.ntp

@@ -1,0 +1,49 @@
+---
+snapraid_install: true
+
+snapraid_apt_package_name: snapraid
+#snapraid_bin_path: /usr/local/bin/snapraid
+snapraid_force_install: false
+
+snapraid_data_disks:
+  - path: /mnt/disk1
+    content: true
+  #  - path: /mnt/disk2
+  #    content: true
+  #  - path: /mnt/disk3
+  #    content: true
+
+snapraid_parity_disks:
+  - path: /mnt/parity1
+    content: true
+
+snapraid_content_files:
+  - /var/snapraid.content
+  #- /mnt/ssd-disk1/snapraid.content
+
+snapraid_config_excludes:
+  - "*.unrecoverable"
+  - /lost+found/
+  - "*.!sync"
+  - /tmp/
+
+snapraid_healthcheck_io_host: https://hc-ping.com
+
+snapraid_config_hidden_files_enabled: false
+snapraid_config_hidden_files: nohidden
+snapraid_config_path: /etc/snapraid.conf
+
+snapraid_scrub_percent: 22
+snapraid_scrub_age: 8
+
+snapraid_sync_schedule:
+  minute: 0
+  hour: 13
+snapraid_sync_healthcheck_io_uuid: ""
+
+snapraid_scrub_schedule:
+  minute: 0
+  hour: 14
+  weekday: 4
+
+snapraid_scrub_healthcheck_io_uuid: ""

@@ -1,0 +1,64 @@
+# main
+username: reliyya
+groupname: "{{ username }}"
+
+hostname: pihole
+domain_base: therabbit.duckdns.org
+
+package_list:
+  - bash
+  - bash-completion
+  - neovim
+  - git
+  - htop
+  - curl
+  - ca-certificates
+  - xclip
+  - rsync
+  - net-tools
+  - wakeonlan
+
+# specific
+
+dnsmasq_config_dir: /etc/dnsmasq.d
+pihole_config_dir: /etc/pihole
+running_as_container: false
+
+default_domain: "k3s.reliyya.xyz"
+network_cidr: 10.56.0.0/23
+dhcp_range_start: 10.56.1.100
+dhcp_range_end: 10.56.1.250
+dhcp_router: 10.56.1.254
+dhcp_active: "false"
+
+dns_overrides:
+  - { ip: 10.56.0.253, custom_dns: "local.{{ default_domain }}" }
+  - { ip: 10.56.0.253, custom_dns: "opnsense.{{ default_domain }}" }
+
+dhcp_reservations:
+  # CORE INFRASTRUCTURE
+  ## FIREWALL
+  - {
+      mac: ac:1f:6b:ad:dc:ab,
+      ip: 10.56.0.254,
+      hostname: opnsense,
+      custom_dns: ["opnsense.firewall"],
+    } # SuperMicro igb1
+  - {
+      mac: ac:1f:6b:ad:dc:ab,
+      ip: WAN,
+      hostname: openwrtWAN,
+      custom_dns: ["openwrt.firewall"],
+    } # SuperMicro igb0
+
+  ## DNS and DHCP
+  #- { mac: ??:??:??:??:??:??, ip: 10.56.0.252, hostname: swag } # Pi4 2GB
+  - { mac: d8:3a:dd:38:fc:cb, ip: 10.56.0.253, hostname: pihole } # Pi4 2GB
+
+  ## kazcynski - MEDIA SERVER
+  - {
+      mac: a8:a1:59:db:64:9f,
+      ip: 10.56.1.10,
+      hostname: kazcynski,
+      custom_dns: ["kz"],
+    } # DIY BUILD

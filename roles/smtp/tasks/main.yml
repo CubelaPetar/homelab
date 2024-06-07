@@ -1,0 +1,23 @@
+---
+- name: Perform a dist-upgrade.
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: yes
+
+- name: Set mailname
+  template:
+    src: templates/mailname
+    dest: /etc/mailname
+
+- name: Install postfix
+  package:
+    name:
+      - postfix
+      - mailutils
+    state: present
+
+- name: Copy the config file
+  template:
+    src: templates/main.cf
+    dest: /etc/postfix/main.cf
+  notify: Reload postfix
