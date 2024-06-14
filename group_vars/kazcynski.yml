@@ -38,6 +38,6 @@ package_list:
   - wakeonlan
   - ethtool
   - libpam-tmpdir
-  - apt-listbugs
+  #- apt-listbugs
   - needrestart
     #- fail2ban
