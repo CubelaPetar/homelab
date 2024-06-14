@@ -33,6 +33,7 @@ security_autoupdate_mail_to: "info@petarcubela.de"
 security_autoupdate_mail_on_error: false
 security_fail2ban_enabled: true
 security_fail2ban_custom_configuration_template: "jail.local.j2"
+
 docker_dir: "/home/{{ main_username }}/docker"
 
 # geerlingguy.docker
