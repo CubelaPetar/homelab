@@ -3,20 +3,15 @@ username: reliyya
 groupname: "{{ username }}"
 
 hostname: pihole
-domain_base: therabbit.duckdns.org
+domain_base: reliyya.xyz
 
 package_list:
   - bash
-  - bash-completion
-  - neovim
-  - git
+  - vim
   - htop
   - curl
   - ca-certificates
   - xclip
-  - rsync
-  - net-tools
-  - wakeonlan
 
 # specific
 

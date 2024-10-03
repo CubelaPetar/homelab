@@ -2,22 +2,14 @@
 username: reliyya
 groupname: "{{ username }}"
 
-hostname: neo
+hostname: unifi
 domain_base: reliyya.xyz
 
 package_list:
   - bash
-  - bash-completion
-  - neovim
-  - git
-  - htop
+  - vim
   - curl
   - ca-certificates
   - xclip
-  - rsync
-  - net-tools
-  - wakeonlan
 # specific
 
-# geerlingguy.ntp
-#ntp_package: chrony
