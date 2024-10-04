@@ -5,11 +5,13 @@ main_groupname: "{{ main_username }}"
 main_uid: "1000"
 main_gid: "{{ main_uid }}"
 
-# weareinteractive.environment
-environment_config: { "PUID": "{{ main_gid }}", "PGID": "{{ main_gid }}" }
-
 # geerlingguy.ntp
 ntp_timezone: "Europe/Berlin"
+
+global_env_vars:
+  - "PUID={{ main_uid }}"
+  - "PGID={{ main_gid }}"
+  - "TZ={{ ntp_timezone }}"
 
 # geerlingguy.security
 security_ssh_port: 2222

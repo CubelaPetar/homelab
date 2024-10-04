@@ -13,13 +13,13 @@
 #    #    - role: smtp # pve has mail
 #    - role: samba
 
-- hosts: neo
-  become: yes
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    - role: geerlingguy.security
-    - role: geerlingguy.ntp # Proxmox docs uses chrony
+#- hosts: neo
+#  become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    - role: geerlingguy.security
+#    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
 #- hosts: pihole
 #  become: yes
@@ -28,12 +28,13 @@
 #  roles:
 #    - role: geerlingguy.security
 #    - role: geerlingguy.ntp # Proxmox docs uses chrony
-#
-#- hosts: unifi
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: geerlingguy.security
-#    - role: geerlingguy.ntp # Proxmox docs uses chrony
-#    - role: geerlingguy.docker
+
+- hosts: unifi
+  become: yes
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    - role: geerlingguy.security
+    - role: geerlingguy.ntp
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
