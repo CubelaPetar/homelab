@@ -1,0 +1,6 @@
+---
+- name: Check for duplicated items
+  include_tasks: duplicate_checks.yml
+
+- name: Template config files into place
+  include_tasks: template.yml
