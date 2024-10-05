@@ -24,15 +24,18 @@ network_cidr: 10.56.0.0/21
 dhcp_range_start: 10.56.5.100
 dhcp_range_end: 10.56.5.250
 dhcp_router: 10.56.5.254
-dhcp_active: "false"
+dhcp_active: false
 
 dns_overrides:
-  - { ip: 10.56.0.252, custom_dns: "opnsense.{{ default_domain }}" }
-  - { ip: 10.56.0.252, custom_dns: "local.{{ default_domain }}" }
-  - { ip: 10.56.0.252, custom_dns: "unifi.{{ default_domain }}" }
-  - { ip: 10.56.0.1, custom_dns: "k3s.{{ default_domain }}" }
-  - { ip: 10.56.0.245, custom_dns: "neo.{{ default_domain }}" }
-  - { ip: 10.56.0.252, custom_dns: ".{{ default_domain }}" }
+  # Caddy rProxy
+  - { ip: 10.56.0.254, custom_dns: "opnsense.{{ default_domain }}" }
+  - { ip: 10.56.0.254, custom_dns: "local.{{ default_domain }}" }
+  - { ip: 10.56.0.253, custom_dns: "dns.{{ default_domain }}" }
+  - { ip: 10.56.0.1, custom_dns: "neo.{{ default_domain }}" }
+  # Non Caddy
+  - { ip: 10.56.0.250, custom_dns: "unifi.{{ default_domain }}" }
+  - { ip: 10.56.0.20, custom_dns: "pain-ipmi.{{ default_domain }}" }
+  - { ip: 10.56.1.1, custom_dns: "pain.{{ default_domain }}" }
   - { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
 
 dhcp_reservations:
@@ -44,21 +47,32 @@ dhcp_reservations:
       hostname: opnsense,
       custom_dns: ["opnsense.firewall"],
     } #
-  #- {
-  #    mac: ac:1f:6b:ad:dc:ab,
-  #    ip: WAN,
-  #    hostname: openwrtWAN,
-  #    custom_dns: ["openwrt.firewall"],
-  #  } # SuperMicro igb0
+  #- { mac: ac:1f:6b:ad:dc:ab, ip: WAN, hostname: openwrtWAN, custom_dns: ["openwrt.firewall"], } # SuperMicro igb0
 
   ## DNS and DHCP
-  #- { mac: ??:??:??:??:??:??, ip: 10.56.0.252, hostname: swag } # Pi4 2GB
-  - { mac: d8:3a:dd:38:fc:cb, ip: 10.56.0.253, hostname: pihole } # Pi4 2GB
+  - { mac: ac:1f:6b:ad:dc:aa, ip: 10.56.0.1, hostname: neo } # pve node
+  - { mac: bc:24:11:6d:8f:38, ip: 10.56.0.253, hostname: pihole } # pct Container
+  - { mac: bc:24:11:55:18:58, ip: 10.56.0.252, hostname: unifi } # pct Container
+  - { mac: 40:b0:34:f2:c2:9d, ip: 10.56.0.11, hostname: worker01 }
+  - { mac: 40:b0:34:f3:ea:cb, ip: 10.56.0.12, hostname: node01 }
+  - { mac: 40:b0:34:f8:5a:57, ip: 10.56.0.13, hostname: node02 }
+  - { mac: f4:e2:c6:5c:a8:6c, ip: 10.56.0.30, hostname: usw_mini-flex }
+  - { mac: f4:e2:c6:6a:fb:e8, ip: 10.56.0.31, hostname: u6 }
+  - { mac: 24:2f:d0:9d:36:fb, ip: 10.56.0.40, hostname: main_switch }
 
-  ## kazcynski - MEDIA SERVER
+  ## pain - MEDIA SERVER
   - {
-      mac: a8:a1:59:db:64:9f,
-      ip: 10.56.1.10,
-      hostname: kazcynski,
-      custom_dns: ["kz"],
+      mac: d8:50:99:fc:2d:d0,
+      ip: 10.56.1.1,
+      hostname: pain,
+      custom_dns: ["pain"],
     } # DIY BUILD
+  - { mac: d0:50:99:f6:82:29, ip: 10.56.0.20, hostname: pain-ipmi }
+
+  ## Clients
+  - { mac: 20:7B:D2:CD:07:83, ip: 10.56.2.1, hostname: void-desktop } # L380 Yoga
+  - { mac: a0:d3:c1:2a:97:6e, ip: 10.56.2.2, hostname: nixos } # HP Tower
+  #- { mac: tba, ip: 10.56.2.3, hostname: void-notebook } #
+
+  ## IoT
+  - { mac: 38:1a:52:29:30:5b, ip: 10.56.3.10, hostname: EPSON29305B }
