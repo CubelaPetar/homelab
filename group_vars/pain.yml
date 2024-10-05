@@ -149,8 +149,8 @@ containers:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.syncthing.rule=Host(`sync.{{ domain }}`)"
-      - "traefik.http.routers.syncthing.entrypoints=https"
-      - "traefik.http.routers.syncthing.tls=true"
+      #      - "traefik.http.routers.syncthing.entrypoints=https"
+      #      - "traefik.http.routers.syncthing.tls=true"
       - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
     ports:
       #- 8384:8384
@@ -178,8 +178,8 @@ containers:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{ domain }}`)"
-      - "traefik.http.routers.jellyfin.entrypoints=https"
-      - "traefik.http.routers.jellyfin.tls=true"
+      #      - "traefik.http.routers.jellyfin.entrypoints=https"
+      #      - "traefik.http.routers.jellyfin.tls=true"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
     ports:
       - 8096:8096
@@ -203,8 +203,8 @@ containers:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.radarr.rule=Host(`radarr.{{ domain }}`)"
-      - "traefik.http.routers.radarr.entrypoints=https"
-      - "traefik.http.routers.radarr.tls=true"
+      #      - "traefik.http.routers.radarr.entrypoints=https"
+      #      - "traefik.http.routers.radarr.tls=true"
       - "traefik.http.services.radarr.loadbalancer.server.port=7878"
       #    ports:
       #      - 7878:7878
@@ -223,8 +223,8 @@ containers:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.immich_server.rule=Host(`immich.{{ domain }}`)"
-      - "traefik.http.routers.immich_server.entrypoints=https"
-      - "traefik.http.routers.immich_server.tls=true"
+      #      - "traefik.http.routers.immich_server.entrypoints=https"
+      #      - "traefik.http.routers.immich_server.tls=true"
       - "traefik.http.services.immich_server.loadbalancer.server.port=3001"
     ports:
       - 2283:3001
@@ -277,9 +277,9 @@ containers:
     container_name: immich_postgres
     image: registry.hub.docker.com/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_DB: ${DB_DATABASE_NAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_DB=${DB_DATABASE_NAME}
     volumes:
       - "{{ appdata_path }}/apps/immich_pgdata:/var/lib/postgresql/data"
     restart: unless-stopped
@@ -298,9 +298,9 @@ containers:
     volumes:
       - "{{ appdata_path }}/apps/paperless_pgdata:/var/lib/postgresql/data"
     environment:
-      POSTGRES_DB: paperless
-      POSTGRES_USER: paperless
-      POSTGRES_PASSWORD: paperless
+      - POSTGRES_DB=paperless
+      - POSTGRES_USER=paperless
+      - POSTGRES_PASSWORD=paperless
 
   - service_name: webserver
     active: true
@@ -313,8 +313,8 @@ containers:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.paperless.rule=Host(`paperless.{{ domain }}`)"
-      - "traefik.http.routers.paperless.entrypoints=https"
-      - "traefik.http.routers.paperless.tls=true"
+      #      - "traefik.http.routers.paperless.entrypoints=https"
+      #      - "traefik.http.routers.paperless.tls=true"
       - "traefik.http.services.paperless.loadbalancer.server.port=8000"
     ports:
       - "8000:8000"
@@ -327,5 +327,5 @@ containers:
       - docker-compose-paperless.env
       - .env
     environment:
-      PAPERLESS_REDIS: redis://broker:6379
-      PAPERLESS_DBHOST: db
+      - PAPERLESS_REDIS=redis://broker:6379
+      - PAPERLESS_DBHOST=db
