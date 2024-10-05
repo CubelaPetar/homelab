@@ -1,18 +1,18 @@
 ---
-#- hosts: pain
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: disks
-#    - role: snapraid
-#    - role: geerlingguy.docker
-#    - role: geerlingguy.security
-#    - role: geerlingguy.nfs
-#    - role: container
-#    #    - role: smtp # pve has mail
-#    - role: samba
-
+- hosts: pain
+  become: yes
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    - role: disks
+    - role: snapraid
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+    - role: geerlingguy.security
+    - role: samba
+    - role: geerlingguy.nfs
+    #    - role: smtp # pve has mail
+#
 #- hosts: neo
 #  become: yes
 #  vars_files:
@@ -21,20 +21,21 @@
 #    - role: geerlingguy.security
 #    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
-- hosts: pihole
-  become: yes
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #- role: geerlingguy.security
-    #- role: geerlingguy.ntp # Proxmox docs uses chrony
-    - role: dhcp-dns
+#- hosts: pihole
+#  become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #- role: geerlingguy.security
+#    #- role: geerlingguy.ntp # Proxmox docs uses chrony
+#    - role: dhcp-dns
+
 #- hosts: unifi
 #  become: yes
 #  vars_files:
 #    - "vars/vault.yml"
 #  roles:
 #    - role: geerlingguy.security
-#    - role: geerlingguy.ntp
+#    #- role: geerlingguy.ntp
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
