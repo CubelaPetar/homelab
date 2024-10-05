@@ -19,32 +19,37 @@ dnsmasq_config_dir: /etc/dnsmasq.d
 pihole_config_dir: /etc/pihole
 running_as_container: false
 
-default_domain: "k3s.reliyya.xyz"
-network_cidr: 10.56.0.0/23
-dhcp_range_start: 10.56.1.100
-dhcp_range_end: 10.56.1.250
-dhcp_router: 10.56.1.254
+default_domain: "reliyya.xyz"
+network_cidr: 10.56.0.0/21
+dhcp_range_start: 10.56.5.100
+dhcp_range_end: 10.56.5.250
+dhcp_router: 10.56.5.254
 dhcp_active: "false"
 
 dns_overrides:
-  - { ip: 10.56.0.253, custom_dns: "local.{{ default_domain }}" }
-  - { ip: 10.56.0.253, custom_dns: "opnsense.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: "opnsense.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: "local.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: "unifi.{{ default_domain }}" }
+  - { ip: 10.56.0.1, custom_dns: "k3s.{{ default_domain }}" }
+  - { ip: 10.56.0.245, custom_dns: "neo.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: ".{{ default_domain }}" }
+  - { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
 
 dhcp_reservations:
   # CORE INFRASTRUCTURE
   ## FIREWALL
   - {
-      mac: ac:1f:6b:ad:dc:ab,
+      mac: 90:1b:0e:57:49:b3,
       ip: 10.56.0.254,
       hostname: opnsense,
       custom_dns: ["opnsense.firewall"],
-    } # SuperMicro igb1
-  - {
-      mac: ac:1f:6b:ad:dc:ab,
-      ip: WAN,
-      hostname: openwrtWAN,
-      custom_dns: ["openwrt.firewall"],
-    } # SuperMicro igb0
+    } #
+  #- {
+  #    mac: ac:1f:6b:ad:dc:ab,
+  #    ip: WAN,
+  #    hostname: openwrtWAN,
+  #    custom_dns: ["openwrt.firewall"],
+  #  } # SuperMicro igb0
 
   ## DNS and DHCP
   #- { mac: ??:??:??:??:??:??, ip: 10.56.0.252, hostname: swag } # Pi4 2GB
