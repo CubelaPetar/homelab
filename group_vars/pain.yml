@@ -43,7 +43,7 @@ snapraid_config_excludes:
   - /tmp/
 
 # geerlingguy.nfs
-nfs_root_path: /mnt/ssd/nfs
+nfs_root_path: /mnt/ssd/pve-neo
 nfs_exports:
   ["{{ nfs_root_path }}    10.56.0.1/32(rw,sync,no_root_squash,fsid=0)"]
 
