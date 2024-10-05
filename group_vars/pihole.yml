@@ -1,9 +1,8 @@
 # main
-username: reliyya
-groupname: "{{ username }}"
-
-hostname: pihole
-domain_base: reliyya.xyz
+#username: reliyya
+#groupname: "{{ username }}"
+#
+#hostname: pihole
 
 package_list:
   - bash

@@ -22,12 +22,12 @@
 #    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
 - hosts: pihole
-  #become: yes
+  become: yes
   vars_files:
     - "vars/vault.yml"
   roles:
-    - role: geerlingguy.security
-    - role: geerlingguy.ntp # Proxmox docs uses chrony
+    #- role: geerlingguy.security
+    #- role: geerlingguy.ntp # Proxmox docs uses chrony
     - role: dhcp-dns
 #- hosts: unifi
 #  become: yes
