@@ -1,0 +1,85 @@
+(cloudflare) {
+  tls {
+    dns cloudflare {{ opnsense_caddy_cloudflare_api_token }}
+    resolvers 10.56.0.253
+  }
+}
+
+(headers) {
+  header {
+    Permissions-Policy interest-cohort=()
+    Strict-Transport-Security "max-age=31536000; includeSubdomains"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Robots-Tag noindex, nofollow
+    Referrer-Policy "same-origin"
+    -Server
+  }
+}
+
+## core
+
+#neo
+neo.{{ domain_me }} {
+  reverse_proxy https://10.56.0.1:8006 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+  import cloudflare
+}
+
+# pihole
+dns.{{ domain_me }} {
+  redir / /admin
+  reverse_proxy http://10.56.0.253
+  import cloudflare
+}
+
+# # dhcp
+# dhcp.{{ domain_me }} {
+#   redir / /dhcp.leases
+#   reverse_proxy http://10.56.0.253:81
+#   import cloudflare
+# }
+
+# opnsense
+opnsense.{{ domain_me }} {
+  reverse_proxy https://10.56.0.254:8443 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+  import cloudflare
+}
+
+# pain ipmi
+ipmi.{{ domain_me }} {
+  reverse_proxy https://10.56.0.20 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+  import cloudflare
+}
+
+## pikvm
+#kvm.{{ domain_me }} {
+#  reverse_proxy https://10.56.0.100:443 {
+#    transport http {
+#      tls_insecure_skip_verify
+#    }
+#  }
+#  import cloudflare
+#}
+
+## unifi local
+#unifi.{{ domain_me }} {
+#  reverse_proxy https://10.56.0.250:8443 {
+#    transport http {
+#      tls_insecure_skip_verify
+#    }
+#  }
+#  import cloudflare
+#}
+

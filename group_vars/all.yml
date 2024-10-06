@@ -41,3 +41,6 @@ docker_dir: "/home/{{ main_username }}/docker"
 # geerlingguy.docker
 docker_users:
   - "{{ main_username }}"
+
+# ironicbadger.docker_compose_generator
+domain_me: "reliyya.xyz"

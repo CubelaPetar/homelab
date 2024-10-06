@@ -28,11 +28,12 @@ dhcp_active: false
 
 dns_overrides:
   # try to use sparingly and must be FQDN
-  - { ip: 10.56.0.254, custom_dns: "opnsense.{{ default_domain }}" }
-  - { ip: 10.56.0.254, custom_dns: "local.{{ default_domain }}" }
-  - { ip: 10.56.0.253, custom_dns: "dns.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: "opnsense.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: "dns.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: "neo.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: "kvm.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: "ipmi.{{ default_domain }}" }
   - { ip: 10.56.0.1, custom_dns: "pve.{{ default_domain }}" }
-  - { ip: 10.56.1.1, custom_dns: "ipmi.{{ default_domain }}" }
   - { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
 
 dhcp_reservations:
@@ -49,7 +50,7 @@ dhcp_reservations:
   ## Network management
   - { mac: ac:1f:6b:ad:dc:aa, ip: 10.56.0.1, hostname: neo } # pve node
   - { mac: bc:24:11:6d:8f:38, ip: 10.56.0.253, hostname: pihole } # pct Container
-  # - { mac: bc:24:11:55:18:58, ip: 10.56.0.252, hostname: caddy } # pct Container
+  - { mac: bc:24:11:09:64:c8, ip: 10.56.0.252, hostname: caddy } # pct Container
   # - { mac: bc:24:11:55:18:58, ip: 10.56.0.251, hostname: nginx } # pct Container
   - { mac: bc:24:11:55:18:58, ip: 10.56.0.250, hostname: unifi } # pct Container
   # - { mac: bc:24:11:55:18:58, ip: 10.56.0.249, hostname: pxe-netboot } # pct Container
