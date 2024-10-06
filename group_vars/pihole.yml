@@ -33,7 +33,6 @@ dns_overrides:
   - { ip: 10.56.0.252, custom_dns: "neo.{{ default_domain }}" }
   - { ip: 10.56.0.252, custom_dns: "kvm.{{ default_domain }}" }
   - { ip: 10.56.0.252, custom_dns: "ipmi.{{ default_domain }}" }
-  - { ip: 10.56.0.1, custom_dns: "pve.{{ default_domain }}" }
   - { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
 
 dhcp_reservations:
@@ -48,7 +47,7 @@ dhcp_reservations:
   #- { mac: ac:1f:6b:ad:dc:ab, ip: WAN, hostname: opnsense, custom_dns: ["opnsense.firewall"], } # SuperMicro igb0
 
   ## Network management
-  - { mac: ac:1f:6b:ad:dc:aa, ip: 10.56.0.1, hostname: neo } # pve node
+  - { mac: ac:1f:6b:ad:dc:aa, ip: 10.56.0.1, hostname: neo, custom_dns: [pve] } # pve node
   - { mac: bc:24:11:6d:8f:38, ip: 10.56.0.253, hostname: pihole } # pct Container
   - { mac: bc:24:11:09:64:c8, ip: 10.56.0.252, hostname: caddy } # pct Container
   # - { mac: bc:24:11:55:18:58, ip: 10.56.0.251, hostname: nginx } # pct Container
