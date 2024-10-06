@@ -1,7 +1,7 @@
 (cloudflare) {
   tls {
     dns cloudflare {{ opnsense_caddy_cloudflare_api_token }}
-    resolvers 10.56.0.253
+    resolvers 1.1.1.1
   }
 }
 
@@ -13,7 +13,9 @@
     X-Content-Type-Options "nosniff"
     X-Robots-Tag noindex, nofollow
     Referrer-Policy "same-origin"
+    Content-Security-Policy "frame-ancestors {{ domain_me }} *.{{ domain_me }}"
     -Server
+    Permissions-Policy "geolocation=(self {{ domain_me }} *.{{ domain_me }}), microphone=()"
   }
 }
 
