@@ -67,12 +67,7 @@ dhcp_reservations:
   - { mac: 24:2f:d0:9d:36:fb, ip: 10.56.0.40, hostname: main_switch }
 
   ## pain - MEDIA SERVER
-  - {
-      mac: d8:50:99:fc:2d:d0,
-      ip: 10.56.1.1,
-      hostname: pain,
-      custom_dns: ["pain"],
-    } # DIY BUILD
+  - { mac: d8:50:99:fc:2d:d0, ip: 10.56.1.1, hostname: pain } # DIY BUILD
   - { mac: d0:50:99:f6:82:29, ip: 10.56.0.20, hostname: pain-ipmi }
 
   ## Clients
