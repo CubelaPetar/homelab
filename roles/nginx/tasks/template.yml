@@ -1,0 +1,39 @@
+---
+- name: ensure target dirs exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+  loop:
+    - "{{ nginx_config_dir }}"
+
+- name: ensure target dirs exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ main_username }}"
+    group: root
+  loop:
+    - "{{ nginx_root_path }}/{{ nginx_root }}"
+
+- name: change hostname to domain_name
+  template:
+    src: ../templates/hostname.j2
+    dest: "/etc/hostname"
+    owner: root
+    group: root
+
+- name: write homepage nginx config file
+  template:
+    src: ../templates/nginx-config.j2
+    dest: "{{ nginx_config_dir }}/{{ domain_name }}"
+    owner: root
+    group: root
+
+- name: write simple homepage index.html file
+  template:
+    src: ../templates/index.html.j2
+    dest: "{{ nginx_root_path }}/{{ nginx_root }}/index.html"
+    owner: "{{ main_username }}"
+    group: root

@@ -1,0 +1,3 @@
+domain_name: nginx.{{ domain_base }}
+nginx_root: hugo # /var/www/"{{ nginx_root }}" is the folder where the website files reside
+

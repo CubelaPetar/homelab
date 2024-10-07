@@ -43,4 +43,4 @@ docker_users:
   - "{{ main_username }}"
 
 # ironicbadger.docker_compose_generator
-domain_me: "reliyya.xyz"
+domain_base: "reliyya.xyz"

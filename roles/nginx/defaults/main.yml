@@ -1,0 +1,11 @@
+# Need to be in var file
+#domain_name: kazcynski.duckdns.org
+#nginx_root: kazcynski # /var/www/"{{ nginx_root }}" is the folder where the website files reside
+
+packages:
+  - nginx
+
+nginx_root_path: /var/www
+
+nginx_config_dir: /etc/nginx/sites-available
+nginx_sites_enabled: /etc/nginx/sites-enabled

@@ -1,0 +1,9 @@
+---
+- name: link nginx config to sites-enabled dir
+  ansible.builtin.file:
+    src: "{{ nginx_config_dir }}/{{ domain_name }}"
+    dest: "{{ nginx_sites_enabled }}/{{ domain_name }}"
+    owner: root
+    group: root
+    state: link
+  notify: Restart nginx

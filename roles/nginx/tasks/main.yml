@@ -1,0 +1,9 @@
+---
+- name: Install and enable nginx
+  include_tasks: nginx.yml
+
+- name: Template config files into place
+  include_tasks: template.yml
+
+- name: Enable site by linking to the dir "{{ nginx_sites_enabled }}"
+  include_tasks: link.yml

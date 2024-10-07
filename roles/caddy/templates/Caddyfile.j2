@@ -13,16 +13,16 @@
     X-Content-Type-Options "nosniff"
     X-Robots-Tag noindex, nofollow
     Referrer-Policy "same-origin"
-    Content-Security-Policy "frame-ancestors {{ domain_me }} *.{{ domain_me }}"
+    Content-Security-Policy "frame-ancestors {{ domain_base }} *.{{ domain_base }}"
     -Server
-    Permissions-Policy "geolocation=(self {{ domain_me }} *.{{ domain_me }}), microphone=()"
+    Permissions-Policy "geolocation=(self {{ domain_base }} *.{{ domain_base }}), microphone=()"
   }
 }
 
 ## core
 
 #neo
-neo.{{ domain_me }} {
+neo.{{ domain_base }} {
   reverse_proxy https://10.56.0.1:8006 {
     transport http {
       tls_insecure_skip_verify
@@ -32,21 +32,21 @@ neo.{{ domain_me }} {
 }
 
 # pihole
-dns.{{ domain_me }} {
+dns.{{ domain_base }} {
   redir / /admin
   reverse_proxy http://10.56.0.253
   import cloudflare
 }
 
 # # dhcp
-# dhcp.{{ domain_me }} {
+# dhcp.{{ domain_base }} {
 #   redir / /dhcp.leases
 #   reverse_proxy http://10.56.0.253:81
 #   import cloudflare
 # }
 
 # opnsense
-opnsense.{{ domain_me }} {
+opnsense.{{ domain_base }} {
   reverse_proxy https://10.56.0.254:8443 {
     transport http {
       tls_insecure_skip_verify
@@ -56,7 +56,7 @@ opnsense.{{ domain_me }} {
 }
 
 # pain ipmi
-ipmi.{{ domain_me }} {
+ipmi.{{ domain_base }} {
   reverse_proxy https://10.56.0.20 {
     transport http {
       tls_insecure_skip_verify
@@ -66,7 +66,7 @@ ipmi.{{ domain_me }} {
 }
 
 ## pikvm
-#kvm.{{ domain_me }} {
+#kvm.{{ domain_base }} {
 #  reverse_proxy https://10.56.0.100:443 {
 #    transport http {
 #      tls_insecure_skip_verify
@@ -76,7 +76,7 @@ ipmi.{{ domain_me }} {
 #}
 
 ## unifi local
-#unifi.{{ domain_me }} {
+#unifi.{{ domain_base }} {
 #  reverse_proxy https://10.56.0.250:8443 {
 #    transport http {
 #      tls_insecure_skip_verify
