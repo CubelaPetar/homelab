@@ -53,8 +53,9 @@ dhcp_reservations:
   - { mac: bc:24:11:fe:51:53, ip: 10.56.0.251, hostname: nginx } # pct Container
   - { mac: bc:24:11:55:18:58, ip: 10.56.0.250, hostname: unifi } # pct Container
   # - { mac: BC:24:11:29:13:A1, ip: 10.56.0.249, hostname: pxe-netboot } # pct Container
-  # - { mac: bc:24:11:55:18:58, ip: 10.56.0.248, hostname: kuma } # pct Container
-  # - { mac: bc:24:11:55:18:58, ip: 10.56.0.247, hostname: netbox } # pct Container
+  - { mac: BC:24:11:55:8B:FF, ip: 10.56.0.248, hostname: tailscale } # pct Container
+  # - { mac: bc:24:11:55:18:58, ip: 10.56.0.247, hostname: kuma } # pct Container
+  # - { mac: bc:24:11:55:18:58, ip: 10.56.0.246, hostname: lldap } # pct Container
   #
   ## Kubernetes Cluster
   - { mac: 40:b0:34:f2:c2:9d, ip: 10.56.0.11, hostname: worker01 }
