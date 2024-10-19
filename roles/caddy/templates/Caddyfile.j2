@@ -75,13 +75,10 @@ ipmi.{{ domain_base }} {
 #  import cloudflare
 #}
 
-## unifi local
-#unifi.{{ domain_base }} {
-#  reverse_proxy https://10.56.0.250:8443 {
-#    transport http {
-#      tls_insecure_skip_verify
-#    }
-#  }
-#  import cloudflare
-#}
+# uptime-kuma
+kuma.{{ domain_base }} {
+  reverse_proxy http://10.56.0.247:3001
+  import cloudflare
+}
+
 
