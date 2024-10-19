@@ -26,19 +26,16 @@
   vars_files:
     - "vars/vault.yml"
   roles:
-    #- role: geerlingguy.security
-    #- role: geerlingguy.ntp # Proxmox docs uses chrony
     - role: dhcp-dns
+
 #- hosts: unifi
 #  become: yes
 #  vars_files:
 #    - "vars/vault.yml"
 #  roles:
 #    - role: geerlingguy.security
-#    #- role: geerlingguy.ntp
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
-#
 
 #- hosts: caddy
 #  vars_files:
@@ -46,3 +43,10 @@
 #  roles:
 #    #    - role: geerlingguy.ntp # local ntp server. delete all other
 #    - role: caddy
+
+- hosts: kuma
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator

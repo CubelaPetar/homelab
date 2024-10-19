@@ -1,0 +1,11 @@
+---
+docker_compose_generator_output_path: "/root"
+containers:
+  - service_name: uptime-kuma
+    active: true
+    image: louislam/uptime-kuma:1
+    volumes:
+      - ./data:/app/data
+    ports:
+      - 3001:3001
+    restart: unless-stopped
