@@ -283,14 +283,14 @@ containers:
       - "{{ appdata_path }}/apps/immich_pgdata:/var/lib/postgresql/data"
     restart: unless-stopped
 
-  - service_name: broker
+  - service_name: paperless_redis
     active: true
     image: docker.io/library/redis:7
     restart: unless-stopped
     volumes:
       - "{{ appdata_path }}/apps/paperless_redis:/data"
 
-  - service_name: db
+  - service_name: paperless_db
     active: true
     image: docker.io/library/postgres:16
     restart: unless-stopped
@@ -301,14 +301,17 @@ containers:
       - POSTGRES_USER=paperless
       - POSTGRES_PASSWORD=paperless
 
-  - service_name: webserver
+  - service_name: paperless_web
     active: true
     container_name: paperless
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     restart: unless-stopped
     depends_on:
-      - db
-      - broker
+      - paperless_db
+      - paperless_redis
+      - gotenberg
+      - tika
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.paperless.rule=Host(`paperless.{{ domain }}`)"
@@ -326,5 +329,25 @@ containers:
       - docker-compose-paperless.env
       - .env
     environment:
-      - PAPERLESS_REDIS=redis://broker:6379
-      - PAPERLESS_DBHOST=db
+      - PAPERLESS_REDIS=redis://paperless_redis:6379
+      - PAPERLESS_DBHOST=paperless_db
+      - PAPERLESS_TIKA_ENABLED=1
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
+      - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
+
+  - service_name: gotenberg
+    active: true
+    image: docker.io/gotenberg/gotenberg:8.7
+    restart: unless-stopped
+
+    # The gotenberg chromium route is used to convert .eml files. We do not
+    # want to allow external content like tracking pixels or even javascript.
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+
+  - service_name: tika
+    active: true
+    image: docker.io/apache/tika:latest
+    restart: unless-stopped
