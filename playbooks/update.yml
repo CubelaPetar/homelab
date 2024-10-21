@@ -10,10 +10,10 @@
         upgrade: dist
         update_cache: yes
 
-    - name: Install essential packages
-      package:
-        name: "{{ package_list }}"
-        state: present
+    #- name: Install essential packages
+    #  package:
+    #    name: "{{ package_list }}"
+    #    state: present
 
     - name: Check if a reboot is required.
       ansible.builtin.stat:
