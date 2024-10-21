@@ -10,5 +10,8 @@ containers:
       - 3000:3000
       - 69:69/udp
       - 3001:80
+    volumes:
+      - ./config:/config
+      - ./assets:/assets #optional
     include_global_env_vars: true
     restart: unless-stopped
