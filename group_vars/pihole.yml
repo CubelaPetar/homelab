@@ -20,10 +20,10 @@ pihole_config_dir: /etc/pihole
 running_as_container: false
 
 default_domain: "reliyya.xyz"
-network_cidr: 10.56.0.0/21
-dhcp_range_start: 10.56.5.100
-dhcp_range_end: 10.56.5.250
-dhcp_router: 10.56.5.254
+network_cidr: 10.56.0.0/24
+dhcp_range_start: 10.56.0.100
+dhcp_range_end: 10.56.0.150
+dhcp_router: 10.56.0.254
 dhcp_active: false
 pxe_server_ip: 10.56.0.249 # lxc on neo
 
