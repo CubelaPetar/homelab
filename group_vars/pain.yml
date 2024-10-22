@@ -114,6 +114,7 @@ containers:
       - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
     restart: unless-stopped
 
+  ## Monitoring
   - service_name: librespeed
     active: true
     image: lscr.io/linuxserver/librespeed:latest
@@ -351,3 +352,53 @@ containers:
     active: true
     image: docker.io/apache/tika:latest
     restart: unless-stopped
+
+  - service_name: gitea
+    active: true
+    image: gitea/gitea
+    depends_on:
+      - mysql
+    environment:
+      - "USER={{ main_username }}"
+      - "USER_UID={{ main_uid }}"
+      - "USER_GID={{ main_gid }}"
+      - "ROOT_URL=https://git.{{ domain }}"
+      - "SSH_DOMAIN=git.{{ domain }}"
+      - "APP_NAME=git.{{ domain }}"
+      - "SSH_PORT=22"
+      - "DISABLE_REGISTRATION=true"
+      - "REQUIRE_SIGNIN_VIEW=true"
+      - TZ=Eurpo/Berlin
+    volumes:
+      - "{{ appdata_path }}/apps/gitea:/data"
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.git.rule=Host(`git.{{ domain }}`)"
+      - traefik.http.services.git.loadbalancer.server.port=3000
+    ports:
+      - '"22:22"'
+    restart: unless-stopped
+  - service_name: mysql
+    active: true
+    image: mariadb
+    environment:
+      - "MYSQL_ROOT_PASSWORD={{ container_mysql_root_password }}"
+      - "MYSQL_PASSWORD={{ container_mysql_password }}"
+      - MYSQL_DATABASE=gitea
+      - MYSQL_USER=gitea
+    volumes:
+      - "{{ appdata_path }}/databases/mysql:/var/lib/mysql"
+    restart: unless-stopped
+  #  - service_name: gitea-runner
+  #    active: true
+  #    image: gitea/act_runner:nightly
+  #    depends_on:
+  #      - gitea
+  #    environment:
+  #      - "GITEA_INSTANCE_URL=https://git.{{ domain_base }}"
+  #      - "GITEA_RUNNER_REGISTRATION_TOKEN={{ gitea_runner_act_token }}"
+  #      - GITEA_RUNNER_NAME=morpheus-docker
+  #    volumes:
+  #      - /var/run/docker.sock:/var/run/docker.sock:ro
+  #    restart: unless-stopped
+  ###
