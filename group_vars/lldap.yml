@@ -1,6 +1,38 @@
 ---
 docker_compose_generator_output_path: "/root"
 containers:
+  ###
+  - service_name: traefik
+    active: true
+    image: traefik
+    container_name: tr
+    ports:
+      - 80:80
+      - 443:443
+    command:
+      - --log.level=info
+      - --accesslog=false
+      - --api.insecure=false
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.cloudflare.acme.dnschallenge=true
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      - "--certificatesresolvers.cloudflare.acme.email={{ cloudflare_account_email }}"
+      - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
+      - --serversTransport.insecureSkipVerify=true
+    volumes:
+      - "/opt/appdata/traefik/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+      #- "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
+      #- "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
+      - "CLOUDFLARE_DNS_API_TOKEN={{ lldap_cloudflare_api_token }}"
+    restart: unless-stopped
+  ###
   - service_name: lldap
     active: true
     image: lldap/lldap:stable
@@ -13,6 +45,14 @@ containers:
       - "17170:17170"
     volumes:
       - "./lldap_data:/data"
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.lldap.rule=Host(`lldap.{{ domain_base }}`)"
+      - traefik.http.routers.lldap.entrypoints=https
+      - traefik.http.routers.lldap.tls=true
+      - traefik.http.routers.lldap.tls.certresolver=cloudflare
+      - traefik.http.services.lldap.loadbalancer.server.scheme=http
+      - traefik.http.services.lldap.loadbalancer.server.port=17170
     environment:
       - UID=0
       - GID=0
