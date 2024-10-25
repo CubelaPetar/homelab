@@ -25,7 +25,7 @@ dhcp_range_start: 10.56.0.100
 dhcp_range_end: 10.56.0.150
 dhcp_router: 10.56.0.254
 dhcp_active: false
-pxe_server_ip: 10.56.0.249 # lxc on neo
+#pxe_server_ip: 10.56.0.249 # lxc on neo
 
 dns_overrides:
   # try to use sparingly and must be FQDN
