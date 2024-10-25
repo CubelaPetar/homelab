@@ -85,7 +85,7 @@ docker_compose_generator_output_path: /home/{{ main_username }}/docker/
 containers:
   - service_name: traefik
     active: true
-    image: traefik
+    image: traefik:3
     container_name: tr
     ports:
       - 80:80
