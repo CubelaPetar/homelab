@@ -363,7 +363,7 @@ containers:
       - "USER={{ main_username }}"
       - "USER_UID={{ main_uid }}"
       - "USER_GID={{ main_gid }}"
-      - "ROOT_URL=https://git.{{ domain_base }}"
+      - "ROOT_URL=http://git.{{ domain_base }}"
       - "SSH_DOMAIN=git.{{ domain_base }}"
       - "APP_NAME=git.{{ domain_base }}"
       - "SSH_PORT=22"

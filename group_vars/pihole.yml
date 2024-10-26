@@ -32,6 +32,7 @@ dns_overrides:
   - { ip: 10.56.0.252, custom_dns: "opnsense.{{ default_domain }}" }
   - { ip: 10.56.0.252, custom_dns: "dns.{{ default_domain }}" }
   - { ip: 10.56.0.252, custom_dns: "kuma.{{ default_domain }}" }
+  - { ip: 10.56.0.252, custom_dns: "ad.{{ default_domain }}" }
   - { ip: 10.56.0.252, custom_dns: "neo.{{ default_domain }}" }
   - { ip: 10.56.0.252, custom_dns: "kvm.{{ default_domain }}" }
   - { ip: 10.56.0.252, custom_dns: "ipmi.{{ default_domain }}" }
