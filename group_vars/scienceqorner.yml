@@ -187,3 +187,36 @@ containers:
   #      #      - traefik.http.routers.lldap.tls.certresolver=cloudflare
   #      #      - traefik.http.services.lldap.loadbalancer.server.scheme=http
   #      - traefik.http.services.lldap.loadbalancer.server.port=17170
+
+  # --------------- blog ---------------------- #
+  ###
+  #  - service_name: science-blog
+  #    active: true
+  #    image: ghost:5
+  #    labels:
+  #      - traefik.enable=true
+  #      - "traefik.http.routers.purrfectprose.rule=Host(`{{ domain_base }}`)"
+  #      - traefik.http.routers.purrfectprose.entrypoints=websecure
+  #      - traefik.http.routers.purrfectprose.tls.certresolver=cloudflare
+  #    environment:
+  #      - NODE_ENV=production
+  #      - "url=https://{{ domain_base }}"
+  #      - database__client=mysql
+  #      - database__connection__host=science-blog-db
+  #      - "database__connection__user={{ science_blog_db_user }}"
+  #      - "database__connection__password={{ science_blog_db_pass }}"
+  #      - database__connection__database=ghost
+  #    volumes:
+  #      - "{{ appdata_path }}/science_blog/content:/var/lib/ghost/content"
+  #    depends_on:
+  #      - science-blog-db
+  #    restart: unless-stopped
+  #  - service_name: science-blog-db
+  #    active: true
+  #    image: mysql:8.0
+  #    volumes:
+  #      - "{{ appdata_path }}/science_blog/db:/var/lib/mysql"
+  #    environment:
+  #      - "MYSQL_ROOT_PASSWORD={{ science_blog_db_pass }}"
+  #    restart: unless-stopped
+  #  ###
