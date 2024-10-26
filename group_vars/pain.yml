@@ -85,13 +85,13 @@ docker_compose_generator_output_path: /home/{{ main_username }}/docker/
 containers:
   - service_name: traefik
     active: true
-    image: traefik:3
+    image: traefik
     container_name: tr
     ports:
       - 80:80
       - 443:443
     command:
-      - --log.level=info
+      - --log.level=debug
       - --accesslog=false
       - --api.insecure=false
       - --providers.docker=true
@@ -104,6 +104,7 @@ containers:
       - --certificatesresolvers.cloudflare.acme.dnschallenge=true
       - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
       - "--certificatesresolvers.cloudflare.acme.email={{ cloudflare_account_email }}"
+      #- "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
       - --serversTransport.insecureSkipVerify=true
     volumes:

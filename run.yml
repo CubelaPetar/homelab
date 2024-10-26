@@ -12,7 +12,6 @@
     #- role: samba
     #- role: geerlingguy.nfs
     #- role: smtp # pve has mail
-
 #- hosts: neo
 #  become: yes
 #  vars_files:
@@ -21,12 +20,12 @@
 #    - role: geerlingguy.security
 #    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
-- hosts: pihole
-  become: yes
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    - role: dhcp-dns
+#- hosts: pihole
+#  become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    - role: dhcp-dns
 #- hosts: unifi
 #  become: yes
 #  vars_files:
@@ -36,12 +35,12 @@
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 
-- hosts: caddy
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #    - role: geerlingguy.ntp # local ntp server. delete all other
-    - role: caddy
+#- hosts: caddy
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #    - role: geerlingguy.ntp # local ntp server. delete all other
+#    - role: caddy
 #- hosts: kuma
 #  vars_files:
 #    - "vars/vault.yml"
@@ -49,12 +48,12 @@
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 
-- hosts: lldap
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #- role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
+#- hosts: lldap
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #- role: geerlingguy.docker
+#    - role: ironicbadger.docker_compose_generator
 #- hosts: netboot
 #  vars_files:
 #    - "vars/vault.yml"
