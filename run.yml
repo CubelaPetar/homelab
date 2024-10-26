@@ -1,17 +1,18 @@
 ---
-- hosts: pain
-  become: yes
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #- role: disks
-    #- role: snapraid
-    #- role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
-    #- role: geerlingguy.security
-    #- role: samba
-    #- role: geerlingguy.nfs
-    #- role: smtp # pve has mail
+#- hosts: pain
+#  become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #- role: disks
+#    #- role: snapraid
+#    #- role: geerlingguy.docker
+#    - role: ironicbadger.docker_compose_generator
+#    #- role: geerlingguy.security
+#    #- role: samba
+#    #- role: geerlingguy.nfs
+#    #- role: smtp # pve has mail
+# ------------- NEO --------------#
 #- hosts: neo
 #  become: yes
 #  vars_files:
@@ -20,6 +21,7 @@
 #    - role: geerlingguy.security
 #    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
+# ------------- NEOs KIDs --------------#
 #- hosts: pihole
 #  become: yes
 #  vars_files:
@@ -60,3 +62,12 @@
 #  roles:
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
+#
+# ------------- VPS --------------#
+- hosts: scienceqorner
+  #become: yes
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    #- role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
