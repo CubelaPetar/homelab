@@ -1,5 +1,5 @@
 main_username: petar
-hostname: scienceqorner.com
+ostname: scienceqorner.com
 domain_base: scienceqorner.com
 base_dn: "dc=scienceqorner,dc=com"
 
@@ -57,9 +57,9 @@ containers:
     active: true
     image: lldap/lldap:stable
     container_name: lldap
-    ports:
-      # For LDAP, not recommended to expose, see Usage section.
-      - "3890:3890"
+    #ports:
+    # For LDAP, not recommended to expose, see Usage section.
+    #- "3890:3890"
     # For LDAPS (LDAP Over SSL), enable port if LLDAP_LDAPS_OPTIONS__ENABLED set true, look env below
     #- "6360:6360"
     # For the web front-end
@@ -111,7 +111,8 @@ containers:
       - "{{ appdata_path }}/dms/mail-logs/:/var/log/mail/"
       - "{{ appdata_path }}/dms/config/:/tmp/docker-mailserver/"
       - /etc/localtime:/etc/localtime:ro
-      - /home/petar/docker-old/swag/config/etc/letsencrypt/:/etc/letsencrypt:ro
+      - "{{ appdata_path }}/dms/letsencrypt_legacy/:/etc/letsencrypt:ro"
+      #- /home/petar/docker-old/swag/config/etc/letsencrypt/:/etc/letsencrypt:ro
     restart: always
     #    depends_on:
     #      - lldap
@@ -123,9 +124,9 @@ containers:
     environment:
       - LOG_LEVEL=debug
       - SUPERVISOR_LOGLEVEL=debug
-      - ENABLE_SPAMASSASSIN=0
-      - SPAMASSASSIN_SPAM_TO_INBOX=0
-      - ENABLE_CLAMAV=0
+      - ENABLE_SPAMASSASSIN=1
+      - SPAMASSASSIN_SPAM_TO_INBOX=1
+      - ENABLE_CLAMAV=1
       - ENABLE_RSPAMD=1
       - RSPAMD_LEARN=1
       - ENABLE_FAIL2BAN=1
@@ -137,12 +138,12 @@ containers:
       - ENABLE_POSTGREY=0
       #      # >>> Postfix LDAP Integration
       #      - ACCOUNT_PROVISIONER=LDAP
-      #      - LDAP_SERVER_HOST=ldap://lldap:3890
+      #      - LDAP_SERVER_HOST=lldap
       #      - LDAP_SEARCH_BASE=ou=people,{{ base_dn }}
       #      - LDAP_BIND_DN=uid=admin,ou=people,{{ base_dn }}
       #      - "LDAP_BIND_PW={{ LLDAP_DMS_PASSWD }}"
       #      - LDAP_QUERY_FILTER_USER=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
-      #      - LDAP_QUERY_FILTER_GROUP=(&(objectClass=mail_user)(uid=%s))
+      #      - LDAP_QUERY_FILTER_GROUP=(&(objectClass=mail_groups)(uid=%s))
       #      - LDAP_QUERY_FILTER_ALIAS=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
       #      - LDAP_QUERY_FILTER_DOMAIN=(mail=*@%s)
       #      - LDAP_QUERY_FILTER_SENDERS=(|(mail=%s)(mail=admin@*))
@@ -159,7 +160,6 @@ containers:
     cap_add:
       - SYS_PTRACE
       - NET_ADMIN # For Fail2Ban to work
-
 
   # --------------- web mail ---------------------- #
   #  - service_name: roundcubemail
@@ -190,33 +190,106 @@ containers:
 
   # --------------- blog ---------------------- #
   ###
-  #  - service_name: science-blog
+  - service_name: science-blog
+    active: true
+    image: ghost:5-alpine
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.purrfectprose.rule=Host(`{{ domain_base }}`)"
+      - traefik.http.routers.purrfectprose.entrypoints=websecure
+      - traefik.http.routers.purrfectprose.tls.certresolver=cloudflare
+    environment:
+      - NODE_ENV=development
+      - "url=https://{{ domain_base }}"
+      #NODE_ENV: development
+      - mail__from="'ScienceQorner' support@{{ domain_base }}"
+      - mail__transport="SMTP"
+      - mail__options__host="mail.{{ domain_base }}"
+      - mail__options__port=465
+      - mail__options__secure=true
+      - "mail__options__auth__user=support@{{ domain_base }}"
+      - "mail__options__auth__pass={{ password }}"
+      - database__client=mysql
+      - database__connection__host=science-blog-db
+      - "database__connection__user={{ science_blog_db_user }}"
+      - "database__connection__password={{ science_blog_db_pass }}"
+      - database__connection__database=science-blog
+
+    volumes:
+      - "{{ appdata_path }}/science_blog/content:/var/lib/ghost/content"
+    depends_on:
+      - science-blog-db
+    restart: unless-stopped
+  - service_name: science-blog-db
+    active: true
+    image: mysql:8.0
+    volumes:
+      - "{{ appdata_path }}/science_blog/db:/var/lib/mysql"
+    environment:
+      - "MYSQL_ROOT_PASSWORD={{ science_blog_db_pass }}"
+    restart: unless-stopped
+  ###
+  ### Data Services
+  ###
+  #  - service_name: nextcloud
   #    active: true
-  #    image: ghost:5
+  #    image: nextcloud:30
+  #    environment:
+  #      - "NEXTCLOUD_TRUSTED_DOMAINS=nc.{{ domain_base }}"
+  #      - REDIS_HOST=nextcloud-redis
+  #    depends_on:
+  #      - nextcloud-db
+  #      - nextcloud-redis
   #    labels:
   #      - traefik.enable=true
-  #      - "traefik.http.routers.purrfectprose.rule=Host(`{{ domain_base }}`)"
-  #      - traefik.http.routers.purrfectprose.entrypoints=websecure
-  #      - traefik.http.routers.purrfectprose.tls.certresolver=cloudflare
-  #    environment:
-  #      - NODE_ENV=production
-  #      - "url=https://{{ domain_base }}"
-  #      - database__client=mysql
-  #      - database__connection__host=science-blog-db
-  #      - "database__connection__user={{ science_blog_db_user }}"
-  #      - "database__connection__password={{ science_blog_db_pass }}"
-  #      - database__connection__database=ghost
+  #      - "traefik.http.routers.nc.rule=Host(`nc.{{ domain_base }}`)"
   #    volumes:
-  #      - "{{ appdata_path }}/science_blog/content:/var/lib/ghost/content"
-  #    depends_on:
-  #      - science-blog-db
+  #      - "{{ appdata_path }}/apps/nextcloud/data:/var/www/html"
   #    restart: unless-stopped
-  #  - service_name: science-blog-db
+  #  - service_name: nextcloud-db
   #    active: true
-  #    image: mysql:8.0
-  #    volumes:
-  #      - "{{ appdata_path }}/science_blog/db:/var/lib/mysql"
+  #    image: postgres:16
   #    environment:
-  #      - "MYSQL_ROOT_PASSWORD={{ science_blog_db_pass }}"
+  #      - "POSTGRES_USER={{ nextcloud_db_user }}"
+  #      - "POSTGRES_PASSWORD={{ nextcloud_db_password }}"
+  #      - "POSTGRES_DB={{ nextcloud_db_name }}"
+  #    volumes:
+  #      - "{{ appdata_path }}/apps/nextcloud/db:/var/lib/postgresql/data"
   #    restart: unless-stopped
-  #  ###
+  #  - service_name: nextcloud-redis
+  #    active: true
+  #    image: redis:alpine
+  #    restart: unless-stopped
+  ###
+  - service_name: nextcloud
+    active: true
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID={{ main_uid }}
+      - PGID={{ main_gid }}
+      - TZ=Europe/Berlin
+    volumes:
+      - "{{ appdata_path }}/nextcloud/config:/config"
+      - "{{ appdata_path }}/nextcloud/data:/data"
+    depends_on:
+      - mariadb
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.nc.rule=Host(`nc.{{ domain_base }}`)"
+    restart: unless-stopped
+  - service_name: mariadb
+    active: true
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: mariadb
+    environment:
+      - PUID={{ main_uid }}
+      - PGID={{ main_gid }}
+      - TZ=Europe/Berlin
+      - MYSQL_ROOT_PASSWORD={{ NC_MYSQL_ROOT_PASSWORD }}
+      - MYSQL_DATABASE={{ NC_MYSQL_DATABASE }}
+      - MYSQL_USER={{ NC_MYSQL_USER }}
+      - MYSQL_PASSWORD={{ NC_MYSQL_PASSWORD }}
+    volumes:
+      - "{{ appdata_path }}/databases/nc_db:/config"
+    restart: unless-stopped
