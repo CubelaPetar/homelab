@@ -54,7 +54,7 @@ containers:
 
   # --------------- ad ---------------------- #
   - service_name: lldap
-    active: true
+    active: false
     image: lldap/lldap:stable
     container_name: lldap
     #ports:
@@ -114,8 +114,8 @@ containers:
       - "{{ appdata_path }}/dms/letsencrypt_legacy/:/etc/letsencrypt:ro"
       #- /home/petar/docker-old/swag/config/etc/letsencrypt/:/etc/letsencrypt:ro
     restart: always
-    #    depends_on:
-    #      - lldap
+    #depends_on:
+    #  - lldap
     stop_grace_period: 1m
     healthcheck:
       test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
@@ -124,36 +124,36 @@ containers:
     environment:
       - LOG_LEVEL=debug
       - SUPERVISOR_LOGLEVEL=debug
-      - ENABLE_SPAMASSASSIN=1
-      - SPAMASSASSIN_SPAM_TO_INBOX=1
-      - ENABLE_CLAMAV=1
       - ENABLE_RSPAMD=1
+      - ENABLE_CLAMAV=1
       - RSPAMD_LEARN=1
       - ENABLE_FAIL2BAN=1
       - ENABLE_QUOTAS=1
-      - ENABLE_AMAVIS=0
       - SPOOF_PROTECTION=1
-      - ENABLE_OPENDKIM=0
-      - ENABLE_OPENDMARC=0
-      - ENABLE_POSTGREY=0
-      #      # >>> Postfix LDAP Integration
-      #      - ACCOUNT_PROVISIONER=LDAP
-      #      - LDAP_SERVER_HOST=lldap
-      #      - LDAP_SEARCH_BASE=ou=people,{{ base_dn }}
-      #      - LDAP_BIND_DN=uid=admin,ou=people,{{ base_dn }}
-      #      - "LDAP_BIND_PW={{ LLDAP_DMS_PASSWD }}"
-      #      - LDAP_QUERY_FILTER_USER=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
-      #      - LDAP_QUERY_FILTER_GROUP=(&(objectClass=mail_groups)(uid=%s))
-      #      - LDAP_QUERY_FILTER_ALIAS=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
-      #      - LDAP_QUERY_FILTER_DOMAIN=(mail=*@%s)
-      #      - LDAP_QUERY_FILTER_SENDERS=(|(mail=%s)(mail=admin@*))
-      #      # <<< Postfix LDAP Integration
-      #      # >>> Dovecot LDAP Integration
-      #      - DOVECOT_AUTH_BIND=yes
-      #      - DOVECOT_USER_FILTER=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
-      #      - DOVECOT_USER_ATTRS==uid=5000,=gid=5000,=home=/var/mail/%Ln,=mail=maildir:~/Maildir
-      #      # <<< Dovecot LDAP Integration
-      #      - POSTMASTER_ADDRESS=admin@scienceqorner.com
+      #  # >>> Postfix LDAP Integration
+      #  - ACCOUNT_PROVISIONER=LDAP
+      #  - LDAP_SERVER_HOST=ldap://lldap:3890
+      #  - LDAP_SEARCH_BASE=ou=people,{{ base_dn }}
+      #  - LDAP_BIND_DN=uid=admin,ou=people,{{ base_dn }}
+      #  - "LDAP_BIND_PW={{ LLDAP_DMS_PASSWD }}"
+      #  - LDAP_QUERY_FILTER_USER=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
+      #  - LDAP_QUERY_FILTER_GROUP=(&(objectClass=mail_groups)(uid=%s))
+      #  - LDAP_QUERY_FILTER_ALIAS=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
+      #  - LDAP_QUERY_FILTER_DOMAIN=(mail=*@%s)
+      #  - LDAP_QUERY_FILTER_SENDERS=(|(mail=%s)(mail=admin@*))
+      #  # <<< Postfix LDAP Integration
+      #  # >>> Dovecot LDAP Integration
+      #  - DOVECOT_AUTH_BIND=yes
+      #  - DOVECOT_USER_FILTER=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
+      #  - DOVECOT_USER_ATTRS==uid=5000,=gid=5000,=home=/var/mail/%Ln,=mail=maildir:~/Maildir
+      #  # <<< Dovecot LDAP Integration
+      #  - POSTMASTER_ADDRESS=admin@{{ base_dn }}
+
+      #  # >>> SASL LDAP Authentication
+      #  - ENABLE_SASLAUTHD=1
+      #  - SASLAUTHD_MECHANISMS=ldap
+      #  - SASLAUTHD_LDAP_FILTER=(&(mail=%u)(objectClass=mail_user))
+      #  # <<< SASL LDAP Authentication
 
       - SSL_TYPE=letsencrypt
       - PERMIT_DOCKER=host
@@ -162,31 +162,27 @@ containers:
       - NET_ADMIN # For Fail2Ban to work
 
   # --------------- web mail ---------------------- #
-  #  - service_name: roundcubemail
-  #    active: true
-  #    image: roundcube/roundcubemail:latest
-  #    container_name: roundcubemail
-  #    restart: always
-  #    volumes:
-  #      - "{{ appdata_path }}/roundcube_data:/var/www/html"
-  #    ports:
-  #      - "9002:80"
-  #    environment:
-  #      - ROUNDCUBEMAIL_DB_TYPE=sqlite
-  #      - ROUNDCUBEMAIL_SKIN=elastic
-  #      - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://mailserver # IMAP
-  #      - ROUNDCUBEMAIL_DEFAULT_PORT=993 # IMAP
-  #      - ROUNDCUBEMAIL_SMTP_SERVER=ssl://mailserver # SMTP
-  #      - ROUNDCUBEMAIL_SMTP_PORT=465
-  #
-  #    labels:
-  #      - traefik.enable=true
-  #      - "traefik.http.routers.lldap.rule=Host(`mail.{{ domain_base }}`)"
-  #      #      - traefik.http.routers.lldap.entrypoints=https
-  #      #      - traefik.http.routers.lldap.tls=true
-  #      #      - traefik.http.routers.lldap.tls.certresolver=cloudflare
-  #      #      - traefik.http.services.lldap.loadbalancer.server.scheme=http
-  #      - traefik.http.services.lldap.loadbalancer.server.port=17170
+  - service_name: roundcubemail
+    active: true
+    image: roundcube/roundcubemail:latest
+    container_name: roundcubemail
+    restart: always
+    volumes:
+      - "{{ appdata_path }}/roundcube_data:/var/www/html"
+    #ports:
+    #  - "9002:80"
+    environment:
+      - ROUNDCUBEMAIL_DB_TYPE=sqlite
+      - ROUNDCUBEMAIL_SKIN=elastic
+      - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://mail.scienceqorner.com # IMAP
+      - ROUNDCUBEMAIL_DEFAULT_PORT=993 # IMAP
+      - ROUNDCUBEMAIL_SMTP_SERVER=ssl://mail.scienceqorner.com # SMTP
+      - ROUNDCUBEMAIL_SMTP_PORT=465
+
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.lldap.rule=Host(`mail.{{ domain_base }}`)"
+      - traefik.http.services.lldap.loadbalancer.server.port=80
 
   # --------------- blog ---------------------- #
   ###
