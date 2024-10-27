@@ -54,7 +54,7 @@ containers:
 
   # --------------- ad ---------------------- #
   - service_name: lldap
-    active: false
+    active: true
     image: lldap/lldap:stable
     container_name: lldap
     #ports:
@@ -69,10 +69,6 @@ containers:
     labels:
       - traefik.enable=true
       - "traefik.http.routers.lldap.rule=Host(`ad.{{ domain_base }}`)"
-      #      - traefik.http.routers.lldap.entrypoints=https
-      #      - traefik.http.routers.lldap.tls=true
-      #      - traefik.http.routers.lldap.tls.certresolver=cloudflare
-      #      - traefik.http.services.lldap.loadbalancer.server.scheme=http
       - traefik.http.services.lldap.loadbalancer.server.port=17170
     environment:
       - UID={{ main_uid }}
@@ -114,8 +110,8 @@ containers:
       - "{{ appdata_path }}/dms/letsencrypt_legacy/:/etc/letsencrypt:ro"
       #- /home/petar/docker-old/swag/config/etc/letsencrypt/:/etc/letsencrypt:ro
     restart: always
-    #depends_on:
-    #  - lldap
+    depends_on:
+      - lldap
     stop_grace_period: 1m
     healthcheck:
       test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
@@ -130,30 +126,30 @@ containers:
       - ENABLE_FAIL2BAN=1
       - ENABLE_QUOTAS=1
       - SPOOF_PROTECTION=1
-      #  # >>> Postfix LDAP Integration
-      #  - ACCOUNT_PROVISIONER=LDAP
-      #  - LDAP_SERVER_HOST=ldap://lldap:3890
-      #  - LDAP_SEARCH_BASE=ou=people,{{ base_dn }}
-      #  - LDAP_BIND_DN=uid=admin,ou=people,{{ base_dn }}
-      #  - "LDAP_BIND_PW={{ LLDAP_DMS_PASSWD }}"
-      #  - LDAP_QUERY_FILTER_USER=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
-      #  - LDAP_QUERY_FILTER_GROUP=(&(objectClass=mail_groups)(uid=%s))
-      #  - LDAP_QUERY_FILTER_ALIAS=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
-      #  - LDAP_QUERY_FILTER_DOMAIN=(mail=*@%s)
-      #  - LDAP_QUERY_FILTER_SENDERS=(|(mail=%s)(mail=admin@*))
-      #  # <<< Postfix LDAP Integration
-      #  # >>> Dovecot LDAP Integration
-      #  - DOVECOT_AUTH_BIND=yes
-      #  - DOVECOT_USER_FILTER=(&(objectClass=mail_user)(|(uid=%u)(mail=%u)))
-      #  - DOVECOT_USER_ATTRS==uid=5000,=gid=5000,=home=/var/mail/%Ln,=mail=maildir:~/Maildir
-      #  # <<< Dovecot LDAP Integration
-      #  - POSTMASTER_ADDRESS=admin@{{ base_dn }}
+      # >>> Postfix LDAP Integration
+      - ACCOUNT_PROVISIONER=LDAP
+      - LDAP_SERVER_HOST=ldap://lldap:3890
+      - LDAP_SEARCH_BASE=ou=people,{{ base_dn }}
+      - LDAP_BIND_DN=uid=admin,ou=people,{{ base_dn }}
+      - "LDAP_BIND_PW={{ LLDAP_DMS_PASSWD }}"
+      - LDAP_QUERY_FILTER_USER=(&(objectClass=inetOrgPerson)(|(uid=%u)(mail=%u)))
+      - LDAP_QUERY_FILTER_GROUP=(&(objectClass=groupOfUniqueNames)(uid=%s))
+      - LDAP_QUERY_FILTER_ALIAS=(&(objectClass=inetOrgPerson)(|(uid=%u)(mail=%u)))
+      - LDAP_QUERY_FILTER_DOMAIN=(mail=*@%s)
+      - LDAP_QUERY_FILTER_SENDERS=(|(mail=%s)(mail=admin@*))
+      # <<< Postfix LDAP Integration
+      # >>> Dovecot LDAP Integration
+      - DOVECOT_AUTH_BIND=yes
+      - DOVECOT_USER_FILTER=(&(objectClass=inetOrgPerson)(|(uid=%u)(mail=%u)))
+      - DOVECOT_USER_ATTRS==uid=5000,=gid=5000,=home=/var/mail/%Ln,=mail=maildir:~/Maildir
+      # <<< Dovecot LDAP Integration
+      - POSTMASTER_ADDRESS=admin@{{ base_dn }}
 
-      #  # >>> SASL LDAP Authentication
-      #  - ENABLE_SASLAUTHD=1
-      #  - SASLAUTHD_MECHANISMS=ldap
-      #  - SASLAUTHD_LDAP_FILTER=(&(mail=%u)(objectClass=mail_user))
-      #  # <<< SASL LDAP Authentication
+      ## >>> SASL LDAP Authentication
+      #- ENABLE_SASLAUTHD=1
+      #- SASLAUTHD_MECHANISMS=ldap
+      #- SASLAUTHD_LDAP_FILTER=(&(mail=%u)(objectClass=mail_user))
+      ## <<< SASL LDAP Authentication
 
       - SSL_TYPE=letsencrypt
       - PERMIT_DOCKER=host
@@ -181,8 +177,8 @@ containers:
 
     labels:
       - traefik.enable=true
-      - "traefik.http.routers.lldap.rule=Host(`mail.{{ domain_base }}`)"
-      - traefik.http.services.lldap.loadbalancer.server.port=80
+      - "traefik.http.routers.roundcube.rule=Host(`mail.{{ domain_base }}`)"
+      - traefik.http.services.roundcube.loadbalancer.server.port=80
 
   # --------------- blog ---------------------- #
   ###
