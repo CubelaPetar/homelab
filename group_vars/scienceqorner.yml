@@ -1,5 +1,5 @@
 main_username: petar
-ostname: scienceqorner.com
+hostname: scienceqorner.com
 domain_base: scienceqorner.com
 base_dn: "dc=scienceqorner,dc=com"
 

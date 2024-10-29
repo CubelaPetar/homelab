@@ -1,7 +1,7 @@
 ---
 docker_compose_generator_output_path: "/root"
 containers:
-  ###
+  ##
   #  - service_name: traefik
   #    active: true
   #    image: traefik
@@ -67,3 +67,4 @@ containers:
       # You can also set a different database:
       # - LLDAP_DATABASE_URL=mysql://mysql-user:password@mysql-server/my-database
       # - LLDAP_DATABASE_URL=postgres://postgres-user:password@postgres-server/my-database
+    restart: unless-stopped
