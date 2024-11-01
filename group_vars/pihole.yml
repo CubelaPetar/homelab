@@ -76,9 +76,10 @@ dhcp_reservations:
   - { mac: f4:e2:c6:6a:fb:e8, ip: 10.56.0.31, hostname: u6 }
   - { mac: 24:2f:d0:9d:36:fb, ip: 10.56.0.40, hostname: main_switch }
 
-  ## pain - MEDIA SERVER
+  ## SERVER
   - { mac: d8:50:99:fc:2d:d0, ip: 10.56.1.1, hostname: pain } # DIY BUILD
   - { mac: d0:50:99:f6:82:29, ip: 10.56.0.20, hostname: pain-ipmi }
+  - { mac: BC:24:11:8A:10:C5, ip: 10.56.0.10, hostname: kanboard }
 
   ## Clients
   - { mac: 20:7B:D2:CD:07:83, ip: 10.56.2.1, hostname: void-desktop } # L380 Yoga
