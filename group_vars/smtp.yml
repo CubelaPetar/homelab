@@ -32,7 +32,7 @@
 #---# postfix reload
 
 main_username: root
-hostname: reliyya.xyz
+hostname: smtp
 domain_base: reliyya.xyz
 base_dn: "dc=reliyya,dc=xyz"
 
@@ -45,7 +45,7 @@ containers:
     active: true
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
     container_name: mailserver
-    hostname: mail.reliyya.xyz
+    hostname: smtp.{{ domain_base }}
     ports:
       - "25:25" # SMTP  (explicit TLS => STARTTLS, Authentication is DISABLED => use port 465/587 instead)
       - "465:465" # ESMTP (implicit TLS)
@@ -72,15 +72,14 @@ containers:
       - SMTP_ONLY=1
       - ENABLE_SPAMASSASSIN=0
       - ENABLE_FETCHMAIL=0
-      ### Dont the following query filters: _DOMAIN_, _USER, _GROUP
-      ### Probably needed _ALIAS, _SENDERS
+      - POSTMASTER_ADDRESS=reliyya@petarcubela.de
 
       ## >>> Postfix LDAP Integration
       - ACCOUNT_PROVISIONER=LDAP
       - LDAP_START_TLS=yes
-      - LDAP_SERVER_HOST=ldap://{{ hostname }}.{{ domain_base }}:3890
+      - LDAP_SERVER_HOST=ldap://lldap.{{ domain_base }}:3890
       - LDAP_SEARCH_BASE=ou=people,{{ base_dn }}
-      - LDAP_BIND_DN=uid=mail_user,ou=people,{{ base_dn }}
+      - LDAP_BIND_DN=uid=smtp_user,ou=people,{{ base_dn }}
       - "LDAP_BIND_PW={{ LLDAP_DMS_PASSWD }}"
       ## <<< Postfix LDAP Integration
       ## >>> SASL LDAP Authentication
@@ -88,10 +87,10 @@ containers:
       - SASLAUTHD_MECHANISMS=ldap
       - SASLAUTHD_LDAP_SERVER=ldap://{{ hostname }}.{{ domain_base }}:3890
       - SASLAUTHD_LDAP_START_TLS=yes
-      - SASLAUTHD_LDAP_BIND_DN=uid=mail_user,dc=reliyya,dc=xyz
+      - SASLAUTHD_LDAP_BIND_DN=uid=smtp_user,dc=reliyya,dc=xyz
       - SASLAUTHD_LDAP_PASSWORD={{ LLDAP_DMS_PASSWD }}
       - SASLAUTHD_LDAP_SEARCH_BASE=ou=people,dc=reliyya,dc=org
-      - SASLAUTHD_LDAP_FILTER=(&(uid=%U)(objectClass=inetOrgPerson))
+      - SASLAUTHD_LDAP_FILTER=(&(objectClass=inetOrgPerson)(uid=%U)(memberOf=cn=smtp_bot))
       ## <<< SASL LDAP Authentication
     cap_add:
       - SYS_PTRACE

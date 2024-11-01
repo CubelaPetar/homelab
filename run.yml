@@ -50,12 +50,12 @@
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 
-- hosts: lldap
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #- role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
+#- hosts: lldap
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #- role: geerlingguy.docker
+#    - role: ironicbadger.docker_compose_generator
 #- hosts: netboot
 #  vars_files:
 #    - "vars/vault.yml"
@@ -63,6 +63,13 @@
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 #
+
+- hosts: smtp
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    #- role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
 # ------------- VPS --------------#
 #- hosts: scienceqorner
 #  #become: yes
