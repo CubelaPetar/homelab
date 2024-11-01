@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+{% for record in mx_records %}
+mx-host={{ default_domain }},{{ record.subdomain }}.{{ default_domain }},50
+{% endfor %}
+txt-record={{ default_domain }},"v=spf1 mx -all"
+txt-record=mail._domainkey,"v=DKIM1; h=sha256; k=rsa; " "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArTZLD27EszV3E4o2KyjjLA7iIc/OUBWe6IaWHj1cTrlm59idgz9T9oXaaSmNHGd9OR1inpvilRinHLl1554l0CQV4cOslM6FPDI5t6ITKqPLaUM3bBnyOIlEvhpvhuLd0VJLgPHgZ++dYir2dVrm31HF3pycFzor1phccGKlvQP09cNM0Xtx7UbM/N2DXSvB4CtJq8AkyWMq1X" "KNbrYubfbQt3GZJFkof/BSX87LtEaS4VPJhUO0VHHEhe7m3o8V40WxSwB/KLNf25bDtrIftYm005lO8gEk8juJ5oPjYnEKwRhhrsEQi5uxq0SX8JfjyD1L7H1km7+dwZinxi+/HwIDAQAB"

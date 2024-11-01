@@ -39,6 +39,10 @@ dns_overrides:
   - { ip: 10.56.1.1, custom_dns: "git.{{ default_domain }}" }
   - { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
 
+mx_records:
+  ## mx domain <subdomain>.domain
+  - { subdomain: smtp }
+
 dhcp_reservations:
   # CORE INFRASTRUCTURE
   ## FIREWALL
