@@ -91,7 +91,7 @@ containers:
       - SASLAUTHD_LDAP_BIND_DN=uid=smtp_user,dc=reliyya,dc=xyz
       - SASLAUTHD_LDAP_PASSWORD={{ LLDAP_DMS_PASSWD }}
       - SASLAUTHD_LDAP_SEARCH_BASE=ou=people,dc=reliyya,dc=org
-      - SASLAUTHD_LDAP_FILTER=(&(objectClass=inetOrgPerson)(uid=%U)(memberOf=cn=smtp_bot))
+      - SASLAUTHD_LDAP_FILTER=(&(objectClass=inetOrgPerson)(uid=%U)(memberof=cn=smtp_bot))
       ## <<< SASL LDAP Authentication
     cap_add:
       - SYS_PTRACE
