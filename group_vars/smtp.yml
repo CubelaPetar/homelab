@@ -40,6 +40,41 @@ base_dn: "dc=reliyya,dc=xyz"
 appdata_path: /root
 docker_compose_generator_output_path: /root
 containers:
+  # --------------- traefik ---------------------- #
+  - service_name: traefik
+    active: true
+    image: traefik
+    container_name: tr
+    ports:
+      - 80:80
+      - 443:443
+    command:
+      - --log.level=info
+      - --accesslog=false
+      - --api.insecure=false
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls.certresolver=cloudflare
+      - --certificatesresolvers.cloudflare.acme.dnschallenge=true
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      - "--certificatesresolvers.cloudflare.acme.email={{ cloudflare_account_email }}"
+      #- "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
+      - --serversTransport.insecureSkipVerify=true
+    volumes:
+      - "{{ appdata_path }}/traefik/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+      #      - CF_DNS_API_TOKEN={{ scienceqorner_cloudflare_api_key }}"
+      - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
+      - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
+    # if using .env
+    restart: unless-stopped
+
   # --------------- dms ---------------------- #
   - service_name: mailserver
     active: true
@@ -54,7 +89,8 @@ containers:
       - "{{ appdata_path }}/dms/mail-logs/:/var/log/mail/"
       - "{{ appdata_path }}/dms/config/:/tmp/docker-mailserver/"
       - /etc/localtime:/etc/localtime:ro
-      #- "{{ appdata_path }}/dms/letsencrypt_legacy/:/etc/letsencrypt:ro"
+      - "{{ appdata_path }}/dms/letsencrypt_legacy/:/etc/letsencrypt:ro"
+      - "{{ appdata_path }}/traefik/letsencrypt/:/etc/letsencrypt:ro"
     restart: always
     stop_grace_period: 1m
     healthcheck:
@@ -78,7 +114,7 @@ containers:
 
       ## >>> Postfix LDAP Integration
       - ACCOUNT_PROVISIONER=LDAP
-      - LDAP_START_TLS=
+      - LDAP_START_TLS=yes
       - LDAP_SERVER_HOST=ldap://lldap.{{ domain_base }}:3890
       - LDAP_SEARCH_BASE=ou=people,{{ base_dn }}
       - LDAP_BIND_DN=uid=smtp_user,ou=people,{{ base_dn }}
@@ -97,4 +133,9 @@ containers:
     cap_add:
       - SYS_PTRACE
       - NET_ADMIN # For Fail2Ban to work
-
+  - service_name: whoami
+    active: true
+    image: docker.io/traefik/whoami:latest
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.whoami.rule=Host(`smtp.reliyya.xyz`)"

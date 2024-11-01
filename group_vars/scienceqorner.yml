@@ -107,8 +107,8 @@ containers:
       - "{{ appdata_path }}/dms/mail-logs/:/var/log/mail/"
       - "{{ appdata_path }}/dms/config/:/tmp/docker-mailserver/"
       - /etc/localtime:/etc/localtime:ro
-      - "{{ appdata_path }}/dms/letsencrypt_legacy/:/etc/letsencrypt:ro"
-      #- /home/petar/docker-old/swag/config/etc/letsencrypt/:/etc/letsencrypt:ro
+      #- "{{ appdata_path }}/dms/letsencrypt_legacy/:/etc/letsencrypt:ro"
+      - "{{ appdata_path }}/traefik/letsencrypt/:/etc/letsencrypt:ro"
     restart: always
     #depends_on:
     #  - lldap
