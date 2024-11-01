@@ -67,6 +67,7 @@ containers:
       - SUPERVISOR_LOGLEVEL=debug
       ## general
       - PERMIT_DOCKER=host
+      - POSTFIX_INET_PROTOCOLS=ipv4
       - ENABLE_POP3=0
       - ENABLE_CLAMAV=0
       - ENABLE_AMAVIS=0
