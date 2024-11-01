@@ -78,7 +78,7 @@ containers:
 
       ## >>> Postfix LDAP Integration
       - ACCOUNT_PROVISIONER=LDAP
-      - LDAP_START_TLS=yes
+      - LDAP_START_TLS=
       - LDAP_SERVER_HOST=ldap://lldap.{{ domain_base }}:3890
       - LDAP_SEARCH_BASE=ou=people,{{ base_dn }}
       - LDAP_BIND_DN=uid=smtp_user,ou=people,{{ base_dn }}
