@@ -126,6 +126,7 @@ containers:
       - ENABLE_FAIL2BAN=1
       - ENABLE_QUOTAS=1
       - SPOOF_PROTECTION=1
+      - POSTFIX_INET_PROTOCOLS=ipv4
       ## >>> Postfix LDAP Integration
       #- ACCOUNT_PROVISIONER=LDAP
       #- LDAP_SERVER_HOST=ldap://lldap:3890
@@ -152,7 +153,7 @@ containers:
       ## <<< SASL LDAP Authentication
 
       - SSL_TYPE=letsencrypt
-      - PERMIT_DOCKER=host
+      - PERMIT_DOCKER=connected-networks
     cap_add:
       - SYS_PTRACE
       - NET_ADMIN # For Fail2Ban to work

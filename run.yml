@@ -64,17 +64,17 @@
 #    - role: ironicbadger.docker_compose_generator
 #
 
-- hosts: smtp
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #- role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
-# ------------- VPS --------------#
-#- hosts: scienceqorner
-#  #become: yes
+#- hosts: smtp
 #  vars_files:
 #    - "vars/vault.yml"
 #  roles:
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
+# ------------- VPS --------------#
+- hosts: scienceqorner
+  #become: yes
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    #- role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
