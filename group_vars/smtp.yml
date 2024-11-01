@@ -69,6 +69,7 @@ containers:
       - PERMIT_DOCKER=host
       - ENABLE_POP3=0
       - ENABLE_CLAMAV=0
+      - ENABLE_AMAVIS=0
       - SMTP_ONLY=1
       - ENABLE_SPAMASSASSIN=0
       - ENABLE_FETCHMAIL=0
