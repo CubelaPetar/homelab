@@ -85,7 +85,7 @@ containers:
       ## >>> SASL LDAP Authentication
       - ENABLE_SASLAUTHD=1
       - SASLAUTHD_MECHANISMS=ldap
-      - SASLAUTHD_LDAP_SERVER=ldap://{{ hostname }}.{{ domain_base }}:3890
+      - SASLAUTHD_LDAP_SERVER=ldap://lldap.{{ domain_base }}:3890
       - SASLAUTHD_LDAP_START_TLS=yes
       - SASLAUTHD_LDAP_BIND_DN=uid=smtp_user,dc=reliyya,dc=xyz
       - SASLAUTHD_LDAP_PASSWORD={{ LLDAP_DMS_PASSWD }}
