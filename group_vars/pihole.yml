@@ -56,7 +56,7 @@ dhcp_reservations:
 
   ## Network management
   - { mac: ac:1f:6b:ad:dc:aa, ip: 10.56.0.1, hostname: neo, custom_dns: [pve] } # pve node
-  - { mac: bc:24:11:15:0a:63, ip: 10.56.0.2, hostname: smtp } # pct Container
+  - { mac: bc:24:11:15:0a:63, ip: 10.56.0.2, hostname: mail-gw } # pct Container
   - { mac: bc:24:11:6d:8f:38, ip: 10.56.0.253, hostname: pihole } # pct Container
   - { mac: bc:24:11:09:64:c8, ip: 10.56.0.252, hostname: caddy } # pct Container
   - { mac: bc:24:11:fe:51:53, ip: 10.56.0.251, hostname: nginx } # pct Container
