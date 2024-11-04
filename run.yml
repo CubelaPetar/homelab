@@ -64,7 +64,7 @@
 #    - role: ironicbadger.docker_compose_generator
 #
 
-#- hosts: mail_gw
+#- hosts: smtp
 #  vars_files:
 #    - "vars/vault.yml"
 #  roles:

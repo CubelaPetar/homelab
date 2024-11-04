@@ -37,7 +37,7 @@ dns_overrides:
   - { ip: 10.56.0.252, custom_dns: "kvm.{{ default_domain }}" }
   - { ip: 10.56.0.252, custom_dns: "ipmi.{{ default_domain }}" }
   - { ip: 10.56.1.1, custom_dns: "git.{{ default_domain }}" }
-  - { ip: 10.56.1.1, custom_dns: "git.{{ default_domain }}" }
+  - { ip: 10.56.1.252, custom_dns: "todo.{{ default_domain }}" }
   - { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
 
 mx_records:
@@ -62,7 +62,7 @@ dhcp_reservations:
   - { mac: bc:24:11:09:64:c8, ip: 10.56.0.252, hostname: caddy } # pct Container
   - { mac: bc:24:11:fe:51:53, ip: 10.56.0.251, hostname: nginx } # pct Container
   - { mac: bc:24:11:55:18:58, ip: 10.56.0.250, hostname: unifi } # pct Container
-  - { mac: bc:24:11:29:13:a1, ip: 10.56.0.249, hostname: pxe-netboot } # pct Container
+  - { mac: bc:24:11:29:13:a1, ip: 10.56.0.249, hostname: pxe } # pct Container
   - { mac: bc:24:11:55:8b:ff, ip: 10.56.0.248, hostname: tailscale } # pct Container
   - { mac: bc:24:11:33:3a:a0, ip: 10.56.0.247, hostname: uptime-kuma } # pct Container
   - { mac: bc:24:11:25:f0:84, ip: 10.56.0.246, hostname: lldap } # pct Container

@@ -1,0 +1,47 @@
+(cloudflare) {
+  tls {
+    dns cloudflare {{ opnsense_caddy_srv_cloudflare_api_token }}
+    resolvers 1.1.1.1
+  }
+}
+
+(headers) {
+  header {
+    Permissions-Policy interest-cohort=()
+    Strict-Transport-Security "max-age=31536000; includeSubdomains"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Robots-Tag noindex, nofollow
+    Referrer-Policy "same-origin"
+    Content-Security-Policy "frame-ancestors {{ domain_base }} *.{{ domain_base }}"
+    -Server
+    Permissions-Policy "geolocation=(self {{ domain_base }} *.{{ domain_base }}), microphone=()"
+  }
+}
+
+## core
+
+#pain
+pain.{{ domain_base }} {
+  reverse_proxy https://10.56.1.1:8006 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+  import cloudflare
+}
+
+# kanboard
+todo.{{ domain_base }} {
+  redir / /admin
+  reverse_proxy http://10.56.1.252
+  import cloudflare
+}
+
+# # dhcp
+# dhcp.{{ domain_base }} {
+#   redir / /dhcp.leases
+#   reverse_proxy http://10.56.0.253:81
+#   import cloudflare
+# }
+

@@ -1,0 +1,11 @@
+---
+- name: install caddy
+  include_tasks:
+    file: install.yml
+
+- name: configure caddy rules
+  include_tasks:
+    file: configure.yml
+    apply:
+      tags:
+        - caddyconfig
