@@ -37,6 +37,7 @@ dns_overrides:
   - { ip: 10.56.0.252, custom_dns: "kvm.{{ default_domain }}" }
   - { ip: 10.56.0.252, custom_dns: "ipmi.{{ default_domain }}" }
   - { ip: 10.56.1.1, custom_dns: "git.{{ default_domain }}" }
+  - { ip: 10.56.1.1, custom_dns: "git.{{ default_domain }}" }
   - { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
 
 mx_records:
@@ -56,7 +57,7 @@ dhcp_reservations:
 
   ## Network management
   - { mac: ac:1f:6b:ad:dc:aa, ip: 10.56.0.1, hostname: neo, custom_dns: [pve] } # pve node
-  - { mac: bc:24:11:15:0a:63, ip: 10.56.0.2, hostname: mail-gw } # pct Container
+  - { mac: bc:24:11:15:0a:63, ip: 10.56.0.2, hostname: smtp } # pct Container
   - { mac: bc:24:11:6d:8f:38, ip: 10.56.0.253, hostname: pihole } # pct Container
   - { mac: bc:24:11:09:64:c8, ip: 10.56.0.252, hostname: caddy } # pct Container
   - { mac: bc:24:11:fe:51:53, ip: 10.56.0.251, hostname: nginx } # pct Container
@@ -77,9 +78,10 @@ dhcp_reservations:
   - { mac: 24:2f:d0:9d:36:fb, ip: 10.56.0.40, hostname: main_switch }
 
   ## SERVER
+  - { mac: BC:24:11:DF:1D:EA, ip: 10.56.1.252, hostname: caddy-srv }
   - { mac: d8:50:99:fc:2d:d0, ip: 10.56.1.1, hostname: pain } # DIY BUILD
   - { mac: d0:50:99:f6:82:29, ip: 10.56.0.20, hostname: pain-ipmi }
-  - { mac: BC:24:11:8A:10:C5, ip: 10.56.0.10, hostname: kanboard }
+  - { mac: BC:24:11:8A:10:C5, ip: 10.56.1.10, hostname: kanboard }
 
   ## Clients
   - { mac: 20:7B:D2:CD:07:83, ip: 10.56.2.1, hostname: void-desktop } # L380 Yoga
@@ -88,3 +90,6 @@ dhcp_reservations:
 
   ## IoT
   - { mac: 38:1a:52:29:30:5b, ip: 10.56.3.10, hostname: EPSON29305B }
+
+  ## DMZ
+  - { mac: BC:24:11:AB:5A:D9, ip: 10.56.6.252, hostname: caddy-dmz }
