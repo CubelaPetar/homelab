@@ -22,7 +22,7 @@
 ## core
 
 #pain
-pain.{{ domain_base }} {
+p.{{ domain_base }} {
   reverse_proxy https://10.56.1.1:8006 {
     transport http {
       tls_insecure_skip_verify
@@ -33,15 +33,8 @@ pain.{{ domain_base }} {
 
 # kanboard
 todo.{{ domain_base }} {
-  redir / /admin
-  reverse_proxy http://10.56.1.252
+  redir / /kanboard
+  reverse_proxy http://10.56.1.10
   import cloudflare
 }
-
-# # dhcp
-# dhcp.{{ domain_base }} {
-#   redir / /dhcp.leases
-#   reverse_proxy http://10.56.0.253:81
-#   import cloudflare
-# }
 

@@ -1,17 +1,17 @@
 ---
-#- hosts: pain
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #- role: disks
-#    #- role: snapraid
-#    #- role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
-#    #- role: geerlingguy.security
-#    #- role: samba
-#    #- role: geerlingguy.nfs
-#    #- role: smtp # pve has mail
+- hosts: pain
+  become: yes
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    #- role: disks
+    #- role: snapraid
+    #- role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+    #- role: geerlingguy.security
+    #- role: samba
+    #- role: geerlingguy.nfs
+    #- role: smtp # pve has mail
 # ------------- NEO --------------#
 #- hosts: neo
 #  become: yes
@@ -43,6 +43,13 @@
 #  roles:
 #    #    - role: geerlingguy.ntp # local ntp server. delete all other
 #    - role: caddy
+#
+- hosts: caddy_srv
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    #    - role: geerlingguy.ntp # local ntp server. delete all other
+    - role: caddy_srv
 #- hosts: kuma
 #  vars_files:
 #    - "vars/vault.yml"
