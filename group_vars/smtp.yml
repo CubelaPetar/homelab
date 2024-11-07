@@ -99,7 +99,7 @@ containers:
       retries: 0
     environment:
       ## log
-      - LOG_LEVEL=debug
+      - LOG_LEVEL=info
       - SUPERVISOR_LOGLEVEL=debug
       ## general
       - PERMIT_DOCKER=host

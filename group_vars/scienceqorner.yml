@@ -118,8 +118,8 @@ containers:
       timeout: 3s
       retries: 0
     environment:
-      - LOG_LEVEL=debug
-      - SUPERVISOR_LOGLEVEL=debug
+      - LOG_LEVEL=info
+      - SUPERVISOR_LOGLEVEL=info
       - ENABLE_RSPAMD=1
       - ENABLE_CLAMAV=1
       - RSPAMD_LEARN=1
