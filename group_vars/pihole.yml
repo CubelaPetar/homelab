@@ -82,7 +82,7 @@ dhcp_reservations:
   - { mac: BC:24:11:DF:1D:EA, ip: 10.56.1.252, hostname: caddy-srv }
   - { mac: d8:50:99:fc:2d:d0, ip: 10.56.1.1, hostname: pain } # DIY BUILD
   - { mac: d0:50:99:f6:82:29, ip: 10.56.0.20, hostname: pain-ipmi }
-  - { mac: BC:24:11:8A:10:C5, ip: 10.56.1.10, hostname: kanboard }
+  - { mac: bc:24:11:8a:10:c5, ip: 10.56.1.10, hostname: kanboard }
 
   ## Clients
   - { mac: 20:7B:D2:CD:07:83, ip: 10.56.2.1, hostname: void-desktop } # L380 Yoga
