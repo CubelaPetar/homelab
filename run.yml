@@ -21,12 +21,12 @@
 #    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
 ## ------------- NEOs KIDs --------------#
-- hosts: pihole
-  become: yes
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    - role: dhcp-dns
+#- hosts: pihole
+#  become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    - role: dhcp-dns
 #- hosts: unifi
 #  become: yes
 #  vars_files:
@@ -43,12 +43,18 @@
 #    #    - role: geerlingguy.ntp # local ntp server. delete all other
 #    - role: caddy
 #
-- hosts: caddy_srv
+#- hosts: caddy_srv
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #    - role: geerlingguy.ntp # local ntp server. delete all other
+#    - role: caddy_srv
+- hosts: caddy_dmz
   vars_files:
     - "vars/vault.yml"
   roles:
     #    - role: geerlingguy.ntp # local ntp server. delete all other
-    - role: caddy_srv
+    - role: caddy_dmz
 #- hosts: kuma
 #  vars_files:
 #    - "vars/vault.yml"
@@ -69,7 +75,6 @@
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 #
-
 #- hosts: smtp
 #  vars_files:
 #    - "vars/vault.yml"

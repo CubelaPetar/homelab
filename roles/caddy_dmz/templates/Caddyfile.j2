@@ -1,6 +1,6 @@
 (cloudflare) {
   tls {
-    dns cloudflare {{ opnsense_caddy_cloudflare_api_token }}
+    dns cloudflare {{ opnsense_caddy_dmz_cloudflare_api_token }}
     resolvers 1.1.1.1
   }
 }
@@ -21,30 +21,6 @@
 
 ## core
 
-#neo
-neo.{{ domain_base }} {
-  reverse_proxy https://10.56.0.1:8006 {
-    transport http {
-      tls_insecure_skip_verify
-    }
-  }
-  import cloudflare
-}
-
-# pihole
-dns.{{ domain_base }} {
-  redir / /admin
-  reverse_proxy http://10.56.0.253
-  import cloudflare
-}
-
-# # dhcp
-# dhcp.{{ domain_base }} {
-#   redir / /dhcp.leases
-#   reverse_proxy http://10.56.0.253:81
-#   import cloudflare
-# }
-
 # opnsense
 opnsense.{{ domain_base }} {
   reverse_proxy https://10.56.0.254:8443 {
@@ -55,37 +31,10 @@ opnsense.{{ domain_base }} {
   import cloudflare
 }
 
-# pain ipmi
-ipmi.{{ domain_base }} {
-  reverse_proxy https://10.56.0.20 {
-    transport http {
-      tls_insecure_skip_verify
-    }
-  }
+# kanboard
+todo.{{ domain_base }} {
+  redir / /kanboard
+  reverse_proxy http://10.56.1.10:80
   import cloudflare
 }
-
-## pikvm
-#kvm.{{ domain_base }} {
-#  reverse_proxy https://10.56.0.100:443 {
-#    transport http {
-#      tls_insecure_skip_verify
-#    }
-#  }
-#  import cloudflare
-#}
-
-# uptime-kuma
-kuma.{{ domain_base }} {
-  reverse_proxy http://10.56.0.247:3001
-  import cloudflare
-}
-
-
-# lldap
-ad.{{ domain_base }} {
-  reverse_proxy http://10.56.0.246:17170
-  import cloudflare
-}
-
 
