@@ -1,16 +1,16 @@
 ---
-- hosts: pain
-  become: yes
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #- role: disks
-    #- role: snapraid
-    #- role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
-    #- role: geerlingguy.security
-    #- role: samba
-    #- role: geerlingguy.nfs
+#- hosts: pain
+#  become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #- role: disks
+#    #- role: snapraid
+#    #- role: geerlingguy.docker
+#    - role: ironicbadger.docker_compose_generator
+#    #- role: geerlingguy.security
+#    #- role: samba
+#    #- role: geerlingguy.nfs
 # ------------- NEO --------------#
 #- hosts: neo
 #  become: yes
@@ -21,12 +21,12 @@
 #    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
 ## ------------- NEOs KIDs --------------#
-#- hosts: pihole
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: dhcp-dns
+- hosts: pihole
+  become: yes
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    - role: dhcp-dns
 #- hosts: unifi
 #  become: yes
 #  vars_files:
@@ -36,13 +36,12 @@
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 
-#- hosts: caddy
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #    - role: geerlingguy.ntp # local ntp server. delete all other
-#    - role: caddy
-#
+- hosts: caddy
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    #    - role: geerlingguy.ntp # local ntp server. delete all other
+    - role: caddy
 #- hosts: caddy_srv
 #  vars_files:
 #    - "vars/vault.yml"
@@ -82,10 +81,10 @@
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 # ------------- VPS --------------#
-- hosts: scienceqorner
-  #become: yes
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #- role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
+#- hosts: scienceqorner
+#  #become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #- role: geerlingguy.docker
+#    - role: ironicbadger.docker_compose_generator
