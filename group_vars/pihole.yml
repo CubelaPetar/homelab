@@ -67,6 +67,7 @@ dhcp_reservations:
   - { mac: bc:24:11:55:8b:ff, ip: 10.56.0.248, hostname: tailscale } # pct Container
   - { mac: bc:24:11:33:3a:a0, ip: 10.56.0.247, hostname: uptime-kuma } # pct Container
   - { mac: bc:24:11:25:f0:84, ip: 10.56.0.246, hostname: lldap } # pct Container
+  - { mac: d8:3a:dd:1a:e9:13, ip: 10.56.0.100, hostname: pikvm } # pikvm
   #
   ## Kubernetes Cluster
   - { mac: 40:b0:34:f2:c2:9d, ip: 10.56.0.11, hostname: worker01 }
@@ -93,4 +94,4 @@ dhcp_reservations:
   - { mac: 38:1a:52:29:30:5b, ip: 10.56.3.10, hostname: EPSON29305B }
 
   ## DMZ
-  - { mac: BC:24:11:AB:5A:D9, ip: 10.56.6.252, hostname: caddy-dmz }
+  - { mac: bc:24:11:ab:5a:d9, ip: 10.56.6.252, hostname: caddy-dmz }
