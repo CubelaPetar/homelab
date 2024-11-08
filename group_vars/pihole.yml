@@ -88,10 +88,11 @@ dhcp_reservations:
   ## Clients
   - { mac: 20:7B:D2:CD:07:83, ip: 10.56.2.1, hostname: void-desktop } # L380 Yoga
   - { mac: a0:d3:c1:2a:97:6e, ip: 10.56.2.2, hostname: nixos } # HP Tower
-  #- { mac: tba, ip: 10.56.2.3, hostname: void-notebook } #
-
+  - { mac: e4:a7:a0:54:e9:d0, ip: 10.56.2.3, hostname: void-notebook } #
+  - { mac: dc:e5:5b:1a:bb:bf, ip: 10.56.2.4, hostname: grapheneos } # myphone
   ## IoT
   - { mac: 38:1a:52:29:30:5b, ip: 10.56.3.10, hostname: EPSON29305B }
+  ## NoInt
 
   ## DMZ
   - { mac: bc:24:11:ab:5a:d9, ip: 10.56.6.252, hostname: caddy-dmz }
