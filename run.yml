@@ -36,24 +36,12 @@
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 
-- hosts: caddy
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #    - role: geerlingguy.ntp # local ntp server. delete all other
-    - role: caddy
-#- hosts: caddy_srv
+#- hosts: caddy
 #  vars_files:
 #    - "vars/vault.yml"
 #  roles:
 #    #    - role: geerlingguy.ntp # local ntp server. delete all other
-#    - role: caddy_srv
-#- hosts: caddy_dmz
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #    - role: geerlingguy.ntp # local ntp server. delete all other
-#    - role: caddy_dmz
+#    - role: caddy
 #- hosts: kuma
 #  vars_files:
 #    - "vars/vault.yml"
@@ -88,3 +76,20 @@
 #  roles:
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
+# ------------- p.kids --------------#
+- hosts: caddy_srv
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    #    - role: geerlingguy.ntp # local ntp server. delete all other
+    - role: caddy_srv
+#- hosts: caddy_dmz
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #    - role: geerlingguy.ntp # local ntp server. delete all other
+#    - role: caddy_dmz
+- hosts: search
+  roles:
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator

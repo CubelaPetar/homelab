@@ -38,3 +38,9 @@ todo.{{ domain_base }} {
   import cloudflare
 }
 
+# searx
+search.{{ domain_base }} {
+  reverse_proxy http://10.56.1.11:8080
+  import cloudflare
+}
+

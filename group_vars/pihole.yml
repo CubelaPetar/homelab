@@ -38,6 +38,7 @@ dns_overrides:
   - { ip: 10.56.0.252, custom_dns: "ipmi.{{ default_domain }}" }
   #- { ip: 10.56.1.1, custom_dns: "git.{{ default_domain }}" }
   - { ip: 10.56.1.252, custom_dns: "todo.{{ default_domain }}" }
+  - { ip: 10.56.1.252, custom_dns: "search.{{ default_domain }}" }
   - { ip: 10.56.1.252, custom_dns: "p.{{ default_domain }}" }
   - { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
 
@@ -80,13 +81,14 @@ dhcp_reservations:
   - { mac: 24:2f:d0:9d:36:fb, ip: 10.56.0.40, hostname: main_switch }
 
   ## SERVER
-  - { mac: BC:24:11:DF:1D:EA, ip: 10.56.1.252, hostname: caddy-srv }
   - { mac: d8:50:99:fc:2d:d0, ip: 10.56.1.1, hostname: pain } # DIY BUILD
-  - { mac: d0:50:99:f6:82:29, ip: 10.56.0.20, hostname: pain-ipmi }
   - { mac: bc:24:11:8a:10:c5, ip: 10.56.1.10, hostname: kanboard }
+  - { mac: bc:24:11:6b:ea:33, ip: 10.56.1.11, hostname: searx }
+  - { mac: d0:50:99:f6:82:29, ip: 10.56.0.20, hostname: pain-ipmi }
+  - { mac: bc:24:11:df:1d:ea, ip: 10.56.1.252, hostname: caddy-srv }
 
   ## Clients
-  - { mac: 20:7B:D2:CD:07:83, ip: 10.56.2.1, hostname: void-desktop } # L380 Yoga
+  - { mac: 20:7b:d2:cd:07:83, ip: 10.56.2.1, hostname: void-desktop } # L380 Yoga
   - { mac: a0:d3:c1:2a:97:6e, ip: 10.56.2.2, hostname: nixos } # HP Tower
   - { mac: e4:a7:a0:54:e9:d0, ip: 10.56.2.3, hostname: void-notebook } #
   - { mac: dc:e5:5b:1a:bb:bf, ip: 10.56.2.4, hostname: grapheneos } # myphone
