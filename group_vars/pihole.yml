@@ -40,7 +40,8 @@ dns_overrides:
   - { ip: 10.56.1.252, custom_dns: "todo.{{ default_domain }}" }
   - { ip: 10.56.1.252, custom_dns: "search.{{ default_domain }}" }
   - { ip: 10.56.1.252, custom_dns: "p.{{ default_domain }}" }
-  - { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
+  #- { ip: 100.86.250.113, custom_dns: "pearson.jc.{{ default_domain }}" }
+  - { ip: 192.168.178.10, custom_dns: "pearson.jc.{{ default_domain }}" }
 
 mx_records:
   ## mx domain <subdomain>.domain
