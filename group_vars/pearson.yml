@@ -78,3 +78,26 @@ package_list:
   #- apt-listbugs
   - needrestart
     #- fail2ban
+  #
+# geerlingguy.security
+security_ssh_port: 22
+security_ssh_password_authentication: "no"
+security_ssh_permit_root_login: "no"
+security_ssh_usedns: "no"
+security_ssh_permit_empty_password: "no"
+security_ssh_challenge_response_auth: "no"
+security_ssh_gss_api_authentication: "no"
+security_ssh_x11_forwarding: "no"
+security_ssh_allowed_users:
+  - "{{ main_username }}"
+security_ssh_allowed_groups: []
+security_sudoers_passwordless:
+  - "{{ main_username }}"
+security_autoupdate_enabled: true
+security_autoupdate_blacklist: []
+security_autoupdate_reboot: false
+security_autoupdate_reboot_time: "03:00"
+security_autoupdate_mail_to: "info@petarcubela.de"
+security_autoupdate_mail_on_error: true
+security_fail2ban_enabled: true
+security_fail2ban_custom_configuration_template: "jail.local.j2"
