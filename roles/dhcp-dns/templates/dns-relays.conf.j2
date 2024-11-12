@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+{%  for relay in dns_relays %}
+server=/{{ relay.query_domain }}/{{ relay.dns_server }}
+{% endfor %}

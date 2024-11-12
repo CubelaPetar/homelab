@@ -46,6 +46,8 @@ dns_overrides:
 mx_records:
   ## mx domain <subdomain>.domain
   - { subdomain: smtp }
+dns_relays:
+  - { query_domain: "juro-vpn.{{ default_domain }}", dns_server: 10.56.0.254 }
 
 dhcp_reservations:
   # CORE INFRASTRUCTURE
