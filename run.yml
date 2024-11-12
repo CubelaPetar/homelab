@@ -83,28 +83,28 @@
 #  roles:
 #    #    - role: geerlingguy.ntp # local ntp server. delete all other
 #    - role: caddy_srv
-#- hosts: caddy_dmz
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #    - role: geerlingguy.ntp # local ntp server. delete all other
-#    - role: caddy_dmz
+- hosts: caddy_dmz
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    #    - role: geerlingguy.ntp # local ntp server. delete all other
+    - role: caddy_dmz
 #- hosts: search
 #  roles:
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 #
 # ------------ juro ------- #
-- hosts: pearson
-  become: yes
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #- role: disks
-    #- role: snapraid
-    #- role: geerlingguy.docker
-    - role: geerlingguy.security
-    #- role: geerlingguy.nfs
-    #- role: container
-    #- role: smtp
-    #- role: samba
+#- hosts: pearson
+#  become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #- role: disks
+#    #- role: snapraid
+#    #- role: geerlingguy.docker
+#    - role: geerlingguy.security
+#    #- role: geerlingguy.nfs
+#    #- role: container
+#    #- role: smtp
+#    #- role: samba
