@@ -82,7 +82,12 @@ dhcp_reservations:
   - { mac: d8:50:99:fc:2d:d0, ip: 10.56.1.1, hostname: pain } # DIY BUILD
   - { mac: bc:24:11:8a:10:c5, ip: 10.56.1.10, hostname: kanboard }
   - { mac: bc:24:11:6b:ea:33, ip: 10.56.1.11, hostname: searx }
-  - { mac: bc:24:11:45:1d:35, ip: 10.56.1.12, hostname: xandikos }
+  - {
+      mac: bc:24:11:45:1d:35,
+      ip: 10.56.1.12,
+      hostname: xandikos,
+      custom_dns: [cad],
+    }
   - { mac: d0:50:99:f6:82:29, ip: 10.56.0.20, hostname: pain-ipmi }
   - { mac: bc:24:11:df:1d:ea, ip: 10.56.1.252, hostname: caddy-srv }
 

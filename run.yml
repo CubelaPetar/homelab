@@ -94,9 +94,9 @@
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 
-- hosts: xandikos
-  roles:
-    - role: geerlingguy.docker
+#- hosts: xandikos
+#  roles:
+#    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 #
 # ------------ juro ------- #
