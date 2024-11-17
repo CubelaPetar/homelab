@@ -376,6 +376,8 @@ containers:
     labels:
       - traefik.enable=true
       - "traefik.http.routers.git.rule=Host(`git.{{ domain }}`)"
+      - "traefik.http.routers.git.entrypoints=websecure"
+      - "traefik.http.routers.git.tls=true"
       - traefik.http.services.git.loadbalancer.server.port=3000
     ports:
       - "22:22"
