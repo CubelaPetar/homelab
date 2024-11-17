@@ -120,13 +120,28 @@ containers:
     environment:
       - LOG_LEVEL=info
       - SUPERVISOR_LOGLEVEL=info
-      - ENABLE_RSPAMD=1
-      - ENABLE_CLAMAV=1
-      - RSPAMD_LEARN=1
       - ENABLE_FAIL2BAN=1
       - ENABLE_QUOTAS=1
       - SPOOF_PROTECTION=1
       - POSTFIX_INET_PROTOCOLS=ipv4
+      # rspamd
+      - ENABLE_RSPAMD=1
+      - RSPAMD_LEARN=1
+      - RSPAMD_GREYLISTING=1
+      - ENABLE_RSPAMD_REDIS=1
+      # ClamAV is compatible with Rspamd. Optionally enable it for anti-virus support:
+      - ENABLE_CLAMAV=1
+
+      # Rspamd replaces the functionality of all these anti-spam services, disable them:
+      - ENABLE_OPENDKIM=0
+      - ENABLE_OPENDMARC=0
+      - ENABLE_POLICYD_SPF=0
+      - ENABLE_AMAVIS=0
+      - ENABLE_SPAMASSASSIN=0
+
+      # Provided you've set `RSPAMD_GREYLISTING=1`, also disable Postgrey:
+      - ENABLE_POSTGREY=0
+
       ## >>> Postfix LDAP Integration
       #- ACCOUNT_PROVISIONER=LDAP
       #- LDAP_SERVER_HOST=ldap://lldap:3890
