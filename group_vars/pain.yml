@@ -378,7 +378,7 @@ containers:
       - "traefik.http.routers.git.rule=Host(`git.{{ domain }}`)"
       - traefik.http.services.git.loadbalancer.server.port=3000
     ports:
-      - '"22:22"'
+      - "22:22"
     restart: unless-stopped
   - service_name: mysql
     active: true

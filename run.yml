@@ -21,12 +21,12 @@
 #    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
 ## ------------- NEOs KIDs --------------#
-#- hosts: pihole
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: dhcp-dns
+- hosts: pihole
+  become: yes
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    - role: dhcp-dns
 #- hosts: unifi
 #  become: yes
 #  vars_files:
@@ -69,13 +69,13 @@
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 # ------------- VPS --------------#
-- hosts: scienceqorner
-  #become: yes
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #- role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
+#- hosts: scienceqorner
+#  #become: yes
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #- role: geerlingguy.docker
+#    - role: ironicbadger.docker_compose_generator
 # ------------- p.kids --------------#
 #- hosts: caddy_srv
 #  vars_files:
@@ -94,10 +94,10 @@
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 
-#- hosts: xandikos
-#  roles:
-#    - role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
+- hosts: xandikos
+  roles:
+    #- role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
 #
 # ------------ juro ------- #
 #- hosts: pearson
