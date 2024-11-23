@@ -113,6 +113,7 @@ containers:
     environment:
       - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
       - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
+      #- "CLOUDFLARE_DNS_API_TOKEN={{ cloudflare_api_key }}"
     restart: unless-stopped
 
   ## Monitoring
@@ -376,8 +377,8 @@ containers:
     labels:
       - traefik.enable=true
       - "traefik.http.routers.git.rule=Host(`git.{{ domain }}`)"
-      - "traefik.http.routers.git.entrypoints=websecure"
-      - "traefik.http.routers.git.tls=true"
+      #      - "traefik.http.routers.git.entrypoints=websecure"
+      #      - "traefik.http.routers.git.tls=true"
       - traefik.http.services.git.loadbalancer.server.port=3000
     ports:
       - "22:22"
