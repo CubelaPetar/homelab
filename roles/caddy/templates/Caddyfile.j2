@@ -31,6 +31,14 @@ neo.{{ domain_base }} {
   import cloudflare
 }
 
+
+# home assistant
+ha.{{ domain_base }} {
+  reverse_proxy http://haos.{{ domain_base }}:8123
+  import cloudflare
+}
+
+
 # pihole
 dns.{{ domain_base }} {
   redir / /admin
