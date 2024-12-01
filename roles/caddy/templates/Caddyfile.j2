@@ -23,7 +23,7 @@
 
 #neo
 neo.{{ domain_base }} {
-  reverse_proxy https://10.56.0.1:8006 {
+  reverse_proxy https://pve.{{ domain_base }}:8006 {
     transport http {
       tls_insecure_skip_verify
     }
@@ -42,7 +42,7 @@ ha.{{ domain_base }} {
 # pihole
 dns.{{ domain_base }} {
   redir / /admin
-  reverse_proxy http://10.56.0.253
+  reverse_proxy http://pihole.{{ domain_base }}
   import cloudflare
 }
 
@@ -65,7 +65,7 @@ opnsense.{{ domain_base }} {
 
 # pain ipmi
 ipmi.{{ domain_base }} {
-  reverse_proxy https://10.56.0.20 {
+  reverse_proxy https://pain-ipmi.{{ domain_base }} {
     transport http {
       tls_insecure_skip_verify
     }
@@ -75,7 +75,7 @@ ipmi.{{ domain_base }} {
 
 ## pikvm
 kvm.{{ domain_base }} {
-  reverse_proxy https://10.56.0.100:443 {
+  reverse_proxy https://pikvm.{{ domain_base }}:443 {
     transport http {
       tls_insecure_skip_verify
     }
@@ -85,14 +85,14 @@ kvm.{{ domain_base }} {
 
 # uptime-kuma
 kuma.{{ domain_base }} {
-  reverse_proxy http://10.56.0.247:3001
+  reverse_proxy http://uptime-kuma.{{ domain_base }}:3001
   import cloudflare
 }
 
 
 # lldap
 ad.{{ domain_base }} {
-  reverse_proxy http://10.56.0.246:17170
+  reverse_proxy http://lldap.{{ domain_base }}:17170
   import cloudflare
 }
 
