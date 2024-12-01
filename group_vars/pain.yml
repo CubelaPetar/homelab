@@ -366,9 +366,9 @@ containers:
       - "USER={{ main_username }}"
       - "USER_UID={{ main_uid }}"
       - "USER_GID={{ main_gid }}"
-      - "ROOT_URL=https://git.{{ domain }}"
-      - "SSH_DOMAIN=git.{{ domain }}"
-      - "APP_NAME=git.{{ domain }}"
+      - "ROOT_URL=https://git.{{ domain_base }}"
+      - "SSH_DOMAIN=git.{{ domain_base }}"
+      - "APP_NAME=git.{{ domain_base }}"
       - "SSH_PORT=22"
       - "DISABLE_REGISTRATION=true"
       - "REQUIRE_SIGNIN_VIEW=true"
@@ -377,7 +377,7 @@ containers:
       - "{{ appdata_path }}/apps/gitea:/data"
     labels:
       - traefik.enable=true
-      - "traefik.http.routers.git.rule=Host(`git.{{ domain }}`)"
+      - "traefik.http.routers.git.rule=Host(`git.{{ domain_base }}`)"
       #      - "traefik.http.routers.git.entrypoints=websecure"
       #      - "traefik.http.routers.git.tls=true"
       - traefik.http.services.git.loadbalancer.server.port=3000
