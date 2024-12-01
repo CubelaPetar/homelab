@@ -74,6 +74,8 @@ dhcp_reservations:
   - { mac: bc:24:11:33:3a:a0, ip: 10.56.0.247, hostname: uptime-kuma } # pct Container
   - { mac: bc:24:11:25:f0:84, ip: 10.56.0.246, hostname: lldap } # pct Container
   - { mac: d8:3a:dd:1a:e9:13, ip: 10.56.0.100, hostname: pikvm } # pikvm
+
+  - { mac: bc:24:11:5a:66:b2, ip: 10.56.0.99, hostname: owncloud } # pikvm
   #
   ## Network devices
   - { mac: f4:e2:c6:5c:a8:6c, ip: 10.56.0.30, hostname: usw_mini-flex }
