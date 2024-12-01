@@ -36,12 +36,12 @@
 #    - role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 
-#- hosts: caddy
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #    - role: geerlingguy.ntp # local ntp server. delete all other
-#    - role: caddy
+- hosts: caddy
+  vars_files:
+    - "vars/vault.yml"
+  roles:
+    #    - role: geerlingguy.ntp # local ntp server. delete all other
+    - role: caddy
 #- hosts: kuma
 #  vars_files:
 #    - "vars/vault.yml"
