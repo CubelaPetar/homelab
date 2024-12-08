@@ -9,8 +9,8 @@
     #- role: geerlingguy.docker
     #- role: ironicbadger.docker_compose_generator
     #- role: geerlingguy.security
-    - role: samba
-    #- role: geerlingguy.nfs
+    #- role: samba
+    - role: geerlingguy.nfs
 # ------------- NEO --------------#
 #- hosts: neo
 #  become: yes
