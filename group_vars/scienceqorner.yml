@@ -87,7 +87,7 @@ containers:
 
   # --------------- dms ---------------------- #
   - service_name: mailserver
-    active: true
+    active: false
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
     container_name: mailserver
     # Provide the FQDN of your mail server here (Your DNS MX record should point to this value)
@@ -175,7 +175,7 @@ containers:
 
   # --------------- web mail ---------------------- #
   - service_name: roundcubemail
-    active: true
+    active: false
     image: roundcube/roundcubemail:latest
     container_name: roundcubemail
     restart: always
