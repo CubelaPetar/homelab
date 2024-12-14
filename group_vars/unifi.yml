@@ -76,7 +76,8 @@ containers:
     restart: unless-stopped
   - service_name: unifi-db
     active: true
-    image: docker.io/mongo:7.0
+    #image: docker.io/mongo:7.0
+    image: docker.io/mongo:4.4
     volumes:
       - /opt/appdata/unifi/db:/data/db
     include_global_env_vars: false
