@@ -54,12 +54,12 @@ dhcp_reservations:
   # CORE INFRASTRUCTURE
   ## FIREWALL
   - {
-      mac: 90:1b:0e:57:49:b3,
+      mac: 98:b7:85:20:25:eb,
       ip: 10.56.0.254,
       hostname: opnsense,
       custom_dns: ["opnsense.firewall"],
     } #
-  #- { mac: ac:1f:6b:ad:dc:ab, ip: WAN, hostname: opnsense, custom_dns: ["opnsense.firewall"], } # SuperMicro igb0
+  #- { mac: 98:b7:85:20:25:ea, ip: WAN, hostname: opnsense, custom_dns: ["opnsense.firewall"], } # SuperMicro igb0
 
   ## Network management
   - { mac: ac:1f:6b:ad:dc:aa, ip: 10.56.0.1, hostname: neo, custom_dns: [pve] } # pve node
