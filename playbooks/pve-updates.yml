@@ -1,5 +1,5 @@
 ---
-- hosts: zoidbergskids
+- hosts: neoskids
   tasks:
     - name: Update apt repo and cache on all Debian/Ubuntu boxes
       when: ansible_os_family == 'Debian'
@@ -14,22 +14,22 @@
         update_only: yes
     - name: Check if a reboot is needed on all servers
       register: reboot_required_file
-      stat: path=/var/run/reboot-required get_md5=no
+      stat: path=/var/run/reboot-required get_checksum=no
     - name: Reboot the box if kernel updated
       reboot:
         msg: "Reboot initiated by Ansible for kernel updates"
       when: reboot_required_file.stat.exists
     # docker container updates
     - name: is docker-compose installed?
-      command: which docker-compose
+      command: which docker
       ignore_errors: true
       register: dcp_installed
     - name: container update procedure
       block:
         - name: pull containers
-          command: docker-compose pull
+          command: docker compose pull
         - name: start updated containers
-          command: docker-compose up -d
+          command: docker compose up -d
         - name: cleanup old containers
           command: docker system prune --all -f
       when: dcp_installed.rc == 0
