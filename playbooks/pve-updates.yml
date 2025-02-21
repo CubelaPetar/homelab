@@ -34,19 +34,19 @@
           command: docker system prune --all -f
       when: dcp_installed.rc == 0
     # pihole updates
-    - name: is pihole installed?
-      command: which pihole
-      ignore_errors: true
-      register: pihole_installed
-    - name: pihole update procedure
-      block:
-        - name: update pihole
-          command: pihole updatePihole
-        - name: update gravity
-          command: pihole updateGravity
-        - name: restartdns
-          command: pihole restartdns
-      when: pihole_installed.rc == 0
+    #- name: is pihole installed?
+    #  command: which pihole
+    #  ignore_errors: true
+    #  register: pihole_installed
+    #- name: pihole update procedure
+    #  block:
+    #    - name: update pihole
+    #      command: pihole updatePihole
+    #    - name: update gravity
+    #      command: pihole updateGravity
+    #    - name: restartdns
+    #      command: pihole restartdns
+    #  when: pihole_installed.rc == 0
     # caddy updates
     - name: is caddy installed?
       command: which caddy
