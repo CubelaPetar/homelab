@@ -84,6 +84,7 @@ dhcp_reservations:
 
   ## SERVER
   - { mac: d8:50:99:fc:2d:d0, ip: 10.56.1.1, hostname: pain } # DIY BUILD
+  - { mac: BC:24:11:AD:5B:5A, ip: 10.56.1.2, hostname: internal-mail }
   - { mac: bc:24:11:8a:10:c5, ip: 10.56.1.10, hostname: kanboard }
   - { mac: bc:24:11:6b:ea:33, ip: 10.56.1.11, hostname: searx }
   - { mac: BC:24:11:FB:BC:69, ip: 10.56.1.99, hostname: rocky } # test machine
