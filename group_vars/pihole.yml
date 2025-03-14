@@ -75,7 +75,7 @@ dhcp_reservations:
   - { mac: bc:24:11:25:f0:84, ip: 10.56.0.246, hostname: lldap } # pct Container
   - { mac: d8:3a:dd:1a:e9:13, ip: 10.56.0.100, hostname: pikvm } # pikvm
 
-  - { mac: bc:24:11:5a:66:b2, ip: 10.56.0.99, hostname: owncloud } # pikvm
+  #  - { mac: bc:24:11:5a:66:b2, ip: 10.56.0.99, hostname: owncloud } # pikvm
   #
   ## Network devices
   - { mac: f4:e2:c6:5c:a8:6c, ip: 10.56.0.30, hostname: usw_mini-flex }
@@ -87,7 +87,6 @@ dhcp_reservations:
   - { mac: BC:24:11:AD:5B:5A, ip: 10.56.1.2, hostname: internal-mail }
   - { mac: bc:24:11:8a:10:c5, ip: 10.56.1.10, hostname: kanboard }
   - { mac: bc:24:11:6b:ea:33, ip: 10.56.1.11, hostname: searx }
-  - { mac: BC:24:11:FB:BC:69, ip: 10.56.1.99, hostname: rocky } # test machine
   - {
       mac: bc:24:11:45:1d:35,
       ip: 10.56.1.12,
