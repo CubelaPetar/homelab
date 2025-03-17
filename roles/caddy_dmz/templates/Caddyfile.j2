@@ -46,6 +46,7 @@ search.{{ domain_base }} {
 
 # notes 
 notes.{{ domain_base }} {
-    reverse_proxy https://notes.{{ domain_base }}
-  }
+    reverse_proxy http://10.56.1.1:3000
+    import cloudflare
+}
 

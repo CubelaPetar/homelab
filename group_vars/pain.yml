@@ -365,8 +365,8 @@ containers:
       - "SB_USER={{ main_username }}:{{ password }}"
     volumes:
       - /mnt/ssd/notes:/space
-    #    ports:
-    #      - 3000:3000
+    ports:
+      - 3000:3000
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sb.rule=Host(`notes.{{ domain_base }}`)"
