@@ -193,27 +193,27 @@ containers:
       #- 1900:1900/udp #optional
     restart: unless-stopped
 
-  - service_name: radarr
-    active: true
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Berlin
-    volumes:
-      - "{{ appdata_path }}/arrthings/data:/config"
-      - /mnt/disk1/vids/movies:/movies #optional
-      - "{{ download_path }}/complete/movies:/downloads" #optional
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.radarr.rule=Host(`radarr.{{ domain }}`)"
-      #      - "traefik.http.routers.radarr.entrypoints=https"
-      #      - "traefik.http.routers.radarr.tls=true"
-      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
-      #    ports:
-      #      - 7878:7878
-    restart: unless-stopped
+  #  - service_name: radarr
+  #    active: true
+  #    image: lscr.io/linuxserver/radarr:latest
+  #    container_name: radarr
+  #    environment:
+  #      - PUID=1000
+  #      - PGID=1000
+  #      - TZ=Europe/Berlin
+  #    volumes:
+  #      - "{{ appdata_path }}/arrthings/data:/config"
+  #      - /mnt/disk1/vids/movies:/movies #optional
+  #      - "{{ download_path }}/complete/movies:/downloads" #optional
+  #    labels:
+  #      - "traefik.enable=true"
+  #      - "traefik.http.routers.radarr.rule=Host(`radarr.{{ domain }}`)"
+  #      #      - "traefik.http.routers.radarr.entrypoints=https"
+  #      #      - "traefik.http.routers.radarr.tls=true"
+  #      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+  #      #    ports:
+  #      #      - 7878:7878
+  #    restart: unless-stopped
 
   - service_name: immich-server
     active: true
@@ -356,6 +356,23 @@ containers:
     active: true
     image: docker.io/apache/tika:latest
     restart: unless-stopped
+
+  - service_name: silverbullet
+    active: true
+    image: ghcr.io/silverbulletmd/silverbullet
+    restart: unless-stopped
+    environment:
+      - "SB_USER={{ main_username }}:{{ password }}"
+    volumes:
+      - /mnt/ssd/notes:/space
+    #    ports:
+    #      - 3000:3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sb.rule=Host(`notes.{{ domain_base }}`)"
+      #      - "traefik.http.routers.paperless.entrypoints=https"
+      #      - "traefik.http.routers.paperless.tls=true"
+      - "traefik.http.services.sb.loadbalancer.server.port=3000"
 
   - service_name: gitea
     active: true
