@@ -199,7 +199,7 @@ containers:
   # --------------- blog ---------------------- #
   ###
   - service_name: science-blog
-    active: true
+    active: false
     image: ghost:5-alpine
     labels:
       - traefik.enable=true
@@ -229,7 +229,7 @@ containers:
       - science-blog-db
     restart: unless-stopped
   - service_name: science-blog-db
-    active: true
+    active: false
     image: mysql:8.0
     volumes:
       - "{{ appdata_path }}/science_blog/db:/var/lib/mysql"
