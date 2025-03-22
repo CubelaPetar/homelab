@@ -42,7 +42,11 @@ ha.{{ domain_base }} {
 # pihole
 dns.{{ domain_base }} {
   redir / /admin
-  reverse_proxy http://pihole.{{ domain_base }}
+  reverse_proxy https://pihole.{{ domain_base }} {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
   import cloudflare
 }
 
