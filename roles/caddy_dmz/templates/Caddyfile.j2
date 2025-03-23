@@ -50,3 +50,8 @@ notes.{{ domain_base }} {
     import cloudflare
 }
 
+# gitea
+git.{{ domain_base }} {
+    reverse_proxy https://git.reliyya.xyz
+}
+
