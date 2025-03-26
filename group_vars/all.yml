@@ -44,3 +44,4 @@ docker_users:
 
 # ironicbadger.docker_compose_generator
 domain_base: "reliyya.xyz"
+domain_base_sq: "scienceqorner.com"

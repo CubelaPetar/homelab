@@ -5,6 +5,13 @@
   }
 }
 
+(cloudflare_sq) {
+  tls {
+    dns cloudflare {{ scienceqorner_cloudflare_api_key }}
+    resolvers 1.1.1.1
+  }
+}
+
 (headers) {
   header {
     Permissions-Policy interest-cohort=()
@@ -55,3 +62,8 @@ git.{{ domain_base }} {
     reverse_proxy https://git.reliyya.xyz
 }
 
+# webmail.sq.com 
+webmail.{{ domain_base_sq }} {
+    reverse_proxy https://webmail.scienceqorner.com
+    import cloudflare_sq
+}
