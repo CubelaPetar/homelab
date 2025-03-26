@@ -82,7 +82,7 @@
 #  roles:
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
-# ------------- VPS --------------#
+# ------------- SQ --------------#
 #- hosts: scienceqorner
 #  #become: yes
 #  vars_files:
@@ -90,6 +90,15 @@
 #  roles:
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
+#
+- hosts: nc_sq_com
+  become: yes
+  #vars_files:
+  #  - "vars/vault.yml"
+  roles:
+    - role: geerlingguy.security
+    - role: geerlingguy.docker
+    #- role: ironicbadger.docker_compose_generator
 # ------------- p.kids --------------#
 #- hosts: caddy_srv
 #  vars_files:
@@ -97,12 +106,12 @@
 #  roles:
 #    #    - role: geerlingguy.ntp # local ntp server. delete all other
 #    - role: caddy_srv
-- hosts: caddy_dmz
-  vars_files:
-    - "vars/vault.yml"
-  roles:
-    #    - role: geerlingguy.ntp # local ntp server. delete all other
-    - role: caddy_dmz
+#- hosts: caddy_dmz
+#  vars_files:
+#    - "vars/vault.yml"
+#  roles:
+#    #    - role: geerlingguy.ntp # local ntp server. delete all other
+#    - role: caddy_dmz
 #- hosts: search
 #  roles:
 #    #- role: geerlingguy.docker

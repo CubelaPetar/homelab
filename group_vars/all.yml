@@ -14,7 +14,7 @@ global_env_vars:
   - "TZ={{ ntp_timezone }}"
 
 # geerlingguy.security
-security_ssh_port: 2222
+security_ssh_port: 22
 security_ssh_password_authentication: "no"
 security_ssh_permit_root_login: "no"
 security_ssh_usedns: "no"
