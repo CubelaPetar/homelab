@@ -358,15 +358,15 @@ containers:
     restart: unless-stopped
 
   - service_name: silverbullet
-    active: true
+    active: false
     image: ghcr.io/silverbulletmd/silverbullet
     restart: unless-stopped
     environment:
       - "SB_USER={{ main_username }}:{{ password }}"
     volumes:
       - /mnt/ssd/notes:/space
-    ports:
-      - 3000:3000
+    #ports:
+    #  - 3000:3000
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sb.rule=Host(`notes.{{ domain_base }}`)"
@@ -425,3 +425,52 @@ containers:
   #      - /var/run/docker.sock:/var/run/docker.sock:ro
   #    restart: unless-stopped
   ###
+
+  - service_name: karakeep_web
+    active: true
+    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
+    restart: unless-stopped
+    volumes:
+      # By default, the data is stored in a docker volume called "data".
+      # If you want to mount a custom directory, change the volume mapping to:
+      # - /path/to/your/directory:/data
+      - "{{ appdata_path }}/apps/karakeep/data:/data"
+    #ports:
+    #  - 3000:3000
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.karakeep.rule=Host(`links.{{ domain_base }}`)"
+      #      - "traefik.http.routers.git.entrypoints=websecure"
+      #      - "traefik.http.routers.git.tls=true"
+      - traefik.http.services.karakeep.loadbalancer.server.port=3000
+    env_file:
+      - .env
+    environment:
+      - MEILI_ADDR=http://karakeep_meilisearch:7700
+      - BROWSER_WEB_URL=http://karakeep_chrome:9222
+      # OPENAI_API_KEY: ...
+
+      # You almost never want to change the value of the DATA_DIR variable.
+      # If you want to mount a custom directory, change the volume mapping above instead.
+      - DATA_DIR=/data # DON'T CHANGE THIS
+  - service_name: karakeep_chrome
+    active: true
+    image: gcr.io/zenika-hub/alpine-chrome:123
+    restart: unless-stopped
+    command:
+      - --no-sandbox
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --remote-debugging-address=0.0.0.0
+      - --remote-debugging-port=9222
+      - --hide-scrollbars
+  - service_name: karakeep_meilisearch
+    active: true
+    image: getmeili/meilisearch:v1.13.3
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MEILI_NO_ANALYTICS=true
+    volumes:
+      - "{{ appdata_path }}/apps/meilisearch:/meili_data"
