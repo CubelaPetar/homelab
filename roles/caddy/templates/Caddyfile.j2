@@ -62,6 +62,7 @@ gw.{{ domain_base }} {
   reverse_proxy https://10.56.0.254:8443 {
     transport http {
       tls_insecure_skip_verify
+			versions 1.1 1.2
     }
   }
   import cloudflare
