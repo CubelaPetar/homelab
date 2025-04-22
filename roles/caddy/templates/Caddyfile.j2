@@ -68,6 +68,13 @@ gw.{{ domain_base }} {
   import cloudflare
 }
 
+# beszel
+monit.{{ domain_base }} {
+  reverse_proxy http://beszel.{{ domain_base }}:8090
+  import cloudflare
+}
+
+
 # pain ipmi
 ipmi.{{ domain_base }} {
   reverse_proxy https://pain-ipmi.{{ domain_base }} {
