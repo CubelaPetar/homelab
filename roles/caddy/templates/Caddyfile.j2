@@ -74,6 +74,12 @@ monit.{{ domain_base }} {
   import cloudflare
 }
 
+# netbox
+infra.{{ domain_base }} {
+  reverse_proxy http://netbox.{{ domain_base }}:8001
+  import cloudflare
+}
+
 
 # pain ipmi
 ipmi.{{ domain_base }} {
