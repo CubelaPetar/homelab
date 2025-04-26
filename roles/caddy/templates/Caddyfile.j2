@@ -76,8 +76,16 @@ monit.{{ domain_base }} {
 
 # netbox
 infra.{{ domain_base }} {
-  reverse_proxy http://netbox.{{ domain_base }}:8001
-  import cloudflare
+    handle /static* {
+        root * /opt/netbox/netbox/
+        file_server
+    }
+
+    handle {
+        #Backend is running on 8001
+        reverse_proxy http://netbox.{{ domain_base }}:8001
+    }
+    import cloudflare
 }
 
 
