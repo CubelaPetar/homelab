@@ -1,125 +1,148 @@
 ---
-#- hosts: pain
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #- role: disks
-#    #- role: snapraid
-#    #- role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
-#    #- role: geerlingguy.security
-#    #- role: samba
-#    #- role: geerlingguy.nfs
-# ------------- NEO --------------#
-#- hosts: neo
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: geerlingguy.security
-#    - role: geerlingguy.ntp # Proxmox docs uses chrony
+- hosts: pain
+  become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: disks
+    - role: snapraid
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
+    - role: geerlingguy.security
+    - role: samba
+    - role: geerlingguy.nfs
+ ------------- NEO --------------#
+- hosts: neo
+  become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: geerlingguy.security
+    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
-## ------------- NEOs KIDs --------------#
-#- hosts: pihole
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: dhcp-dns
-#- hosts: dns01
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: bind9
-#
-#- hosts: dns02
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: bind9
+# ------------- NEOs KIDs --------------#
+- hosts: pihole
+  become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: dhcp-dns
+- hosts: dns01
+  become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: bind9
 
-#- hosts: unifi
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: geerlingguy.security
-#    - role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
+- hosts: dns02
+  become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: bind9
+
+- hosts: unifi
+  become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: geerlingguy.security
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
 
 - hosts: caddy
   vars_files:
-    - "vars/vault.yml"
+    - "group_vars/secrets.yml"
   roles:
     #    - role: geerlingguy.ntp # local ntp server. delete all other
     - role: caddy
-#- hosts: kuma
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
+      tags: caddy
+- hosts: kuma
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
 
-#- hosts: lldap
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #- role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
-#- hosts: netboot
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    - role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
-#
+- hosts: lldap
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    #- role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
+- hosts: netboot
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
+
 #- hosts: smtp
 #  vars_files:
-#    - "vars/vault.yml"
+#    - "group_vars/secrets.yml"
 #  roles:
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
-# ------------- SQ --------------#
-#- hosts: scienceqorner
-#  #become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #- role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
-#
-# ------------- p.kids --------------#
-#- hosts: caddy_srv
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #    - role: geerlingguy.ntp # local ntp server. delete all other
-#    - role: caddy_srv
-#- hosts: caddy_dmz
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
-#    #    - role: geerlingguy.ntp # local ntp server. delete all other
-#    - role: caddy_dmz
-#- hosts: search
-#  roles:
-#    #- role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
+#      tags: compose
+ ------------- SQ --------------#
+- hosts: scienceqorner
+  #become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    #- role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
 
-# ------------ juro ------- #
-#- hosts: pearson
-#  become: yes
-#  vars_files:
-#    - "vars/vault.yml"
-#  roles:
+ ------------- p.kids --------------#
+- hosts: caddy_srv
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    #    - role: geerlingguy.ntp # local ntp server. delete all other
+    - role: caddy_srvd
+      tags: caddy
+- hosts: caddy_dmz
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    #    - role: geerlingguy.ntp # local ntp server. delete all other
+    - role: caddy_dmz
+      tags: caddy
+- hosts: search
+  roles:
+    #- role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
+
+ ------------ juro ------- #
+- hosts: pearson
+  become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    #- role: disks
+    #- role: snapraid
+    #- role: geerlingguy.docker
+    - role: geerlingguy.security
+    #- role: geerlingguy.nfs
+    #- role: container
+    #- role: smtp
+    #- role: samba
+
+- hosts: jc_pve
+  become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
 #    #- role: disks
 #    #- role: snapraid
-#    #- role: geerlingguy.docker
-#    - role: geerlingguy.security
-#    #- role: geerlingguy.nfs
-#    #- role: container
-#    #- role: smtp
-#    #- role: samba
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
+     #-role: samba

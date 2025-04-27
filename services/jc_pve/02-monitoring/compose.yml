@@ -1,0 +1,13 @@
+services:
+  librespeed:
+    image: lscr.io/linuxserver/librespeed:latest
+    container_name: librespeed
+    environment:
+      - PUID="{{ main_uid }}"
+      - PGID="{{ main_gid }}"
+      - TZ="{{ ntp_timezone }}"
+      - PASSWORD="{{ password }}"
+      - MODE=standalone
+    ports:
+      - 80:80
+    restart: unless-stopped
