@@ -12,7 +12,7 @@
     - role: geerlingguy.security
     - role: samba
     - role: geerlingguy.nfs
- ------------- NEO --------------#
+# ------------- NEO --------------#
 - hosts: neo
   become: yes
   vars_files:
@@ -89,7 +89,7 @@
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 #      tags: compose
- ------------- SQ --------------#
+# ------------- SQ --------------#
 - hosts: scienceqorner
   #become: yes
   vars_files:
@@ -99,13 +99,13 @@
     - role: ironicbadger.docker_compose_generator
       tags: compose
 
- ------------- p.kids --------------#
+# ------------- p.kids --------------#
 - hosts: caddy_srv
   vars_files:
     - "group_vars/secrets.yml"
   roles:
     #    - role: geerlingguy.ntp # local ntp server. delete all other
-    - role: caddy_srvd
+    - role: caddy_srv
       tags: caddy
 - hosts: caddy_dmz
   vars_files:
@@ -120,7 +120,7 @@
     - role: ironicbadger.docker_compose_generator
       tags: compose
 
- ------------ juro ------- #
+# ------------ juro ------- #
 - hosts: pearson
   become: yes
   vars_files:

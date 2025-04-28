@@ -2,7 +2,7 @@
 
 # Ansible playbook against specific host
 run HOST *TAGS:
-  ansible-playbook -b run.yml --limit {{HOST}} {{TAGS}}
+  ansible-playbook -b run.yml -J --limit {{HOST}} -t {{TAGS}}
 
 # docker compose against remote host via Ansible
 compose HOST *V:
