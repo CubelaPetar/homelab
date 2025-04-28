@@ -28,19 +28,19 @@
     - "group_vars/secrets.yml"
   roles:
     - role: dhcp-dns
-- hosts: dns01
-  become: yes
-  vars_files:
-    - "group_vars/secrets.yml"
-  roles:
-    - role: bind9
-
-- hosts: dns02
-  become: yes
-  vars_files:
-    - "group_vars/secrets.yml"
-  roles:
-    - role: bind9
+#- hosts: dns01
+#  become: yes
+#  vars_files:
+#    - "group_vars/secrets.yml"
+#  roles:
+#    - role: bind9
+#
+#- hosts: dns02
+#  become: yes
+#  vars_files:
+#    - "group_vars/secrets.yml"
+#  roles:
+#    - role: bind9
 
 - hosts: unifi
   become: yes
@@ -114,6 +114,7 @@
     #    - role: geerlingguy.ntp # local ntp server. delete all other
     - role: caddy_dmz
       tags: caddy
+
 - hosts: search
   roles:
     #- role: geerlingguy.docker

@@ -5,4 +5,4 @@ roles:
   - name: geerlingguy.nfs
   - name: geerlingguy.security
   - name: geerlingguy.ntp
-  - name: ironicbadger.docker_compose_generator
+  #- name: ironicbadger.docker_compose_generator
