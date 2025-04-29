@@ -89,8 +89,8 @@
 #    #- role: geerlingguy.docker
 #    - role: ironicbadger.docker_compose_generator
 #      tags: compose
-# ------------- SQ --------------#
-- hosts: scienceqorner
+# ------------- cloud --------------#
+- hosts: cloud
   #become: yes
   vars_files:
     - "group_vars/secrets.yml"

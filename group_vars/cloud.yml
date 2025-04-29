@@ -1,0 +1,28 @@
+main_username: petar
+hostname: cloud
+domain_base_sq: scienceqorner.com
+domain_base_pc: petarcubela.de
+#base_dn: "dc=scienceqorner,dc=com"
+
+disabled_compose_files:
+  - 04-blogs
+
+package_list:
+  - bash-completion
+  - curl
+  - rync
+  - git
+  - htop
+  - vim
+  - nmap
+  - net-tools
+
+# ironicbadger.docker_compose_generator
+appdata_path: /home/{{ main_username }}/appdata
+docker_compose_generator_output_path: /home/{{ main_username }}/docker/
+docker_compose_hostname: "cloud"
+
+# searxng container
+SEARXNG_UWSGI_WORKERS: "1"
+SEARXNG_UWSGI_THREADS: "1"
+

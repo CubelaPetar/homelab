@@ -1,0 +1,83 @@
+services:
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: mailserver
+    # Provide the FQDN of your mail server here (Your DNS MX record should point to this value)
+    hostname: mail.scienceqorner.com
+    #env_file: mailserver.env More information about the mail-server ports:
+    # https://docker-mailserver.github.io/docker-mailserver/latest/config/security/understanding-the-ports/
+    # To avoid conflicts with yaml base-60 float, DO NOT remove the quotation marks.
+    ports:
+      - "25:25" # SMTP  (explicit TLS => STARTTLS, Authentication is DISABLED => use port 465/587 instead)
+      - "143:143" # IMAP4 (explicit TLS => STARTTLS)
+      - "465:465" # ESMTP (implicit TLS)
+      - "587:587" # ESMTP (explicit TLS => STARTTLS)
+      - "993:993" # IMAP4 (implicit TLS)
+    volumes:
+      - "{{ appdata_path }}/dms/mail-data/:/var/mail/"
+      - "{{ appdata_path }}/dms/mail-state/:/var/mail-state/"
+      - "{{ appdata_path }}/dms/mail-logs/:/var/log/mail/"
+      - "{{ appdata_path }}/dms/config/:/tmp/docker-mailserver/"
+      - /etc/localtime:/etc/localtime:ro
+      #- "{{ appdata_path }}/dms/letsencrypt_legacy/:/etc/letsencrypt:ro"
+      - "{{ appdata_path }}/traefik/letsencrypt/:/etc/letsencrypt:ro"
+    restart: always
+    #depends_on:
+    #  - lldap
+    stop_grace_period: 1m
+    healthcheck:
+      test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
+      timeout: 3s
+      retries: 0
+    environment:
+      - LOG_LEVEL=info
+      - SUPERVISOR_LOGLEVEL=info
+      - ENABLE_FAIL2BAN=1
+      - ENABLE_QUOTAS=1
+      - SPOOF_PROTECTION=1
+      - POSTFIX_INET_PROTOCOLS=ipv4
+      # rspamd
+      - ENABLE_RSPAMD=1
+      - RSPAMD_LEARN=1
+      - RSPAMD_GREYLISTING=1
+      - ENABLE_RSPAMD_REDIS=1
+      # ClamAV is compatible with Rspamd. Optionally enable it for anti-virus support:
+      - ENABLE_CLAMAV=1
+                                                                                                            
+      # Rspamd replaces the functionality of all these anti-spam services, disable them:
+      - ENABLE_OPENDKIM=0
+      - ENABLE_OPENDMARC=0
+      - ENABLE_POLICYD_SPF=0
+      - ENABLE_AMAVIS=0
+      - ENABLE_SPAMASSASSIN=0
+                                                                                                            
+      # Provided you've set `RSPAMD_GREYLISTING=1`, also disable Postgrey:
+      - ENABLE_POSTGREY=0
+                                                                                                            
+      - SSL_TYPE=letsencrypt
+      - PERMIT_DOCKER=connected-networks
+    cap_add:
+      - SYS_PTRACE
+      - NET_ADMIN # For Fail2Ban to work
+                                                                                                          
+# --------------- web mail ---------------------- #
+  roundcubemail:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcubemail
+    restart: always
+    volumes:
+      - "{{ appdata_path }}/roundcube_data:/var/www/html"
+    #ports:
+    #  - "9002:80"
+    environment:
+      - ROUNDCUBEMAIL_DB_TYPE=sqlite
+      - ROUNDCUBEMAIL_SKIN=elastic
+      - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://mail.scienceqorner.com # IMAP
+      - ROUNDCUBEMAIL_DEFAULT_PORT=993 # IMAP
+      - ROUNDCUBEMAIL_SMTP_SERVER=ssl://mail.scienceqorner.com # SMTP
+      - ROUNDCUBEMAIL_SMTP_PORT=465
+                                                                                                            
+#    labels:
+#      - traefik.enable=true
+#      - "traefik.http.routers.roundcube.rule=Host(`mail.{{ domain_base_sq }}`)"
+#      - traefik.http.services.roundcube.loadbalancer.server.port=80

@@ -1,0 +1,31 @@
+services: 
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID={{ main_uid }}
+      - PGID={{ main_gid }}
+      - TZ=Europe/Berlin
+    volumes:
+      - "{{ appdata_path }}/nextcloud/config:/config"
+      - "{{ appdata_path }}/nextcloud/data:/data"
+    depends_on:
+      - mariadb
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.nc.rule=Host(`nc.{{ domain_base_sq }}`)"
+    restart: unless-stopped
+  mariadb:
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: mariadb
+    environment:
+      - PUID={{ main_uid }}
+      - PGID={{ main_gid }}
+      - TZ=Europe/Berlin
+      - MYSQL_ROOT_PASSWORD={{ NC_MYSQL_ROOT_PASSWORD }}
+      - MYSQL_DATABASE={{ NC_MYSQL_DATABASE }}
+      - MYSQL_USER={{ NC_MYSQL_USER }}
+      - MYSQL_PASSWORD={{ NC_MYSQL_PASSWORD }}
+    volumes:
+      - "{{ appdata_path }}/databases/nc_db:/config"
+    restart: unless-stopped
