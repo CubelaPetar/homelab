@@ -1,0 +1,143 @@
+services:
+  immich-server:
+    container_name: immich_server
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    volumes:
+      - ${UPLOAD_LOCATION}:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.immich_server.rule=Host(`immich.pearson.jc.reliyya.xyz`)"
+#      - "traefik.http.routers.immich_server.entrypoints=https"
+#      - "traefik.http.routers.immich_server.tls=true"
+#      - "traefik.http.services.immich_server.loadbalancer.server.port=2283"
+    ports:
+      - 2283:2283
+    depends_on:
+      - redis
+      - database
+    restart: unless-stopped
+
+  immich-machine-learning:
+    container_name: immich_machine_learning
+    # For hardware acceleration, add one of -[armnn, cuda, openvino] to the image tag.
+    # Example tag: ${IMMICH_VERSION:-release}-cuda
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+    # extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/ml-hardware- acceleration
+    #   file: hwaccel.ml.yml
+    #   service: cpu # set to one of [armnn, cuda, openvino, openvino-wsl] for accelerated inference - use the `-wsl` version for WSL2 where applicable
+    volumes:
+      - "{{ appdata_path }}/apps/immich_model-cache:/cache"
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  redis:
+    container_name: immich_redis
+    image: registry.hub.docker.com/library/redis:6.2-alpine@sha256:51d6c56749a4243096327e3fb964a48ed92254357108449cb6e23999c37773c5
+    restart: unless-stopped
+
+  database:
+    container_name: immich_postgres
+    image: registry.hub.docker.com/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+    volumes:
+      - "{{ appdata_path }}/apps/immich_pgdata:/var/lib/postgresql/data"
+    restart: unless-stopped
+
+  paperless_redis:
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    volumes:
+      - "{{ appdata_path }}/apps/paperless_redis:/data"
+
+  paperless_db:
+    image: docker.io/library/postgres:16
+    restart: unless-stopped
+    volumes:
+      - "{{ appdata_path }}/apps/paperless_pgdata:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD: paperless
+
+  paperless_web:
+    container_name: paperless
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      - paperless_db
+      - paperless_redis
+      - gotenberg
+      - tika
+    #labels:
+    #  - "traefik.enable=true"
+    #  - "traefik.http.routers.paperless.rule=Host(`paperless.pearson.jc.reliyya.xyz`)"
+    #  - "traefik.http.routers.paperless.entrypoints=https"
+    #  - "traefik.http.routers.paperless.tls=true"
+    #  - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "{{ appdata_path }}/apps/paperless_data:/usr/src/paperless/data"
+      - "{{ appdata_path }}/mediaservers/paperless/:/usr/src/paperless/media"
+      - ./export:/usr/src/paperless/export
+        #- ./consume:/usr/src/paperless/consume
+      - /mnt/disk1/share/paperless-consume:/usr/src/paperless/consume
+    env_file:
+      - docker-compose-paperless.env
+      - .env
+    environment:
+      - PAPERLESS_REDIS=redis://paperless_redis:6379
+      - PAPERLESS_DBHOST=paperless_db
+      - PAPERLESS_TIKA_ENABLED=1
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
+      - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:8.7
+    container_name: gotenberg
+    command:
+      - gotenberg
+      - --chromium-disable-javascript=true
+      - --chromium-allow-list=file:///tmp/.*
+    restart: unless-stopped
+  tika:
+    image: docker.io/apache/tika:latest
+    container_name: tika
+    restart: unless-stopped
+
+
+      #  jellyfin:
+      #    image: lscr.io/linuxserver/jellyfin:latest
+      #    container_name: jellyfin
+      #    environment:
+      #      - PUID=1001
+      #      - PGID=1001
+      #      - TZ=Europe/Berlin
+      #      - JELLYFIN_PublishedServerUrl=jellfin.pearson.jc.reliyya.xyz #optional
+      #      - DOCKER_MODS=linuxserver/mods:jellyfin-opencl-intel
+      #    volumes:
+      #      - "{{ appdata_path }}/mediaservers/jellyfin:/config"
+      #      - /mnt/disk1/petar/vids/movies:/media:ro
+      #      - /mnt/disk1/petar/vids/series:/media2:ro
+      #    devices:
+      #      - /dev/dri:/dev/dri
+      #    labels:
+      #      - "traefik.enable=true"
+      #      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.pearson.jc.reliyya.xyz`)"
+      #      - "traefik.http.routers.jellyfin.entrypoints=https"
+      #      - "traefik.http.routers.jellyfin.tls=true"
+      #      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      #    ports:
+      #      - 8096:8096
+      #      #- 8920:8920 #optional
+      #      #- 7359:7359/udp #optional
+      #      #- 1900:1900/udp #optional
+      #    restart: unless-stopped
+
+

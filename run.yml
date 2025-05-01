@@ -122,7 +122,7 @@
       tags: compose
 
 # ------------ juro ------- #
-- hosts: pearson
+- hosts: jc_pve
   become: yes
   vars_files:
     - "group_vars/secrets.yml"
