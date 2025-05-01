@@ -6,7 +6,6 @@ services:
     restart: unless-stopped
     volumes:
       - "{{ appdata_path }}/valkey-data2:/data"
-      - "{{ appdata_path }}/nextcloud/config:/config"
     cap_drop:
       - ALL
     cap_add:
