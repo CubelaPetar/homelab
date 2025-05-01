@@ -1,6 +1,0 @@
-main_username: petar
-
-package_list:
-  - curl
-  - htop
-  - vim
