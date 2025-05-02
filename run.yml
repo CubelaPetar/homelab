@@ -122,19 +122,19 @@
       tags: compose
 
 # ------------ juro ------- #
-- hosts: jc_pve
-  become: yes
-  vars_files:
-    - "group_vars/secrets.yml"
-  roles:
-    #- role: disks
-    #- role: snapraid
-    #- role: geerlingguy.docker
-    - role: geerlingguy.security
-    #- role: geerlingguy.nfs
-    #- role: container
-    #- role: smtp
-    #- role: samba
+#- hosts: jc_pve
+#  become: yes
+#  vars_files:
+#    - "group_vars/secrets.yml"
+#  roles:
+#    #- role: disks
+#    #- role: snapraid
+#    #- role: geerlingguy.docker
+#    - role: geerlingguy.security
+#    #- role: geerlingguy.nfs
+#    #- role: container
+#    #- role: smtp
+#    #- role: samba
 
 - hosts: jc_pve
   become: yes
