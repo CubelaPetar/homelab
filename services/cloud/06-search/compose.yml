@@ -23,9 +23,9 @@ services:
     container_name: searxng
     image: docker.io/searxng/searxng:latest
     restart: unless-stopped
-    ports:
-      #- "127.0.0.1:8080:8080"
-      - 8080:8080
+    #ports:
+    #  #- "127.0.0.1:8080:8080"
+    #  - 8080:8080
     volumes:
       - "{{ appdata_path }}/searxng:/etc/searxng:rw"
     environment:
