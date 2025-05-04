@@ -144,6 +144,8 @@
 #    #- role: disks
 #    #- role: snapraid
     - role: geerlingguy.docker
+    - role: geerlingguy.security
+      tags: sec
     - role: ironicbadger.docker_compose_generator
       tags: compose
      #-role: samba

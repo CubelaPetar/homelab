@@ -8,6 +8,8 @@ main_gid: 1001
 # ironicbadger.docker-compose-generator
 disabled_compose_files:
   - 01-traefik
+docker_compose_generator_output_path: /home/{{ main_username }}/docker/
+docker_compose_hostname: "jc_pve"
 
 
 #storage_mp: /mnt/disk1
@@ -91,7 +93,7 @@ package_list:
 
 # geerlingguy.security
 security_ssh_port: 22
-security_ssh_password_authentication: "no"
+security_ssh_password_authentication: "yes"
 security_ssh_permit_root_login: "no"
 security_ssh_usedns: "no"
 security_ssh_permit_empty_password: "no"
