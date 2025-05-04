@@ -128,8 +128,8 @@
   vars_files:
     - "group_vars/secrets.yml"
   roles:
-#    #- role: disks
-#    #- role: snapraid
+    - role: disks
+    - role: snapraid
     - role: geerlingguy.docker
     - role: geerlingguy.security
       tags: sec
