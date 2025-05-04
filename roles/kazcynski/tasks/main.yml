@@ -1,2 +1,0 @@
-- include_tasks: container.yml
-- include_tasks: disks.yml
