@@ -1,0 +1,5 @@
+hostname: qwerty
+domain_base: reliyya.xyz
+
+domain: "{{ hostname }}.{{ domain_base}}"
+
