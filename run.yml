@@ -121,6 +121,19 @@
 #    - role: ironicbadger.docker_compose_generator
 #      tags: compose
 
+
+# ------------- qwerty.kids --------------#
+- hosts: nix_llm
+  #become: yes
+  #vars_files:
+  #  - "group_vars/secrets.yml"
+  roles:
+    #- role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
+
+
+
 # ------------ juro ------- #
 
 - hosts: jc_pve
