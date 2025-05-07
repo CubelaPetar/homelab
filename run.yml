@@ -123,16 +123,15 @@
 
 
 # ------------- qwerty.kids --------------#
-- hosts: nix_llm
+- hosts: llm
   #become: yes
   #vars_files:
   #  - "group_vars/secrets.yml"
   roles:
-    #- role: geerlingguy.docker
+    - role: geerlingguy.security
+    - role: geerlingguy.docker
     - role: ironicbadger.docker_compose_generator
       tags: compose
-
-
 
 # ------------ juro ------- #
 
