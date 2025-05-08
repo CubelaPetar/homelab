@@ -107,6 +107,7 @@
     #    - role: geerlingguy.ntp # local ntp server. delete all other
     - role: caddy_srv
       tags: caddy
+
 - hosts: caddy_dmz
   vars_files:
     - "group_vars/secrets.yml"

@@ -31,6 +31,16 @@ p.{{ domain_base }} {
   import cloudflare
 }
 
+#qwerty
+qwerty.{{ domain_base }} {
+  reverse_proxy https://pve-qwerty.reliyya.xyz:8006 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+  import cloudflare
+}
+
 # kanboard
 todo.{{ domain_base }} {
   redir / /kanboard
@@ -41,6 +51,12 @@ todo.{{ domain_base }} {
 # searx
 search.{{ domain_base }} {
   reverse_proxy http://10.56.1.11:8080
+  import cloudflare
+}
+
+# openwebui
+ou.{{ domain_base }} {
+  reverse_proxy http://llm.reliyya.xyz:8080
   import cloudflare
 }
 
