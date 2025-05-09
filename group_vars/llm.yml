@@ -18,8 +18,11 @@ package_list:
   - net-tools
 
 # ironicbadger.docker_compose_generator
-appdata_path: /root/appdata
+appdata_path: "/home/{{ main_username }}/appdata"
 docker_compose_generator_output_path: "/home/{{ main_username }}/docker/"
 docker_compose_hostname: "llm"
 
+# searxng container
+SEARXNG_UWSGI_WORKERS: "1"
+SEARXNG_UWSGI_THREADS: "1"
 

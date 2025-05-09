@@ -1,0 +1,46 @@
+services:
+  redis:
+    container_name: redis
+    image: docker.io/valkey/valkey:8-alpine
+    command: valkey-server --save 30 1 --loglevel warning
+    restart: unless-stopped
+    volumes:
+      - "{{ appdata_path }}/db/valkey-data2:/data"
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+
+  searxng:
+    container_name: searxng
+    image: docker.io/searxng/searxng:latest
+    restart: unless-stopped
+    ports:
+      #- "127.0.0.1:8080:8080"
+      - 3000:8080
+    volumes:
+      - "{{ appdata_path }}/apps/searxng:/etc/searxng:rw"
+    environment:
+      #- "SEARXNG_BASE_URL=https://search.{{ domain_base }}/"
+      - "SEARXNG_BASE_URL=http://localhost:3000/"
+      - "UWSGI_WORKERS={{ SEARXNG_UWSGI_WORKERS }}"
+      - "UWSGI_THREADS={{ SEARXNG_UWSGI_THREADS }}"
+      #- SEARXNG_HOSTNAME=search
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
