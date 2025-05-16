@@ -448,11 +448,14 @@ containers:
     environment:
       - MEILI_ADDR=http://karakeep_meilisearch:7700
       - BROWSER_WEB_URL=http://karakeep_chrome:9222
-      # OPENAI_API_KEY: ...
-
-      # You almost never want to change the value of the DATA_DIR variable.
-      # If you want to mount a custom directory, change the volume mapping above instead.
       - DATA_DIR=/data # DON'T CHANGE THIS
+      - KARAKEEP_VERSION=release
+      - NEXTAUTH_SECRET=efkVltv3Ufl6JsPmgBTmpCCFxALenWV9m25//78TNAc7ZSma
+      - MEILI_MASTER_KEY=QlAjWCf3Q5ap+Lq8drLgtijS1HydxyhaQ8E0HylIWz91S5Am
+      - NEXTAUTH_URL=https://links.reliyya.xyz
+      - OLLAMA_BASE_URL=http://llm.reliyya.xyz:11434
+      - INFERENCE_TEXT_MODEL=gemma3:12b
+      - INFERENCE_IMAGE_MODEL=gemma3:12b
   - service_name: karakeep_chrome
     active: true
     image: gcr.io/zenika-hub/alpine-chrome:123
