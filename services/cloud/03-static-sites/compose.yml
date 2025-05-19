@@ -1,0 +1,9 @@
+petarcubela:
+    image: nginx
+    container_name: petarcubela
+    volumes:
+      - "{{ appdata_path }}/petarcubela/public:/usr/share/nginx/html:ro"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.petarcubela.rule=Host(`petarcubela.de`)
+    restart: unless-stopped
