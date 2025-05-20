@@ -1,0 +1,35 @@
+services: 
+  traefik:
+    image: traefik
+    container_name: tr
+    ports:
+      - 80:80
+      - 443:443
+    command:
+      - --log.level=info
+      - --accesslog=false
+      - --api.insecure=false
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls.certresolver=cloudflare
+      - --certificatesresolvers.cloudflare.acme.dnschallenge=true
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - "--certificatesresolvers.cloudflare.acme.email={{ cloudflare_account_email }}"
+      #- "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
+      - --serversTransport.insecureSkipVerify=true
+    volumes:
+      - "/opt/appdata/traefik/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+      - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
+      - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
+      #- "CLOUDFLARE_DNS_API_TOKEN={{ cloudflare_api_key }}"
+    restart: unless-stopped
+
+

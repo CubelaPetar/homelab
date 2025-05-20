@@ -1,0 +1,77 @@
+services:
+  paperless_web:
+    container_name: paperless
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      - paperless_db
+      - paperless_redis
+      - gotenberg
+      - tika
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.paperless.rule=Host(`paperless.{{ domain }}`)"
+      #      - "traefik.http.routers.paperless.entrypoints=https"
+      #      - "traefik.http.routers.paperless.tls=true"
+      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+    #ports:
+    #  - "8000:8000"
+    volumes:
+      - "{{ appdata_path }}/apps/paperless_data:/usr/src/paperless/data"
+      - "{{ storage_rust }}/media/documents/paperless:/usr/src/paperless/media"
+      - ./export:/usr/src/paperless/export
+      - ./consume:/usr/src/paperless/consume
+#    env_file:
+#      - docker-compose-paperless.env
+#      - .env
+    environment:
+      - "USERMAP_UID={{ main_uid }}"
+      - "USERMAP_GID={{ main_gid }}"
+      - "PAPERLESS_URL=https://paperless.{{ domain_base }}"
+      - USE_X_FORWARD_HOST=true
+      - USE_X_FORWARD_PORT=true
+      - "PAPERLESS_SECRET_KEY={{ password }}"
+      - "PAPERLESS_TIME_ZONE={{ ntp_timezone }}"
+      - PAPERLESS_OCR_LANGUAGE=deu
+      - COMPOSE_PROJECT_NAME=paperless
+      - PAPERLESS_REDIS=redis://paperless_redis:6379
+      - PAPERLESS_DBHOST=paperless_db
+      - PAPERLESS_TIKA_ENABLED=1
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
+      - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
+
+  paperless_redis:
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    volumes:
+      - "{{ appdata_path }}/databases/paperless_redis:/data"
+
+  paperless_db:
+    image: docker.io/library/postgres:16
+    restart: unless-stopped
+    volumes:
+      - "{{ appdata_path }}/databases/paperless_pgdata:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_DB=paperless
+      - POSTGRES_USER=paperless
+      - POSTGRES_PASSWORD={{ paperless_db_passwd }}
+
+
+  - service_name: gotenberg
+    active: true
+    image: docker.io/gotenberg/gotenberg:8.7
+    restart: unless-stopped
+
+    # The gotenberg chromium route is used to convert .eml files. We do not
+    # want to allow external content like tracking pixels or even javascript.
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+
+  - service_name: tika
+    active: true
+    image: docker.io/apache/tika:latest
+    restart: unless-stopped
+
+

@@ -1,0 +1,52 @@
+services:
+  gitea:
+    image: gitea/gitea
+    depends_on:
+      - gitea_mysql
+    environment:
+      - "USER={{ main_username }}"
+      - "USER_UID={{ main_uid }}"
+      - "USER_GID={{ main_gid }}"
+      - "ROOT_URL=https://git.{{ domain_base }}"
+      - "SSH_DOMAIN=git.{{ domain_base }}"
+      - "APP_NAME=git.{{ domain_base }}"
+      - "SSH_PORT=22"
+      - "DISABLE_REGISTRATION=true"
+      - "REQUIRE_SIGNIN_VIEW=true"
+      - TZ=Eurpo/Berlin
+    volumes:
+      - "{{ appdata_path }}/apps/gitea:/data"
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.git.rule=Host(`git.{{ domain_base }}`)"
+      #      - "traefik.http.routers.git.entrypoints=websecure"
+      #      - "traefik.http.routers.git.tls=true"
+      - traefik.http.services.git.loadbalancer.server.port=3000
+    ports:
+      - "22:22"
+    restart: unless-stopped
+  gitea_mysql:
+    image: mariadb
+    environment:
+      - "MYSQL_ROOT_PASSWORD={{ container_mysql_root_password }}"
+      - "MYSQL_PASSWORD={{ container_mysql_password }}"
+      - MYSQL_DATABASE=gitea
+      - MYSQL_USER=gitea
+    volumes:
+      - "{{ appdata_path }}/databases/gitea_mysql:/var/lib/mysql"
+    restart: unless-stopped
+  #  - service_name: gitea-runner
+  #    active: true
+  #    image: gitea/act_runner:nightly
+  #    depends_on:
+  #      - gitea
+  #    environment:
+  #      - "GITEA_INSTANCE_URL=https://git.{{ domain_base }}"
+  #      - "GITEA_RUNNER_REGISTRATION_TOKEN={{ gitea_runner_act_token }}"
+  #      - GITEA_RUNNER_NAME=morpheus-docker
+  #    volumes:
+  #      - /var/run/docker.sock:/var/run/docker.sock:ro
+  #    restart: unless-stopped
+  ###
+
+

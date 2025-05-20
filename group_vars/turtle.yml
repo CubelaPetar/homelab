@@ -1,0 +1,90 @@
+hostname: turtle
+domain_base: reliyya.xyz
+
+domain: "{{ hostname }}.{{ domain_base}}"
+
+# ironicbadger.docker_compose_generator
+appdata_path: /mnt/ssd/appdata
+download_path: /mnt/disk1/downloads
+docker_compose_generator_output_path: /home/{{ main_username }}/docker/
+
+storage_rust: /mnt/disk1
+
+ssd_storage:
+  - path: /mnt/ssd
+    content: true
+    diskbyid: /dev/disk/by-id/ata-Samsung_SSD_870_EVO_1TB_S75CNX0W919785R-part1
+    fs: ext4
+    opts: defaults
+
+# ironicbadger.snapraid
+snapraid_data_disks:
+  - path: /mnt/disk1
+    content: true
+    diskbyid: /dev/disk/by-id/ata-WDC_WD40EFAX-68JH4N0_WD-WX52D3067UAH-part1
+    fs: ext4
+    opts: defaults
+
+  #  - path: /mnt/disk2
+  #    content: true
+  #  - path: /mnt/disk3
+  #    content: true
+
+snapraid_parity_disks:
+  - path: /mnt/parity1
+    content: true
+    diskbyid: /dev/disk/by-id/ata-WDC_WD40EFAX-68JH4N0_WD-WX62D302F6P3-part1
+    fs: ext4
+    opts: defaults
+
+snapraid_content_files:
+  - /var/snapraid.content
+  #- /mnt/ssd-disk1/snapraid.content
+
+snapraid_config_excludes:
+  - "*.unrecoverable"
+  - /lost+found/
+  - "*.!sync"
+  - /tmp/
+
+# geerlingguy.nfs
+nfs_neo_backup: /mnt/ssd/pve-neo
+nfs_qwerty_backup: /mnt/ssd/pve-qwerty
+nfs_projects: /mnt/ssd/projects
+nfs_exports:
+  - "{{ nfs_neo_backup }}    pve.{{ domain_base }}(rw,sync,no_root_squash,fsid=0)"
+  - "{{ nfs_qwerty_backup }}    pve-qwerty.{{ domain_base }}(rw,sync,no_root_squash,fsid=1)"
+  - "{{ nfs_projects }}    10.56.2.1/28(rw,sync,no_root_squash,fsid=1)"
+
+package_list:
+  - bash-completion
+  - curl
+  - rsync
+  - git
+  - htop
+  - iftop
+  - iotop
+  - lm-sensors
+  - net-tools
+  - nfs-kernel-server
+  - nmap
+  - openssh-server
+  - python3
+  - smartmontools
+  - sudo
+  - vim
+  - tree
+  - wget
+  - unattended-upgrades
+  - apticron
+  - apt-listchanges
+  - libsensors5
+  - figlet
+  - wakeonlan
+  - ethtool
+  - libpam-tmpdir
+  #- apt-listbugs
+  - needrestart
+    #- fail2ban
+
+

@@ -3,7 +3,7 @@ domain_base: reliyya.xyz
 
 domain: "{{ hostname }}.{{ domain_base}}"
 
-#storage_mp: /mnt/disk1
+storage_rust: /mnt/disk1
 
 ssd_storage:
   - path: /mnt/ssd
@@ -237,24 +237,6 @@ containers:
       - database
     restart: unless-stopped
 
-  #  - service_name: immich-microservices
-  #    active: true
-  #    container_name: immich_microservices
-  #    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-  #    # extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/hardware-transcoding
-  #    #   file: hwaccel.transcoding.yml
-  #    #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
-  #    command: ["start.sh", "microservices"]
-  #    volumes:
-  #      - ${UPLOAD_LOCATION}:/usr/src/app/upload
-  #      - /etc/localtime:/etc/localtime:ro
-  #    env_file:
-  #      - .env
-  #    depends_on:
-  #      - redis
-  #      - database
-  #    restart: unless-stopped
-
   - service_name: immich-machine-learning
     active: true
     container_name: immich_machine_learning
@@ -357,22 +339,22 @@ containers:
     image: docker.io/apache/tika:latest
     restart: unless-stopped
 
-  - service_name: silverbullet
-    active: false
-    image: ghcr.io/silverbulletmd/silverbullet
-    restart: unless-stopped
-    environment:
-      - "SB_USER={{ main_username }}:{{ password }}"
-    volumes:
-      - /mnt/ssd/notes:/space
-    #ports:
-    #  - 3000:3000
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sb.rule=Host(`notes.{{ domain_base }}`)"
-      #      - "traefik.http.routers.paperless.entrypoints=https"
-      #      - "traefik.http.routers.paperless.tls=true"
-      - "traefik.http.services.sb.loadbalancer.server.port=3000"
+#  - service_name: silverbullet
+#    active: false
+#    image: ghcr.io/silverbulletmd/silverbullet
+#    restart: unless-stopped
+#    environment:
+#      - "SB_USER={{ main_username }}:{{ password }}"
+#    volumes:
+#      - /mnt/ssd/notes:/space
+#    #ports:
+#    #  - 3000:3000
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.sb.rule=Host(`notes.{{ domain_base }}`)"
+#      #      - "traefik.http.routers.paperless.entrypoints=https"
+#      #      - "traefik.http.routers.paperless.tls=true"
+#      - "traefik.http.services.sb.loadbalancer.server.port=3000"
 
   - service_name: gitea
     active: true

@@ -1,0 +1,33 @@
+services: 
+  librespeed:
+    image: lscr.io/linuxserver/librespeed:latest
+    container_name: librespeed
+    environment:
+      - PUID="{{ main_uid }}"
+      - PGID="{{ main_gid }}"
+      - TZ="{{ ntp_timezone }}"
+      - PASSWORD="{{ password }}"
+      - MODE=standalone
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.librespeed.rule=Host(`speed.{{ domain }}`)"
+      #- "traefik.http.routers.librespeed.entrypoints=websecure"
+      #- "traefik.http.routers.librespeed.tls=true"
+      #- "traefik.http.routers.librespeed.tls.certresolver=cloudflare"
+      #- "traefik.http.services.librespeed.loadbalancer.server.scheme=https"
+      - "traefik.http.services.librespeed.loadbalancer.server.port=80"
+    restart: unless-stopped
+
+#  beszel-agent:
+#    image: "henrygd/beszel-agent"
+#    container_name: "beszel-agent"
+#    restart: unless-stopped
+#    network_mode: host
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#      # monitor other disks / partitions by mounting a folder in /extra-filesystems
+#      #- /mnt/disk1/.beszel:/extra-filesystems/sda1:ro
+#      #- /mnt/disk/.beszel:/extra-filesystems/sda1:ro
+#    environment:
+#      LISTEN: 45876
+#      KEY: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDej/q8wFVJBEnwvRrM8B+qoAN+H+KDrmpq3PVyJTeCj"
