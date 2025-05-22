@@ -1,3 +1,7 @@
+global:
+  forget:
+    keep-last: 3
+
 locations:
 {% for location in autorestic_locations %}
   {{ location.name }}:
