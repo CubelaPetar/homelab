@@ -19,8 +19,8 @@ services:
     volumes:
       - "{{ appdata_path }}/apps/paperless_data:/usr/src/paperless/data"
       - "{{ storage_rust }}/media/documents/paperless:/usr/src/paperless/media"
-      - ./export:/usr/src/paperless/export
-      - ./consume:/usr/src/paperless/consume
+      - "{{ appdata_path }}/apps/paperless_export:/usr/src/paperless/export"
+      - "{{ appdata_path }}/apps/paperless_consume:/usr/src/paperless/consume"
 #    env_file:
 #      - docker-compose-paperless.env
 #      - .env
