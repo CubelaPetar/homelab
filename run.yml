@@ -122,6 +122,14 @@
 #    - role: ironicbadger.docker_compose_generator
 #      tags: compose
 
+- hosts: filesharing
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: samba 
+      tags: filesharing
+
+
 
 # ------------- qwerty.kids --------------#
 - hosts: llm

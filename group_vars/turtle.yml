@@ -56,6 +56,10 @@ nfs_exports:
   - "{{ nfs_qwerty_backup }}    pve-qwerty.{{ domain_base }}(rw,sync,no_root_squash,fsid=1)"
   - "{{ nfs_projects }}    10.56.2.1/28(rw,sync,no_root_squash,fsid=1)"
 
+# smba role 
+smb_users:
+  - "{{ main_username }}"
+
 package_list:
   - bash-completion
   - curl
