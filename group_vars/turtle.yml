@@ -70,7 +70,7 @@ package_list:
   - iotop
   - lm-sensors
   - net-tools
-  - nfs-kernel-server
+  - #nfs-kernel-server
   - nmap
   - openssh-server
   - python3

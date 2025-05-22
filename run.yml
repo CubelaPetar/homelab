@@ -12,6 +12,19 @@
     - role: geerlingguy.security
     - role: samba
     - role: geerlingguy.nfs
+
+- hosts: turtle
+  become: yes
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: disks
+    - role: snapraid
+    - role: geerlingguy.security
+    - role: packages
+    - role: samba
+    - role: geerlingguy.nfs
+    - role: autorestic
 # ------------- NEO --------------#
 - hosts: neo
   become: yes
