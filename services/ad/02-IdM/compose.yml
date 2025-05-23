@@ -9,23 +9,26 @@ services:
       - "6360:6360"
       # For the web front-end
       #- "17170:17170"
+    networks:
+      - ip6net
     volumes:
       - "{{ appdata_path }}/idm/lldap_data:/data"
+      - "{{ appdata_path }}/certs/ad/letsencrypt/:/letsencrypt"
     labels:
       - traefik.enable=true
       - "traefik.http.routers.lldap.rule=Host(`ad.{{ domain_base }}`)"
       - traefik.http.services.lldap.loadbalancer.server.port=17170
     environment:
-      - UID=0
-      - GID=0
+      - "UID={{ main_uid }}"
+      - "GID={{ main_gid }}"
       - TZ=Europe/Berlin
       - "LLDAP_JWT_SECRET={{ LLDAP_JWT_SECRET }}"
       - "LLDAP_KEY_SEED={{ LLDAP_KEY_SEED }}"
       - LLDAP_LDAP_BASE_DN=dc=reliyya,dc=xyz
       #If using LDAPS, set enabled true and configure cert and key path
       - LLDAP_LDAPS_OPTIONS__ENABLED=true
-      - "LLDAP_LDAPS_OPTIONS__CERT_FILE={{ appdata_path }}/certs/ad/letsencrypt/acme.json"
-      - "LLDAP_LDAPS_OPTIONS__KEY_FILE={{ appdata_path }}/certs/ad/letsencrypt/acme.json"
+      - "LLDAP_LDAPS_OPTIONS__CERT_FILE=/letsencrypt/certs/ad.reliyya.xyz.crt"
+      - "LLDAP_LDAPS_OPTIONS__KEY_FILE=/letsencrypt/private/ad.reliyya.xyz.key"
       # You can also set a different database:
       # - LLDAP_DATABASE_URL=mysql://mysql-user:password@mysql-server/my-database
       # - LLDAP_DATABASE_URL=postgres://postgres-user:password@postgres-server/my-database
