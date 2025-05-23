@@ -5,6 +5,8 @@ services:
     ports:
       - 80:80
       - 443:443
+    network:
+      - ip6net
     command:
       - --log.level=info
       - --accesslog=false
@@ -24,7 +26,7 @@ services:
       - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
       - --serversTransport.insecureSkipVerify=true
     volumes:
-      - "{{ appdata_path }}/certs/media/letsencrypt:/letsencrypt"
+      - "{{ appdata_path }}/certs/ad/letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     environment:
       - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
@@ -33,3 +35,9 @@ services:
     restart: unless-stopped
 
 
+ networks:
+   ip6net:
+     enable_ipv6: true
+     ipam:
+       config:
+         - subnet: fde4:ed21:b2c0:56f1::/64

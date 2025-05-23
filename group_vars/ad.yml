@@ -1,0 +1,10 @@
+hostname: ad
+domain_base: reliyya.xyz
+
+domain: "{{ hostname }}.{{ domain_base}}"
+
+# ironicbadger.docker_compose_generator
+appdata_path: /mnt/nfs/appdata
+docker_compose_generator_output_path: /home/{{ main_username }}/docker/
+
+docker_compose_hostname: "ad"

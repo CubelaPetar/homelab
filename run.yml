@@ -135,14 +135,22 @@
 #    - role: ironicbadger.docker_compose_generator
 #      tags: compose
 
-- hosts: filesharing
+#- hosts: filesharing
+#  vars_files:
+#    - "group_vars/secrets.yml"
+#  roles:
+#    - role: samba 
+#      tags: filesharing
+
+- hosts: ad
   vars_files:
     - "group_vars/secrets.yml"
   roles:
-    - role: samba 
-      tags: filesharing
-
-
+    - role: geerlingguy.security
+    #- role: nfs-client
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
 
 # ------------- qwerty.kids --------------#
 - hosts: llm
