@@ -4,7 +4,7 @@ services:
     container_name: lldap
     ports:
       # For LDAP, not recommended to expose, see Usage section.
-      - "3890:3890"
+      - "3890:3890" ## Close this port when migrated
       # For LDAPS (LDAP Over SSL), enable port if LLDAP_LDAPS_OPTIONS__ENABLED set true, look env below
       - "6360:6360"
       # For the web front-end
