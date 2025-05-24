@@ -4,9 +4,10 @@
     pkg: nfs-common
     state: present
 
-- name: Create group for samba users.
+- name: Create group for nfs users.
   group: 
     name: nfsusers
+    gid: 1111
     state: present 
 
 - name: Ensure nfs users are added to the nfs group.
