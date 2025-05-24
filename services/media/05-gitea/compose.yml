@@ -24,6 +24,9 @@ services:
       - traefik.http.services.git.loadbalancer.server.port=3000
     ports:
       - "22:22"
+    networks:
+      - ip6net
+
     restart: unless-stopped
   gitea_mysql:
     image: mariadb
@@ -34,6 +37,8 @@ services:
       - MYSQL_USER=gitea
     volumes:
       - "{{ appdata_path }}/databases/gitea_mysql:/var/lib/mysql"
+    networks:
+      - ip6net
     restart: unless-stopped
   #  - service_name: gitea-runner
   #    active: true

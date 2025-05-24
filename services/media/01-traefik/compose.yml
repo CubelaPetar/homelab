@@ -1,3 +1,12 @@
+ networks:
+   ip6net:
+     enable_ipv6: true
+     enable_ipv4: false
+#     ipam:
+#       config:
+#         - subnet: fde4:ed21:b2c0:56f1::/64
+
+
 services: 
   traefik:
     image: traefik
@@ -5,6 +14,8 @@ services:
     ports:
       - 80:80
       - 443:443
+    networks:
+      - ip6net
     command:
       - --log.level=info
       - --accesslog=false

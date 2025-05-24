@@ -16,6 +16,8 @@ services:
       - "traefik.http.services.paperless.loadbalancer.server.port=8000"
     #ports:
     #  - "8000:8000"
+    networks:
+      - ip6net
     volumes:
       - "{{ appdata_path }}/apps/paperless_data:/usr/src/paperless/data"
       - "{{ storage_rust }}/media/documents/paperless:/usr/src/paperless/media"
@@ -45,6 +47,9 @@ services:
     restart: unless-stopped
     volumes:
       - "{{ appdata_path }}/databases/paperless_redis:/data"
+    networks:
+      - ip6net
+
 
   paperless_db:
     image: docker.io/library/postgres:16
@@ -55,12 +60,19 @@ services:
       - POSTGRES_DB=paperless
       - POSTGRES_USER=paperless
       - POSTGRES_PASSWORD={{ paperless_db_passwd }}
+    networks:
+      - ip6net
+
+
 
 
   - service_name: gotenberg
     active: true
     image: docker.io/gotenberg/gotenberg:8.7
     restart: unless-stopped
+    networks:
+      - ip6net
+
 
     # The gotenberg chromium route is used to convert .eml files. We do not
     # want to allow external content like tracking pixels or even javascript.
@@ -73,5 +85,8 @@ services:
     active: true
     image: docker.io/apache/tika:latest
     restart: unless-stopped
+    networks:
+      - ip6net
+
 
 

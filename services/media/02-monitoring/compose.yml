@@ -8,6 +8,8 @@ services:
       - TZ="{{ ntp_timezone }}"
       - PASSWORD="{{ password }}"
       - MODE=standalone
+    networks:
+      - ip6net
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.librespeed.rule=Host(`speed.{{ domain }}`)"
