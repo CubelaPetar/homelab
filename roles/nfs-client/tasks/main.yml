@@ -26,4 +26,26 @@
   loop:
     - "{{ nfs_root }}"
 
+- name: Ensure nfs targets exists
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: root
+    group: nfsusers
+    state: directory
+    mode: 0575
+  loop:
+    - "{{ appdata_path }}"
+    - "{{ media_path }}"
+
 ## Mount appdata and other via fstab
+- name: Mount nfs data shares
+  mount:
+    name: "{{ item.path }}"
+    src: "{{ item.source }}"
+    fstype: "{{ item.fs }}"
+    opts: "{{ item.opts }}"
+    # change to 'mounted' to auto mount
+    state: present
+  with_items:
+    - "{{ nfs_mounts }}"
+  when: item.path != '/mnt'

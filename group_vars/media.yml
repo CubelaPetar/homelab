@@ -6,7 +6,6 @@ domain: "{{ hostname }}.{{ domain_base}}"
 # ironicbadger.docker_compose_generator
 appdata_path: /mnt/nfs/appdata
 media_path: /mnt/nfs/media
-nfs_root: /mnt/nfs
 docker_compose_generator_output_path: /home/{{ main_username }}/docker/
 
 docker_compose_hostname: "media"
@@ -14,6 +13,22 @@ docker_compose_hostname: "media"
 # nfs role 
 nfs_users:
   - "{{ main_username }}"
+
+nfs_root: /mnt/nfs
+nfs_appdata_source: /mnt/ssd/appdata
+nfs_media_source: /mnt/disk1/media
+
+nfs_mounts:
+  - path: "{{ appdata_path }}"
+    content: true
+    source: "nas.{{ domain_base }}:{{ nfs_appdata_source }}"
+    fs: nfs
+    opts: defaults,timeo=900,retrans=5,_netdev
+  - path: "{{ media_path }}"
+    content: true
+    source: "nas.{{ domain_base }}:{{ nfs_media_source }}"
+    fs: nfs
+    opts: defaults,timeo=900,retrans=5,_netdev
 
 
 gitea_runner_act_token: "very_secure"
