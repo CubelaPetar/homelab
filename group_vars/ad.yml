@@ -14,3 +14,13 @@ docker_compose_hostname: "ad"
 nfs_users:
   - "{{ main_username }}"
 
+nfs_root: /mnt/nfs
+nfs_appdata_source: /mnt/ssd/appdata
+
+nfs_mounts:
+  - path: "{{ appdata_path }}"
+    content: true
+    source: "nas.{{ domain_base }}:{{ nfs_appdata_source }}"
+    fs: nfs
+    opts: defaults,timeo=900,retrans=5,_netdev
+
