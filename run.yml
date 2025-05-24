@@ -147,10 +147,23 @@
     - "group_vars/secrets.yml"
   roles:
     - role: geerlingguy.security
-    #- role: nfs-client
+    - role: nfs-client
+      tags: nfs
     - role: geerlingguy.docker
     - role: ironicbadger.docker_compose_generator
       tags: compose
+
+- hosts: media
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: geerlingguy.security
+    - role: nfs-client
+      tags: nfs
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
+
 
 # ------------- qwerty.kids --------------#
 - hosts: llm

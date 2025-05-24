@@ -12,7 +12,7 @@ services:
       - ip6net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.librespeed.rule=Host(`speed.{{ domain }}`)"
+      - "traefik.http.routers.librespeed.rule=Host(`speed.{{ domain_base }}`)"
       #- "traefik.http.routers.librespeed.entrypoints=websecure"
       #- "traefik.http.routers.librespeed.tls=true"
       #- "traefik.http.routers.librespeed.tls.certresolver=cloudflare"

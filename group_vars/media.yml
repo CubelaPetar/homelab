@@ -5,6 +5,7 @@ domain: "{{ hostname }}.{{ domain_base}}"
 
 # ironicbadger.docker_compose_generator
 appdata_path: /mnt/nfs/appdata
+media_path: /mnt/nfs/media
 nfs_root: /mnt/nfs
 docker_compose_generator_output_path: /home/{{ main_username }}/docker/
 
@@ -15,3 +16,4 @@ nfs_users:
   - "{{ main_username }}"
 
 
+gitea_runner_act_token: "very_secure"

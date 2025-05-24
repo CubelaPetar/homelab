@@ -22,7 +22,7 @@
     owner: root
     group: nfsusers
     state: directory
-    mode: 0464
+    mode: 0575
   loop:
     - "{{ nfs_root }}"
 

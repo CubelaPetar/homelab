@@ -52,11 +52,13 @@ nfs_neo_backup: /mnt/ssd/pve-neo
 nfs_qwerty_backup: /mnt/ssd/pve-qwerty
 nfs_projects: /mnt/ssd/projects
 nfs_appdata: /mnt/ssd/appdata
+nfs_media: /mnt/disk1/media
 nfs_exports:
   - "{{ nfs_neo_backup }}       pve.{{ domain_base }}(rw,sync,no_root_squash,fsid=0)"
   - "{{ nfs_qwerty_backup }}    pve-qwerty.{{ domain_base }}(rw,sync,no_root_squash,fsid=1)"
   - "{{ nfs_projects }}         10.56.2.1/28(rw,sync,no_root_squash,fsid=2)"
   - "{{ nfs_appdata }}          fde4:ed21:b2c0:5601::/64(rw,sync,no_root_squash,fsid=3)"
+  - "{{ nfs_media }}            fde4:ed21:b2c0:5601::/64(rw,sync,no_root_squash,fsid=4)"
 
 # nfs role 
 nfs_users:

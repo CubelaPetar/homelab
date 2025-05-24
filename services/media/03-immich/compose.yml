@@ -3,13 +3,13 @@ services:
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:release
     volumes:
-      - "{{ storage_rust }}/media/photos:/usr/src/app/upload"
+      - "{{ media_path }}/photos:/usr/src/app/upload"
       - /etc/localtime:/etc/localtime:ro
 #    env_file:
 #      - .env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.immich_server.rule=Host(`immich.{{ domain }}`)"
+      - "traefik.http.routers.immich_server.rule=Host(`immich.{{ domain_base }}`)"
       #      - "traefik.http.routers.immich_server.entrypoints=https"
       #      - "traefik.http.routers.immich_server.tls=true"
       - "traefik.http.services.immich_server.loadbalancer.server.port=2283"
@@ -19,7 +19,7 @@ services:
       - ip6net
     environment:
       - IMMICH_VERSION=release
-      - "UPLOAD_LOCATION={{ storage_rust }}/media/photos"
+      - "UPLOAD_LOCATION={{ media_path }}/photos"
       - "DB_PASSWORD={{ DB_PASSWORD }}"
       - "DB_USERNAME={{ DB_USERNAME }}"
       - "DB_DATABASE_NAME={{ DB_DATABASE_NAME }}"
