@@ -58,7 +58,11 @@ nfs_exports:
   - "{{ nfs_projects }}         10.56.2.1/28(rw,sync,no_root_squash,fsid=2)"
   - "{{ nfs_appdata }}          fde4:ed21:b2c0:5601::/64(rw,sync,no_root_squash,fsid=3)"
 
-# smba role 
+# nfs role 
+nfs_users:
+  - "{{ main_username }}"
+
+# smb role 
 smb_users:
   - "{{ main_username }}"
 

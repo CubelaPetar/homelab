@@ -1,0 +1,29 @@
+---
+- name: Install nfs-common.
+  apt:
+    pkg: nfs-common
+    state: present
+
+- name: Create group for samba users.
+  group: 
+    name: nfsusers
+    state: present 
+
+- name: Ensure nfs users are added to the nfs group.
+  user:
+    name: "{{ item }}"
+    groups: nfsusers
+    append: true
+  with_items: "{{ nfs_users }}"
+
+- name: Ensure nfs root exists
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: root
+    group: nfsusers
+    state: directory
+    mode: 0464
+  loop:
+    - "{{ nfs_root }}"
+
+## Mount appdata and other via fstab
