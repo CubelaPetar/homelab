@@ -5,7 +5,7 @@ networks:
     ipam:
       config:
         - subnet: fde4:ed21:b2c0:56f1::/64
-          gateway: fde4:ed21:b2c0:56f1::1
+          #gateway: fde4:ed21:b2c0:56f1::1
 
 services: 
   traefik:
