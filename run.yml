@@ -23,8 +23,10 @@
     - role: geerlingguy.security
     - role: packages
     - role: samba
+      tags: filesharing
     - role: geerlingguy.nfs
-    - role: autorestic
+      tags: filesharing
+#    - role: autorestic
 # ------------- NEO --------------#
 - hosts: neo
   become: yes

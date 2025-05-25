@@ -9,7 +9,7 @@
   with_items:
     - "{{ snapraid_parity_disks }}"
     - "{{ snapraid_data_disks }}"
-#    - "{{ ssd_storage }}"
+    - "{{ ssd_storage }}"
 
 - name: mount disks
   mount:
@@ -22,5 +22,5 @@
   with_items:
     - "{{ snapraid_parity_disks }}"
     - "{{ snapraid_data_disks }}"
-#    - "{{ ssd_storage }}"
+    - "{{ ssd_storage }}"
   when: item.path != '/mnt'
