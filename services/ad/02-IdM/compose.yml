@@ -1,4 +1,3 @@
-services: 
   lldap:
     image: lldap/lldap:stable
     container_name: lldap
@@ -42,3 +41,102 @@ services:
       - "LLDAP_SMTP_OPTIONS__FROM=no-reply <ad@{{ domain_base }}>" # The header field, optional: how the sender appears in the email. The first is a free-form name, followed by an email between <>.
         #- LLDAP_SMTP_OPTIONS__TO=admin <admin@reliyya.xyz> # Same for reply-to, optional.
     restart: unless-stopped
+
+
+  authentik_postgresql:
+    image: docker.io/library/postgres:16-alpine
+    restart: unless-stopped
+    container_name: authentik_postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    volumes:
+      - "{{ appdata_path }}/databases/authentik_db:/var/lib/postgresql/data"
+    environment:
+      - "POSTGRES_PASSWORD={{ authentik_db_pass }}"
+      - "POSTGRES_USER={{ authentik_db_user }}"
+      - "POSTGRES_DB={{ authentik_db_db }}"
+    networks:
+      - ip6net
+
+  authentik_redis:
+    image: docker.io/library/redis:alpine
+    command: --save 60 1 --loglevel warning
+    container_name: authentik_redis
+    restart: unless-stopped
+    networks:
+      - ip6net
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - "{{ appdata_path }}/databases/authentik_redis:/data"
+  authentik_server:
+    image: ghcr.io/goauthentik/server:latest
+    restart: unless-stopped
+    container_name: authentik_server
+    command: server
+    networks:
+      - ip6net
+    environment:
+      - "AUTHENTIK_SECRET_KEY={{ AUTHENTIK_SECRET_KEY }}"
+      - "AUTHENTIK_REDIS__HOST=authentik_redis"
+      - "AUTHENTIK_POSTGRESQL__HOST=authentik_db"
+      - "AUTHENTIK_POSTGRESQL__USER={{ authentik_db_user }}"
+      - "AUTHENTIK_POSTGRESQL__NAME={{ authentik_db_db }}"
+      - "AUTHENTIK_POSTGRESQL__PASSWORD={{ authentik_db_pass }}"
+      - "POSTGRES_USER={{ authentik_db_user }}"
+    volumes:
+      - "{{ appdata_path }}/idm/authentik_media:/media"
+      - "{{ appdata_path }}/idm/authentik_custom-templates:/templates"
+    ports:
+      - "9000:9000"
+      #- "9443:9443"
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.auth.rule=Host(`auth.{{ domain_base }}`)"
+      - traefik.http.services.auth.loadbalancer.server.port=9443
+    depends_on:
+      authentik_db:
+        condition: service_healthy
+      authentik_redis:
+        condition: service_healthy
+  authentik_worker:
+    image: ghcr.io/goauthentik/server:latest
+    restart: unless-stopped
+    container_name: authentik_worker
+    command: worker
+    networks:
+      - ip6net
+    environment:
+      - "AUTHENTIK_SECRET_KEY={{ AUTHENTIK_SECRET_KEY }}"
+      - "AUTHENTIK_REDIS__HOST=authentik_redis"
+      - "AUTHENTIK_POSTGRESQL__HOST=authentik_db"
+      - "AUTHENTIK_POSTGRESQL__USER={{ authentik_db_user }}"
+      - "AUTHENTIK_POSTGRESQL__NAME={{ authentik_db_db }}"
+      - "AUTHENTIK_POSTGRESQL__PASSWORD={{ authentik_db_pass }}"
+      - "POSTGRES_USER={{ authentik_db_user }}"
+    # `user: root` and the docker socket volume are optional.
+    # See more for the docker socket integration here:
+    # https://goauthentik.io/docs/outposts/integrations/docker
+    # Removing `user: root` also prevents the worker from fixing the permissions
+    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
+    # (1000:1000 by default)
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "{{ appdata_path }}/certs/authentik_certs:/certs"
+      - "{{ appdata_path }}/idm/authentik_media:/media"
+      - "{{ appdata_path }}/idm/authentik_custom-templates:/templates"
+    depends_on:
+      authentik_db:
+        condition: service_healthy
+      authentik_db:
+        condition: service_healthy
+
