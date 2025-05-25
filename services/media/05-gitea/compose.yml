@@ -19,11 +19,9 @@ services:
     labels:
       - traefik.enable=true
       - "traefik.http.routers.git.rule=Host(`git.{{ domain_base }}`)"
-      #      - "traefik.http.routers.git.entrypoints=websecure"
-      #      - "traefik.http.routers.git.tls=true"
       - traefik.http.services.git.loadbalancer.server.port=3000
     ports:
-      - "22:22"
+      - "[::1]:222:22"
     networks:
       - ip6net
 
@@ -31,7 +29,7 @@ services:
   gitea_mysql:
     image: mariadb
     environment:
-      - "MYSQL_ROOT_PASSWORD={{ container_mysql_root_password }}"
+      - 'MYSQL_ROOT_PASSWORD={{ container_mysql_root_password }}'
       - "MYSQL_PASSWORD={{ container_mysql_password }}"
       - MYSQL_DATABASE=gitea
       - MYSQL_USER=gitea
@@ -46,6 +44,9 @@ services:
   #    image: gitea/act_runner:nightly
   #    depends_on:
   #      - gitea
+  #    networks:
+  #     - ip6net
+ 
   #    environment:
   #      - "GITEA_INSTANCE_URL=https://git.{{ domain_base }}"
   #      - "GITEA_RUNNER_REGISTRATION_TOKEN={{ gitea_runner_act_token }}"

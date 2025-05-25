@@ -5,16 +5,10 @@ services:
     volumes:
       - "{{ media_path }}/photos:/usr/src/app/upload"
       - /etc/localtime:/etc/localtime:ro
-#    env_file:
-#      - .env
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.immich_server.rule=Host(`immich.{{ domain_base }}`)"
-      #      - "traefik.http.routers.immich_server.entrypoints=https"
-      #      - "traefik.http.routers.immich_server.tls=true"
       - "traefik.http.services.immich_server.loadbalancer.server.port=2283"
-    #ports:
-    #  - 2283:2283
     networks:
       - ip6net
     environment:
@@ -26,8 +20,8 @@ services:
       - "DB_HOSTNAME=immich_postgres"
       - REDIS_HOSTNAME=immich_redis
     depends_on:
-      - redis
-      - database
+      - immich_redis
+      - immich_database
     restart: unless-stopped
 
   immich-machine-learning:
@@ -43,11 +37,9 @@ services:
 
     volumes:
       - "{{ appdata_path }}/apps/immich_model-cache:/cache"
-#    env_file:
-#      - .env
     restart: unless-stopped
 
-  redis:
+  immich_redis:
     container_name: immich_redis
     image: registry.hub.docker.com/library/redis:6.2-alpine@sha256:51d6c56749a4243096327e3fb964a48ed92254357108449cb6e23999c37773c5
     networks:
@@ -55,13 +47,17 @@ services:
 
     restart: unless-stopped
 
-  database:
+  immich_database:
     container_name: immich_postgres
-    image: registry.hub.docker.com/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
+    #image: registry.hub.docker.com/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
     environment:
       - "POSTGRES_PASSWORD={{ DB_PASSWORD }}"
       - "POSTGRES_USER={{ DB_USERNAME }}"
       - "POSTGRES_DB={{ DB_DATABASE_NAME }}"
+      - POSTGRES_INITDB_ARGS='--data-checksums'
+      # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
+      # DB_STORAGE_TYPE: 'HDD'
     networks:
       - ip6net
     volumes:

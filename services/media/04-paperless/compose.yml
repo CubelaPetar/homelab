@@ -6,16 +6,12 @@ services:
     depends_on:
       - paperless_db
       - paperless_redis
-      - gotenberg
-      - tika
+      - paperless_gotenberg
+      - paperless_tika
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.paperless.rule=Host(`paperless.{{ domain_base }}`)"
-      #      - "traefik.http.routers.paperless.entrypoints=https"
-      #      - "traefik.http.routers.paperless.tls=true"
       - "traefik.http.services.paperless.loadbalancer.server.port=8000"
-    #ports:
-    #  - "8000:8000"
     networks:
       - ip6net
     volumes:
@@ -23,9 +19,6 @@ services:
       - "{{ media_path }}/documents/paperless:/usr/src/paperless/media"
       - "{{ appdata_path }}/apps/paperless_export:/usr/src/paperless/export"
       - "{{ appdata_path }}/apps/paperless_consume:/usr/src/paperless/consume"
-#    env_file:
-#      - docker-compose-paperless.env
-#      - .env
     environment:
       - "USERMAP_UID={{ main_uid }}"
       - "USERMAP_GID={{ main_gid }}"
@@ -63,26 +56,17 @@ services:
     networks:
       - ip6net
 
-
-
-
-  - service_name: gotenberg
-    active: true
+  paperless_gotenberg:
     image: docker.io/gotenberg/gotenberg:8.7
     restart: unless-stopped
     networks:
       - ip6net
-
-
-    # The gotenberg chromium route is used to convert .eml files. We do not
-    # want to allow external content like tracking pixels or even javascript.
     command:
       - "gotenberg"
       - "--chromium-disable-javascript=true"
       - "--chromium-allow-list=file:///tmp/.*"
 
-  - service_name: tika
-    active: true
+  paperless_tika:
     image: docker.io/apache/tika:latest
     restart: unless-stopped
     networks:

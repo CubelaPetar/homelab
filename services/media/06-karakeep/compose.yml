@@ -3,17 +3,14 @@ services:
     image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
     restart: unless-stopped
     volumes:
-      # By default, the data is stored in a docker volume called "data".
-      # If you want to mount a custom directory, change the volume mapping to:
-      # - /path/to/your/directory:/data
       - "{{ appdata_path }}/apps/karakeep/data:/data"
-    #ports:
-    #  - 3000:3000
+    networks:
+      - ip6net
+
+
     labels:
       - traefik.enable=true
       - "traefik.http.routers.karakeep.rule=Host(`links.{{ domain_base }}`)"
-      #      - "traefik.http.routers.git.entrypoints=websecure"
-      #      - "traefik.http.routers.git.tls=true"
       - traefik.http.services.karakeep.loadbalancer.server.port=3000
     environment:
       - MEILI_ADDR=http://karakeep_meilisearch:7700
@@ -36,6 +33,10 @@ services:
       - --remote-debugging-address=0.0.0.0
       - --remote-debugging-port=9222
       - --hide-scrollbars
+    networks:
+      - ip6net
+
+
   karakeep_meilisearch:
     image: getmeili/meilisearch:v1.13.3
     restart: unless-stopped
@@ -43,3 +44,7 @@ services:
       - MEILI_NO_ANALYTICS=true
     volumes:
       - "{{ appdata_path }}/apps/meilisearch:/meili_data"
+    networks:
+      - ip6net
+
+
