@@ -9,9 +9,9 @@ media_path: /mnt/nfs/media
 docker_compose_generator_output_path: /home/{{ main_username }}/docker/
 
 docker_compose_hostname: "media"
-disabled_compose_files:
-  - 05-gitea
-  - 06-karakeep
+#disabled_compose_files:
+#  - 05-gitea
+#  - 06-karakeep
 
 # nfs role 
 nfs_users:
