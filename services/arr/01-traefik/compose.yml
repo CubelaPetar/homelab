@@ -5,6 +5,8 @@ services:
     ports:
       - 80:80
       - 443:443
+    networks:
+      - ip6net
     command:
       - --log.level=info
       - --accesslog=false
@@ -18,17 +20,19 @@ services:
       - --entrypoints.websecure.http.tls.certresolver=cloudflare
       - --certificatesresolvers.cloudflare.acme.dnschallenge=true
       - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
-      - --certificatesresolvers.cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesresolvers.cloudflare.acme.dnsChallenge.resolvers=[2606:4700:4700::1111]:53,[2606:4700:4700::1001]:53
       - "--certificatesresolvers.cloudflare.acme.email={{ cloudflare_account_email }}"
       #- "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - --certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json
       - --serversTransport.insecureSkipVerify=true
     volumes:
-      - "/opt/appdata/traefik/letsencrypt:/letsencrypt"
+      - "{{ appdata_path }}/certs/arr/letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     environment:
       - "CLOUDFLARE_EMAIL={{ cloudflare_account_email }}"
       - "CLOUDFLARE_API_KEY={{ cloudflare_api_key }}"
       #- "CLOUDFLARE_DNS_API_TOKEN={{ cloudflare_api_key }}"
     restart: unless-stopped
+
+
 

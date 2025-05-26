@@ -1,0 +1,31 @@
+#services:
+#  ipv6nat-mailcow:
+##      depends_on:
+##        - traefik
+##        - librespeed
+##        - immich-server
+##        - immich-machine-learning
+##        - immich_redis
+##        - immich_
+#    environment:
+#      - "TZ={{ ntp_timezone }}"
+#    image: robbertkl/ipv6nat
+#    security_opt:
+#      - label=disable
+#    restart: always
+#    privileged: true
+#    network_mode: "host"
+#    volumes:
+#        - /var/run/docker.sock:/var/run/docker.sock:ro
+#        - /lib/modules:/lib/modules:ro
+
+
+networks:
+  ip6net:
+    enable_ipv6: true
+    enable_ipv4: false
+    ipam:
+      config:
+        - subnet: fde4:ed21:b2c0:56f3::/64
+          gateway: fde4:ed21:b2c0:56f3::1
+
