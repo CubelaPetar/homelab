@@ -19,8 +19,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{ domain_base }}`)"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
-    networks:
-      - ip6net
 #    ports:
 #      - 8096:8096
       #- 8920:8920 #optional
