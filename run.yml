@@ -153,6 +153,16 @@
     - role: ironicbadger.docker_compose_generator
       tags: compose
 
+- hosts: arr
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: geerlingguy.security
+    - role: nfs-client
+      tags: nfs
+    - role: geerlingguy.docker
+    - role: ironicbadger.docker_compose_generator
+      tags: compose
 
 # ------------- qwerty.kids --------------#
 - hosts: llm
