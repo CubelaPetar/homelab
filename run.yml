@@ -1,17 +1,4 @@
 ---
-- hosts: pain
-  become: yes
-  vars_files:
-    - "group_vars/secrets.yml"
-  roles:
-    - role: disks
-    - role: snapraid
-    - role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
-      tags: compose
-    - role: geerlingguy.security
-    - role: samba
-    - role: geerlingguy.nfs
 
 - hosts: turtle
   become: yes
