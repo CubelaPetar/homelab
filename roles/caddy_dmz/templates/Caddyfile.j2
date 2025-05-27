@@ -29,14 +29,14 @@
 ## core
 
 # opnsense
-#opnsense.{{ domain_base }} {
-#  reverse_proxy https://10.56.0.254:8443 {
-#    transport http {
-#      tls_insecure_skip_verify
-#    }
-#  }
-#  import cloudflare
-#}
+gw.{{ domain_base }} {
+  reverse_proxy https://10.56.0.254:8443 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+  import cloudflare
+}
 
 # kanboard
 todo.{{ domain_base }} {
@@ -51,13 +51,20 @@ todo.{{ domain_base }} {
 #  import cloudflare
 #}
 
-# notes 
-notes.{{ domain_base }} {
-    reverse_proxy http://10.56.1.1:3000
-    import cloudflare
-}
+## notes 
+#notes.{{ domain_base }} {
+#    reverse_proxy http://10.56.1.1:3000
+#    import cloudflare
+#}
 
 # gitea
-git.{{ domain_base }} {
-    reverse_proxy https://git.reliyya.xyz
+#git.{{ domain_base }} {
+#    reverse_proxy https://git.reliyya.xyz
+#}
+
+# openwebui
+ou.{{ domain_base }} {
+  reverse_proxy http://llm.reliyya.xyz:8080
+  import cloudflare
 }
+
