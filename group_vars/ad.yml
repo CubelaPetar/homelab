@@ -5,7 +5,6 @@ domain: "{{ hostname }}.{{ domain_base}}"
 
 # ironicbadger.docker_compose_generator
 appdata_path: /mnt/nfs/appdata
-nfs_root: /mnt/nfs
 docker_compose_generator_output_path: /home/{{ main_username }}/docker/
 
 docker_compose_hostname: "ad"
