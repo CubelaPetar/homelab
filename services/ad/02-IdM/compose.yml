@@ -44,10 +44,10 @@ services:
     restart: unless-stopped
 
 
-  authentik_postgresql:
+  authentik_db:
     image: docker.io/library/postgres:16-alpine
     restart: unless-stopped
-    container_name: authentik_postgresql
+    container_name: authentik_db
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       start_period: 20s
@@ -93,16 +93,30 @@ services:
       - "AUTHENTIK_POSTGRESQL__NAME={{ authentik_db_db }}"
       - "AUTHENTIK_POSTGRESQL__PASSWORD={{ authentik_db_pass }}"
       - "POSTGRES_USER={{ authentik_db_user }}"
+
+      # SMTP Host Emails are sent to
+      - "AUTHENTIK_EMAIL__HOST=smtp.{{ domain_base }}"
+      - AUTHENTIK_EMAIL__PORT=587
+      # Optionally authenticate (don't add quotation marks to your password)
+      - AUTHENTIK_EMAIL__USERNAME=admin
+      - "AUTHENTIK_EMAIL__PASSWORD={{ password }}"
+      # Use StartTLS
+      - AUTHENTIK_EMAIL__USE_TLS=true
+      # Use SSL
+      - AUTHENTIK_EMAIL__USE_SSL=false
+      - AUTHENTIK_EMAIL__TIMEOUT=10
+      # Email address authentik will send from, should have a correct @domain
+      - "AUTHENTIK_EMAIL__FROM=authentik@{{ domain_base }}"
     volumes:
       - "{{ appdata_path }}/idm/authentik_media:/media"
       - "{{ appdata_path }}/idm/authentik_custom-templates:/templates"
     ports:
-      - "9000:9000"
-      #- "9443:9443"
+      #- "9000:9000"
+      - "9443:9443"
     labels:
       - traefik.enable=true
       - "traefik.http.routers.auth.rule=Host(`auth.{{ domain_base }}`)"
-      - traefik.http.services.auth.loadbalancer.server.port=9443
+      - traefik.http.services.auth.loadbalancer.server.port=9000
     depends_on:
       authentik_db:
         condition: service_healthy
@@ -123,6 +137,21 @@ services:
       - "AUTHENTIK_POSTGRESQL__NAME={{ authentik_db_db }}"
       - "AUTHENTIK_POSTGRESQL__PASSWORD={{ authentik_db_pass }}"
       - "POSTGRES_USER={{ authentik_db_user }}"
+
+      # SMTP Host Emails are sent to
+      - "AUTHENTIK_EMAIL__HOST=smtp.{{ domain_base }}"
+      - AUTHENTIK_EMAIL__PORT=587
+      # Optionally authenticate (don't add quotation marks to your password)
+      - AUTHENTIK_EMAIL__USERNAME=admin
+      - "AUTHENTIK_EMAIL__PASSWORD={{ password }}"
+      # Use StartTLS
+      - AUTHENTIK_EMAIL__USE_TLS=true
+      # Use SSL
+      - AUTHENTIK_EMAIL__USE_SSL=false
+      - AUTHENTIK_EMAIL__TIMEOUT=10
+      # Email address authentik will send from, should have a correct @domain
+      - "AUTHENTIK_EMAIL__FROM=authentik@{{ domain_base }}"
+
     # `user: root` and the docker socket volume are optional.
     # See more for the docker socket integration here:
     # https://goauthentik.io/docs/outposts/integrations/docker
@@ -138,6 +167,6 @@ services:
     depends_on:
       authentik_db:
         condition: service_healthy
-      authentik_db:
+      authentik_redis:
         condition: service_healthy
 
