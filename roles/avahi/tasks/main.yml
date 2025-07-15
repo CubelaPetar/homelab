@@ -1,0 +1,13 @@
+- name: Install avahi
+  package:
+    name: 
+      - avahi-daemon
+      - avahi-browse
+      - libnss-mdns
+    state: present
+
+- name: Enable avahi
+  service:
+    name: avahi-daemon
+    state: started
+    enabled: yes

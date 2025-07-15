@@ -1,0 +1,6 @@
+hostname: avahi
+domain_base: reliyya.xyz
+
+domain: "{{ hostname }}.{{ domain_base}}"
+
+
