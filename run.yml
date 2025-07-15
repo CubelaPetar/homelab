@@ -101,7 +101,7 @@
     - role: ironicbadger.docker_compose_generator
       tags: compose
 
-# ------------- p.kids --------------#
+# ------------- turtle.kids --------------#
 - hosts: caddy_srv
   vars_files:
     - "group_vars/secrets.yml"
@@ -118,18 +118,12 @@
     - role: caddy_dmz
       tags: caddy
 
-#- hosts: search
-#  roles:
-#    #- role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
-#      tags: compose
-
-#- hosts: filesharing
-#  vars_files:
-#    - "group_vars/secrets.yml"
-#  roles:
-#    - role: samba 
-#      tags: filesharing
+- hosts: deb 
+  vars_files:
+    - "group_vars/secrets.yml"
+  roles:
+    - role: geerlingguy.docker 
+      tags: docker
 
 - hosts: ad
   vars_files:
@@ -139,6 +133,7 @@
     - role: nfs-client
       tags: nfs
     - role: geerlingguy.docker
+      tags: docker
     - role: ironicbadger.docker_compose_generator
       tags: compose
 
