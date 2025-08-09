@@ -31,6 +31,13 @@ services:
       - ollama
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
+
+      - OAUTH_CLIENT_ID=literal:REDACTED_OAUTH_ID
+      - OAUTH_CLIENT_SECRET=literal:REDACTED_OAUTH_SECRET
+      - OAUTH_PROVIDER_NAME=authentik
+      - OPENID_PROVIDER_URL=https://auth.reliyya.xyz/application/o/openwebui/.well-known/openid-configuration
+      - OPENID_REDIRECT_URI=https://ou.reliyya.xyz/oauth/oidc/callback
+      #- ENABLE_OAUTH_SIGNUP=true
     restart: unless-stopped 
 #------------ GPU monit not working with docker -------- #
 #  beszel-agent:
