@@ -5,7 +5,7 @@ services:
     command: valkey-server --save 30 1 --loglevel warning
     restart: unless-stopped
     volumes:
-      - "{{ appdata_path }}/db/valkey-data2:/data"
+      - "{{ appdata_path }}/databases/valkey-data2:/data"
     cap_drop:
       - ALL
     cap_add:

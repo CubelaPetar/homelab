@@ -23,7 +23,6 @@
     - role: geerlingguy.security
     - role: geerlingguy.ntp # Proxmox docs uses chrony
 
-
 # ------------- QWERTY --------------#
 
 - hosts: qwerty
@@ -184,6 +183,8 @@
   roles:
     - role: geerlingguy.security
     - role: geerlingguy.docker
+    - role: nfs-client
+      tags: nfs
     - role: ironicbadger.docker_compose_generator
       tags: compose
 
