@@ -8,6 +8,8 @@ services:
       - paperless_redis
       - paperless_gotenberg
       - paperless_tika
+    ports:
+      - 8000:8000
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.paperless.rule=Host(`paperless.{{ domain_base }}`)"
