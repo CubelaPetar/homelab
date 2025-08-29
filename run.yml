@@ -14,14 +14,6 @@
     - role: geerlingguy.nfs
       tags: filesharing
 #    - role: autorestic
-# ------------- NEO --------------#
-- hosts: neo
-  become: yes
-  vars_files:
-    - "group_vars/secrets.yml"
-  roles:
-    - role: geerlingguy.security
-    - role: geerlingguy.ntp # Proxmox docs uses chrony
 
 # ------------- QWERTY --------------#
 
@@ -77,13 +69,6 @@
     #    - role: geerlingguy.ntp # local ntp server. delete all other
     - role: caddy
       tags: caddy
-- hosts: kuma
-  vars_files:
-    - "group_vars/secrets.yml"
-  roles:
-    - role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
-      tags: compose
 
 - hosts: lldap
   vars_files:
@@ -92,6 +77,7 @@
     #- role: geerlingguy.docker
     - role: ironicbadger.docker_compose_generator
       tags: compose
+
 - hosts: netboot
   vars_files:
     - "group_vars/secrets.yml"
