@@ -2,6 +2,7 @@
 - hosts:
     - homelab
     - vps
+    - hetzner
   become: true
 
   tasks:
