@@ -6,7 +6,7 @@ domain: "{{ hostname }}.{{ domain_base}}"
 # ironicbadger.docker_compose_generator
 appdata_path: /mnt/nfs/appdata
 #appdata_path: "/home/{{ main_username }}/appdata"
-media_path: /mnt/nfs/media
+#media_path: /mnt/nfs/media
 docker_compose_generator_output_path: /home/{{ main_username }}/docker/
 
 docker_compose_hostname: "llm"
@@ -32,7 +32,7 @@ SEARXNG_UWSGI_THREADS: "1"
 package_list:
   - bash-completion
   - curl
-  - rync
+  - rsync
   - git
   - htop
   - vim

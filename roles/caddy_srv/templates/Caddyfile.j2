@@ -50,13 +50,15 @@ todo.{{ domain_base }} {
 
 # searx
 search.{{ domain_base }} {
-  reverse_proxy http://llm.reliyya.xyz:3000
+  #reverse_proxy http://llm.reliyya.xyz:3000
+  reverse_proxy http://[fde4:ed21:b2c0:5601:d250:99ff:fefc:2dd0]:3000
   import cloudflare
 }
 
 # openwebui
 ou.{{ domain_base }} {
-  reverse_proxy http://llm.reliyya.xyz:8080
+  #reverse_proxy http://llm.reliyya.xyz:3000
+  reverse_proxy http://[fde4:ed21:b2c0:5601:d250:99ff:fefc:2dd0]:8080
   import cloudflare
 }
 

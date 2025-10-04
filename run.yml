@@ -17,19 +17,21 @@
 
 # ------------- QWERTY --------------#
 
-- hosts: qwerty
-  become: yes
-  vars_files:
-    - "group_vars/secrets.yml"
-  roles:
-    - role: geerlingguy.security
-    - role: packages
-    - role: geerlingguy.docker
-    - role: nfs-client
-      tags: nfs
-    - role: geerlingguy.docker
-    - role: ironicbadger.docker_compose_generator
-      tags: compose
+## DEPRECATED
+#
+#- hosts: qwerty
+#  become: yes
+#  vars_files:
+#    - "group_vars/secrets.yml"
+#  roles:
+#    - role: geerlingguy.security
+#    - role: packages
+#    - role: geerlingguy.docker
+#    - role: nfs-client
+#      tags: nfs
+#    - role: geerlingguy.docker
+#    - role: ironicbadger.docker_compose_generator
+#      tags: compose
 
 # ------------- NEOs KIDs --------------#
 - hosts: pihole
@@ -160,7 +162,11 @@
   #  - "group_vars/secrets.yml"
   roles:
     - role: geerlingguy.security
+      tags: base
+    - role: packages
+      tags: base
     - role: geerlingguy.docker
+      tags: base
     - role: nfs-client
       tags: nfs
     - role: ironicbadger.docker_compose_generator
