@@ -70,8 +70,7 @@ gw.{{ domain_base }} {
 
 # beszel
 monit.{{ domain_base }} {
-  #reverse_proxy http://beszel.{{ domain_base }}:8090
-  reverse_proxy http://[fde4:ed21:b2c0:5607:be24:11ff:fea4:6db]:8090
+  reverse_proxy http://beszel.{{ domain_base }}:8090
   import cloudflare
 }
 
