@@ -29,26 +29,27 @@
 ## core
 
 # opnsense
-#gw.{{ domain_base }} {
-#  reverse_proxy https://10.56.0.254:8443 {
-#    transport http {
-#      tls_insecure_skip_verify
-#    }
-#  }
+gw.{{ domain_base }} {
+  reverse_proxy https://10.56.0.254:8443 {
+    transport http {
+      tls_insecure_skip_verify
+      versions 1.1
+    }
+  }
+  import cloudflare
+}
+
+# kanboard
+#todo.{{ domain_base }} {
+#  redir / /kanboard
+#  reverse_proxy http://10.56.1.10:80
 #  import cloudflare
 #}
 
-# kanboard
-todo.{{ domain_base }} {
-  redir / /kanboard
-  reverse_proxy http://10.56.1.10:80
-  import cloudflare
-}
-
-jellyfin.{{ domain_base }} {
-  reverse_proxy http://arr.reliyya.xyz:8096
-  import cloudflare
-}
+#jellyfin.{{ domain_base }} {
+#  reverse_proxy http://arr.reliyya.xyz:8096
+#  import cloudflare
+#}
 
 # searx
 #search.{{ domain_base }} {
