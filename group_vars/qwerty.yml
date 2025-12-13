@@ -9,10 +9,10 @@ media_path: /mnt/nfs/media
 docker_compose_generator_output_path: /home/{{ main_username }}/docker/
 
 docker_compose_hostname: "qwerty"
-#disabled_compose_files:
+# disabled_compose_files:
 #  - 05-gitea
 
-# nfs role 
+# nfs role
 nfs_users:
   - "{{ main_username }}"
 
@@ -43,7 +43,7 @@ package_list:
   - iotop
   - lm-sensors
   - net-tools
-  #- nfs-kernel-server
+  # - nfs-kernel-server
   - nmap
   - openssh-server
   - python3
@@ -60,8 +60,6 @@ package_list:
   - wakeonlan
   - ethtool
   - libpam-tmpdir
-  #- apt-listbugs
+  # - apt-listbugs
   - needrestart
-    #- fail2ban
-
-
+  # - fail2ban
