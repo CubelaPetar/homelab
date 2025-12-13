@@ -61,12 +61,13 @@ nfs_exports:
   - "{{ nfs_k8s_dev }}          10.56.0.48/29(rw,sync,no_root_squash,no_subtree_check)"
   - "{{ nfs_appdata }}          fde4:ed21:b2c0:5601::/64(rw,sync,no_root_squash,no_subtree_check)"
   - "{{ nfs_media }}            fde4:ed21:b2c0:5601::/64(rw,sync,no_root_squash,no_subtree_check)"
+  - "{{ nfs_media }}            fde4:ed21:b2c0:5608::/64(rw,sync,no_root_squash,no_subtree_check)"
 
-# nfs role 
+# nfs role
 nfs_users:
   - "{{ main_username }}"
 
-# smb role 
+# smb role
 smb_users:
   - "{{ main_username }}"
 
