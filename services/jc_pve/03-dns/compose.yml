@@ -36,7 +36,7 @@ services:
       - PGID="{{ main_gid }}"
       - TZ="{{ ntp_timezone }}"
       - SUBDOMAINS=juro-vpn
-      - TOKEN=literal:REDACTED_DUCKDNS_TOKEN
+      - TOKEN={{ jc_duckdns_token}}
       - LOG_FILE=true #optional
         #      - UPDATE_IP=ipv6
     volumes:
