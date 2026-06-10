@@ -15,24 +15,6 @@
       tags: filesharing
 #    - role: autorestic
 
-# ------------- QWERTY --------------#
-
-## DEPRECATED
-#
-#- hosts: qwerty
-#  become: yes
-#  vars_files:
-#    - "group_vars/secrets.yml"
-#  roles:
-#    - role: geerlingguy.security
-#    - role: packages
-#    - role: geerlingguy.docker
-#    - role: nfs-client
-#      tags: nfs
-#    - role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
-#      tags: compose
-
 # ------------- NEOs KIDs --------------#
 - hosts: pihole
   become: yes
@@ -40,19 +22,6 @@
     - "group_vars/secrets.yml"
   roles:
     - role: dhcp-dns
-#- hosts: dns01
-#  become: yes
-#  vars_files:
-#    - "group_vars/secrets.yml"
-#  roles:
-#    - role: bind9
-#
-#- hosts: dns02
-#  become: yes
-#  vars_files:
-#    - "group_vars/secrets.yml"
-#  roles:
-#    - role: bind9
 
 - hosts: unifi
   become: yes
@@ -80,13 +49,6 @@
     - role: ironicbadger.docker_compose_generator
       tags: compose
 
-#- hosts: smtp
-#  vars_files:
-#    - "group_vars/secrets.yml"
-#  roles:
-#    #- role: geerlingguy.docker
-#    - role: ironicbadger.docker_compose_generator
-#      tags: compose
 # ------------- cloud --------------#
 - hosts: cloud
   #become: yes
