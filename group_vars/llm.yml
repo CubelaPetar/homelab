@@ -23,12 +23,12 @@ nfs_mounts:
     content: true
     source: "nas.{{ domain_base }}:{{ nfs_appdata_source }}"
     fs: nfs
-    opts: defaults,timeo=900,retrans=5,_netdev
+    opts: defaults,timeo=900,retrans=5,_netdev,nofail,x-systemd.requires=network-online.target,x-systemd.automount,x-systemd.mount-timeout=90
   - path: "{{ media_path }}"
     content: true
     source: "nas.{{ domain_base }}:{{ nfs_media_source }}"
     fs: nfs
-    opts: defaults,timeo=900,retrans=5,_netdev
+    opts: defaults,timeo=900,retrans=5,_netdev,nofail,x-systemd.requires=network-online.target,x-systemd.automount,x-systemd.mount-timeout=90
 
 
 # searxng container
