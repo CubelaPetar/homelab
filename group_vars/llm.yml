@@ -44,3 +44,4 @@ package_list:
   - vim
   - nmap
   - net-tools
+  - cron
