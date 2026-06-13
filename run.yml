@@ -120,8 +120,8 @@
 # ------------- qwerty.kids --------------#
 - hosts: llm
   #become: yes
-  #vars_files:
-  #  - "group_vars/secrets.yml"
+  vars_files:
+    - "group_vars/secrets.yml"
   roles:
     - role: geerlingguy.security
       tags: base
