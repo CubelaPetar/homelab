@@ -238,7 +238,11 @@ Sunday 04:00
 Hetzner Storage Box (BX11, 1 TB) — connected via SFTP over IPv6.  
 Backup logs: `/var/log/turtle-backup.log`
 
-Full strategy and scripts: [`docs/backup_strategy/20260612-turtle-backup-strategy-offsite_v3.md`](docs/backup_strategy/20260612-turtle-backup-strategy-offsite_v3.md)
+| Host | Doc |
+|---|---|
+| turtle (NAS) | [`docs/backup_strategy/20260612-turtle-backup-strategy-offsite_v3.md`](docs/backup_strategy/20260612-turtle-backup-strategy-offsite_v3.md) |
+| cloud VPS | [`docs/backup_strategy/20260614-cloud-vps-backup-strategy.md`](docs/backup_strategy/20260614-cloud-vps-backup-strategy.md) |
+| petarcubela VPS | [`docs/backup_strategy/20260610-petarcubela_backup_mailcow_restic.md`](docs/backup_strategy/20260610-petarcubela_backup_mailcow_restic.md) |
 
 ---
 
