@@ -28,9 +28,9 @@ This setup bridges a DS-Lite home network (IPv6 only, no public IPv4) with an IP
 
 |Role|Device|WireGuard IPv4|WireGuard IPv6 (ULA)|Public Endpoint|
 |---|---|---|---|---|
-|**Hub**|VPS|`10.0.0.1/24`|`fde4:ed21:b2c0:56dd::1/64`|`VPS_PUBLIC_IPv4_REDACTED` (IPv4) / `VPS_PUBLIC_IPv6_REDACTED` (IPv6)|
+|**Hub**|VPS|`10.0.0.1/24`|`fde4:ed21:b2c0:56dd::1/64`|`<VPS_PUBLIC_IPv4>` (IPv4) / `<VPS_PUBLIC_IPv6>` (IPv6)|
 |**Home gateway**|OPNsense|`10.0.0.2/24`|`fde4:ed21:b2c0:56dd::2/64`|`vpn.reliyya.xyz` (dynamic IPv6 via DDNS)|
-|**Work machine**|Laptop/PC|`10.0.0.3/24`|`fde4:ed21:b2c0:56dd::3/64`|`WORK_PUBLIC_IPv4_REDACTED` (IPv4)|
+|**Work machine**|Laptop/PC|`10.0.0.3/24`|`fde4:ed21:b2c0:56dd::3/64`|dynamic (IPv4-only network, no fixed address)|
 
 - **Home LAN IPv4 subnet:** `10.56.0.0/20`
 - **Home LAN IPv6 ULA block:** `fde4:ed21:b2c0:5600::/56` (covers all home VLANs)
@@ -135,7 +135,7 @@ All steps performed in the OPNsense web UI.
 |---|---|
 |Name|`vps-hub`|
 |Public Key|`<vps-public-key>`|
-|Endpoint Address|`VPS_PUBLIC_IPv6_REDACTED`|
+|Endpoint Address|`<VPS_PUBLIC_IPv6>`|
 |Endpoint Port|`51822`|
 |Allowed IPs|`10.0.0.0/24`, `fde4:ed21:b2c0:56dd::/64`|
 |Keepalive|`25`|
@@ -258,7 +258,7 @@ DNS        = 10.56.0.1, fde4:ed21:b2c0:5600::254   # OPNsense MGMT (IPv4 + IPv6)
 
 [Peer]
 PublicKey           = <vps-public-key>
-Endpoint            = VPS_PUBLIC_IPv4_REDACTED:51822   # VPS IPv4 address
+Endpoint            = <VPS_PUBLIC_IPv4>:51822
 AllowedIPs          = 10.0.0.0/24, 10.56.0.0/20, fde4:ed21:b2c0:56dd::/64, fde4:ed21:b2c0:5600::/56
 PersistentKeepalive = 25
 ```
