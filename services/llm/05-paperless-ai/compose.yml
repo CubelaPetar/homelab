@@ -2,7 +2,8 @@ services:
   paperless-ai:
     image: clusterzx/paperless-ai
     container_name: paperless-ai
-#    network_mode: bridge
+    networks:
+      - ip6net
     restart: unless-stopped
     cap_drop:
       - ALL

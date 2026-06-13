@@ -3,6 +3,8 @@ services:
   immich-machine-learning:
     image: ghcr.io/immich-app/immich-machine-learning:release-cuda
     container_name: immich-machine-learning
+    networks:
+      - ip6net
     volumes:
       - "{{ appdata_path }}/apps/immich_model-cache:/cache"
     ports:
