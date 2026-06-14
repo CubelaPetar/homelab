@@ -343,33 +343,6 @@ docker exec nextcloud php occ maintenance:mode
 
 ---
 
-## Future: Hermes (agentic AI)
-
-When Hermes is deployed on this server, add its appdata path to the backup script.
-
-Hermes will likely need:
-- Its model cache or weights directory — evaluate size first; if large and re-downloadable, exclude like ollama models on turtle
-- Its database (if any) — determine the engine and apply the same cold-stop or dump strategy as Nextcloud/MariaDB
-- Its config/secrets directory — include unconditionally
-
-Update `backup-cloud.sh` by adding the relevant paths to the `restic_local backup` call:
-
-```bash
-# Example — adjust paths once Hermes is deployed
-restic_local backup \
-  "$APPDATA/nextcloud" \
-  "$APPDATA/databases/nc_db" \
-  "$APPDATA/traefik/letsencrypt" \
-  "$APPDATA/hermes" \           # ← add this
-  /etc/wireguard \
-  --tag cloud \
-  ...
-```
-
-If Hermes uses a database, add a stop/start around it — or a dump step — before the restic call, following the same pattern as the MariaDB block above.
-
----
-
 ## Out of scope
 
 | Host | Status | Notes |
