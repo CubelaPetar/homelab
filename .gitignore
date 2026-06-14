@@ -1,2 +1,4 @@
 hosts.local.ini
 *.retry
+docs/
+TODO.md
