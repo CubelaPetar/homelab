@@ -127,6 +127,7 @@ Personal production infrastructure managed with Ansible. Covers a home server cl
 | Beszel agent | Monitoring |
 | Nextcloud | Cloud storage (`nc.scienceqorner.com`) |
 | SearXNG | Public search instance |
+| Plausible Analytics | Privacy-friendly web analytics (`plausible.petarcubela.de`) |
 | Static sites | Personal and project sites |
 
 ### pve-turtle
