@@ -4,7 +4,9 @@
 
 - **cloud** is a dual-stack VPS running Docker Compose stacks managed by Ansible.
 - `appdata_path` is `/home/petar/appdata` — all persistent service state lives under this tree.
-- The only service with user data that cannot be re-created is **Nextcloud**, backed by a **MariaDB** container (`mariadb`) and storing files under `appdata/nextcloud/data/`.
+- Services with user data that cannot be re-created:
+  - **Nextcloud**, backed by a **MariaDB** container (`mariadb`) and storing files under `appdata/nextcloud/data/`.
+  - **Plausible Analytics**, backed by a **PostgreSQL** container (`plausible_db`, data at `appdata/databases/plausible_db_data/`) and a **ClickHouse** container (`plausible_events_db`, data at `appdata/databases/plausible_clickhouse_event-data/`). Plausible's app state (timezone data, tmp) lives at `appdata/plausible/plausible-data/`.
 - **WireGuard** is the VPN hub for the site-to-site tunnel to home and road warrior access. Its config (`/etc/wireguard/wg0.conf`) contains the VPS private key and all peer public keys — losing it means regenerating keys and reconfiguring all peers.
 - **Traefik** stores ACME certificates in `appdata/traefik/letsencrypt/acme.json`. Losing them is not catastrophic (Let's Encrypt will re-issue), but re-issuance counts toward rate limits and causes a brief service interruption.
 - **Static sites** (`petarcubela.de`, `rezepte.petarcubela.de`) have their content managed as Hugo projects in separate git repositories. Only the pre-built `public/` directories live in `appdata/`. These are intentionally excluded from backup — a `hugo build` redeploy recreates them instantly.
@@ -18,13 +20,20 @@ Daily:
   03:00 — backup-cloud.sh
              enable Nextcloud maintenance mode
              ↓
-             stop mariadb container (DB files now cold — safe to copy)
+             stop mariadb (InnoDB files now cold)
+             stop plausible → plausible_db → plausible_events_db (in that order)
              ↓
-             restic backup: appdata/ (excl. static sites, searxng, valkey)
-                          + /etc/wireguard/
+             restic backup: appdata/nextcloud/
+                            appdata/databases/nc_db/
+                            appdata/databases/plausible_db_data/
+                            appdata/databases/plausible_clickhouse_event-data/
+                            appdata/plausible/plausible-data/
+                            appdata/traefik/letsencrypt/
+                            /etc/wireguard/
                           → Hetzner Storage Box directly
              ↓
-             start mariadb container
+             start plausible_events_db → plausible_db → plausible (sleep 10s between)
+             start mariadb
              ↓
              disable Nextcloud maintenance mode
              ↓
@@ -39,6 +48,9 @@ Daily:
 |---|---|---|
 | `appdata/nextcloud/` (config + data files) | restic (DB cold) | ✓ daily |
 | `appdata/databases/nc_db/` (MariaDB data dir) | restic (container stopped) | ✓ daily |
+| `appdata/databases/plausible_db_data/` (Postgres data dir) | restic (container stopped) | ✓ daily |
+| `appdata/databases/plausible_clickhouse_event-data/` (ClickHouse data dir) | restic (container stopped) | ✓ daily |
+| `appdata/plausible/plausible-data/` (Plausible app state) | restic (container stopped) | ✓ daily |
 | `appdata/traefik/letsencrypt/` (ACME certs) | restic | ✓ daily |
 | `/etc/wireguard/` (WireGuard keys + config) | restic | ✓ daily |
 
@@ -50,6 +62,8 @@ Daily:
 | `appdata/rezepte/public/` | Same — separate git repo |
 | `appdata/searxng/` | Ansible-managed config; no user data |
 | `appdata/valkey-data2/` | SearXNG cache; ephemeral |
+| `appdata/plausible/clickhouse/` | Ansible-managed ClickHouse config XMLs; redeployed by Ansible |
+| `appdata/databases/plausible_clickhouse_vent-logs/` | ClickHouse log files; not needed for restore |
 
 ---
 
@@ -66,6 +80,22 @@ MariaDB uses InnoDB. Copying live InnoDB data files without stopping the engine 
 Total downtime for Nextcloud: typically 2–5 minutes (restic on a small appdata; upload time to Hetzner depends on data size and VPS uplink).
 
 > **Why not `mysqldump`?** A SQL dump is portable and easy to restore into any MySQL instance, but it requires `mysqldump` to be available inside the container and adds complexity (dump file path, cleanup). For this setup the raw-files approach is simpler and produces a directly mountable backup. If the MariaDB data grows large or the restore story matters, add a `mysqldump` step before stopping the container and keep the `.sql` file alongside the raw data backup.
+
+---
+
+## Plausible consistency strategy
+
+Plausible uses two databases: PostgreSQL (Postgrex/Ecto) and ClickHouse. Both require a clean shutdown before their data directories can be copied safely.
+
+1. Stop the `plausible` app container first — it holds open connections to both DBs.
+2. Stop `plausible_db` — PostgreSQL flushes WAL and closes data files cleanly.
+3. Stop `plausible_events_db` — ClickHouse checkpoints and closes its MergeTree data files.
+4. restic backs up `plausible_db_data/`, `plausible_clickhouse_event-data/`, and `plausible-data/` — all cold.
+5. Restart in reverse: `plausible_events_db` → `plausible_db` → (10s sleep) → `plausible`.
+
+The 10-second sleep between database start and Plausible start is a safety margin — Plausible's `depends_on` healthchecks only apply on `docker compose up`, not `docker compose start`.
+
+Total Plausible downtime during backup: typically 1–3 minutes depending on ClickHouse checkpoint and upload time.
 
 ---
 
@@ -140,11 +170,13 @@ restic -r sftp:hetzner-box:backups/cloud \
 
 ### `/usr/local/bin/backup-cloud.sh`
 
+See `scripts/cloud/backup-cloud-restic.sh` in the homelab repo — the doc copy below is kept in sync.
+
 ```bash
 #!/usr/bin/env bash
 # backup-cloud.sh
-# Backs up Nextcloud (with MariaDB cold stop) and WireGuard config
-# directly to Hetzner Storage Box via restic.
+# Backs up Nextcloud (MariaDB cold stop) and Plausible (Postgres + ClickHouse cold stop)
+# plus WireGuard config directly to Hetzner Storage Box via restic.
 # No local repo — cloud's disk is nearly full.
 # Runs at 03:00 daily via /etc/cron.d/cloud-backup.
 set -euo pipefail
@@ -161,6 +193,15 @@ exec > >(tee -a "$LOG") 2>&1
 log() { echo "[${TS}] $*"; }
 
 restic_remote() { restic -r "$REMOTE_REPO" --password-file "$PW_FILE" "$@"; }
+
+restart_all() {
+  docker compose -f "$NC_COMPOSE_FILE" start mariadb || true
+  docker compose -f "$NC_COMPOSE_FILE" start plausible_events_db || true
+  docker compose -f "$NC_COMPOSE_FILE" start plausible_db || true
+  sleep 10
+  docker compose -f "$NC_COMPOSE_FILE" start plausible || true
+  docker exec nextcloud occ maintenance:mode --off || true
+}
 
 log "=== cloud backup starting ==="
 
@@ -180,11 +221,28 @@ docker compose -f "$NC_COMPOSE_FILE" stop mariadb \
     exit 1
   }
 
-# ── 3. restic backup directly to Hetzner ──────────────────────────────────────
+# ── 3. Stop Plausible stack (app first, then databases) ───────────────────────
+log "Stopping Plausible containers"
+docker compose -f "$NC_COMPOSE_FILE" stop plausible \
+  && log "plausible stopped" \
+  || { log "ERROR: could not stop plausible — aborting"; restart_all; exit 1; }
+
+docker compose -f "$NC_COMPOSE_FILE" stop plausible_db \
+  && log "plausible_db stopped" \
+  || { log "ERROR: could not stop plausible_db — aborting"; restart_all; exit 1; }
+
+docker compose -f "$NC_COMPOSE_FILE" stop plausible_events_db \
+  && log "plausible_events_db stopped" \
+  || { log "ERROR: could not stop plausible_events_db — aborting"; restart_all; exit 1; }
+
+# ── 4. restic backup directly to Hetzner ──────────────────────────────────────
 log "Backing up appdata and wireguard config to Hetzner"
 restic_remote backup \
   "$APPDATA/nextcloud" \
   "$APPDATA/databases/nc_db" \
+  "$APPDATA/databases/plausible_db_data" \
+  "$APPDATA/databases/plausible_clickhouse_event-data" \
+  "$APPDATA/plausible/plausible-data" \
   "$APPDATA/traefik/letsencrypt" \
   /etc/wireguard \
   --tag cloud \
@@ -192,26 +250,31 @@ restic_remote backup \
   --exclude "*.tmp" \
   && log "restic backup OK" \
   || {
-    log "ERROR: restic backup failed — restarting mariadb and disabling maintenance mode"
-    docker compose -f "$NC_COMPOSE_FILE" start mariadb
-    docker exec nextcloud occ maintenance:mode --off
+    log "ERROR: restic backup failed — restarting all containers"
+    restart_all
     exit 1
   }
 
-# ── 4. Restart MariaDB ────────────────────────────────────────────────────────
+# ── 5. Restart Plausible stack (databases first, then app) ────────────────────
+log "Starting Plausible containers"
+docker compose -f "$NC_COMPOSE_FILE" start plausible_events_db && log "plausible_events_db started"
+docker compose -f "$NC_COMPOSE_FILE" start plausible_db && log "plausible_db started"
+sleep 10
+docker compose -f "$NC_COMPOSE_FILE" start plausible && log "plausible started"
+
+# ── 6. Restart MariaDB ────────────────────────────────────────────────────────
 log "Starting mariadb container"
 docker compose -f "$NC_COMPOSE_FILE" start mariadb
 log "mariadb started"
 
-# ── 5. Disable Nextcloud maintenance mode ─────────────────────────────────────
+# ── 7. Disable Nextcloud maintenance mode ─────────────────────────────────────
 log "Disabling Nextcloud maintenance mode"
-# Give MariaDB a moment to be ready before Nextcloud reconnects
 sleep 10
 docker exec nextcloud occ maintenance:mode --off \
   && log "Maintenance mode OFF" \
   || log "WARN: could not disable maintenance mode automatically — run manually: docker exec nextcloud occ maintenance:mode --off"
 
-# ── 6. Prune Hetzner repo ─────────────────────────────────────────────────────
+# ── 8. Prune Hetzner repo ─────────────────────────────────────────────────────
 log "Pruning Hetzner repo"
 restic_remote forget \
   --keep-daily   7 \
