@@ -1,0 +1,1 @@
+[{{ smtp_relayhost }}]:{{ smtp_relayport | default(465) }}  {{ smtp_sasl_user }}:{{ smtp_sasl_password }}

@@ -1,23 +1,52 @@
 ---
-- name: Perform a dist-upgrade.
-  ansible.builtin.apt:
-    upgrade: dist
-    update_cache: yes
+- name: Install postfix and SASL client library
+  package:
+    name:
+      - postfix
+      - mailutils
+      - libsasl2-modules
+    state: present
 
 - name: Set mailname
   template:
     src: templates/mailname
     dest: /etc/mailname
 
-- name: Install postfix
-  package:
-    name:
-      - postfix
-      - mailutils
-    state: present
-
-- name: Copy the config file
+- name: Deploy main.cf
   template:
     src: templates/main.cf
     dest: /etc/postfix/main.cf
+  notify: Reload postfix
+
+- name: Deploy sasl_passwd
+  template:
+    src: templates/sasl_passwd
+    dest: /etc/postfix/sasl_passwd
+    owner: root
+    group: root
+    mode: "0600"
+  notify:
+    - Postmap sasl_passwd
+    - Reload postfix
+
+- name: Deploy sender_canonical
+  template:
+    src: templates/sender_canonical
+    dest: /etc/postfix/sender_canonical
+    owner: root
+    group: root
+    mode: "0644"
+  when: smtp_sender_address is defined
+  notify:
+    - Postmap sender_canonical
+    - Reload postfix
+
+- name: Deploy header_checks
+  template:
+    src: templates/header_checks
+    dest: /etc/postfix/header_checks
+    owner: root
+    group: root
+    mode: "0644"
+  when: smtp_subject_prefix is defined
   notify: Reload postfix

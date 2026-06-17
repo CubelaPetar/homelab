@@ -2,6 +2,7 @@ main_username: petar
 hostname: cloud
 domain_base_sq: scienceqorner.com
 domain_base_pc: petarcubela.de
+domain_base: petarcubela.de
 #base_dn: "dc=scienceqorner,dc=com"
 
 disabled_compose_files:
@@ -21,6 +22,16 @@ package_list:
 appdata_path: /home/{{ main_username }}/appdata
 docker_compose_generator_output_path: /home/{{ main_username }}/docker/
 docker_compose_hostname: "cloud"
+
+# postfix send-only relay
+smtp_hostname: cloud.petarcubela.de
+smtp_origin_domain: petarcubela.de
+smtp_relayhost: mail.petarcubela.de
+smtp_relayport: 465
+smtp_sasl_user: reliyya@petarcubela.de
+smtp_sasl_password: "{{ vault_smtp_cloud_password }}"
+smtp_sender_address: cloud@petarcubela.de
+smtp_subject_prefix: cloud
 
 # searxng container
 SEARXNG_UWSGI_WORKERS: "1"

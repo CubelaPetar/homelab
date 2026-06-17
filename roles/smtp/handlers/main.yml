@@ -1,3 +1,9 @@
+- name: Postmap sasl_passwd
+  command: postmap /etc/postfix/sasl_passwd
+
+- name: Postmap sender_canonical
+  command: postmap /etc/postfix/sender_canonical
+
 - name: Reload postfix
   service:
     name: postfix

@@ -1,1 +1,1 @@
-{{ hostname }}.{{ default_domain }}
+{{ hostname }}.{{ domain_base }}
