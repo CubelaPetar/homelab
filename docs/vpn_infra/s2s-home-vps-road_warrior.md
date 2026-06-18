@@ -1,15 +1,15 @@
 # WireGuard Site-to-Site VPN Manual
 
-## Home (DS-Lite/IPv6) ↔ VPS (Dual-Stack) ↔ Work (IPv4)
+## Home (DS-Lite/IPv6) ↔ VPS (Dual-Stack) ↔ IPv4-only client
 
 ---
 
 ## Overview
 
-This setup bridges a DS-Lite home network (IPv6 only, no public IPv4) with an IPv4-only workplace network, using a dual-stack VPS as a WireGuard hub. The tunnel carries both IPv4 (`10.0.0.0/24`) and IPv6 ULA (`fde4:ed21:b2c0:56dd::/64`) so that home devices with only a ULA IPv6 address are reachable from work.
+This setup bridges a DS-Lite home network (IPv6 only, no public IPv4) with any IPv4-only network — corporate, CGNAT, public Wi-Fi — using a dual-stack VPS as a WireGuard hub. The tunnel carries both IPv4 (`10.0.0.0/24`) and IPv6 ULA (`fde4:ed21:b2c0:56dd::/64`) so that home devices with only a ULA IPv6 address are reachable from the client.
 
 ```
-[Home LAN 10.56.0.0/20 + fde4:ed21:b2c0:5600::/56]     [Work Machine]
+[Home LAN 10.56.0.0/20 + fde4:ed21:b2c0:5600::/56]     [Road Warrior]
         |                                                       |
   [OPNsense Firewall]                                  WireGuard client
    WireGuard peer                                       10.0.0.3/24
@@ -30,7 +30,7 @@ This setup bridges a DS-Lite home network (IPv6 only, no public IPv4) with an IP
 |---|---|---|---|---|
 |**Hub**|VPS|`10.0.0.1/24`|`fde4:ed21:b2c0:56dd::1/64`|`VPS_PUBLIC_IPv4_REDACTED` (IPv4) / `VPS_PUBLIC_IPv6_REDACTED` (IPv6)|
 |**Home gateway**|OPNsense|`10.0.0.2/24`|`fde4:ed21:b2c0:56dd::2/64`|`vpn.reliyya.xyz` (dynamic IPv6 via DDNS)|
-|**Work machine**|Laptop/PC|`10.0.0.3/24`|`fde4:ed21:b2c0:56dd::3/64`|`WORK_PUBLIC_IPv4_REDACTED` (IPv4)|
+|**Road warrior**|Laptop/PC|`10.0.0.3/24`|`fde4:ed21:b2c0:56dd::3/64`|`CLIENT_PUBLIC_IPv4_REDACTED` (IPv4)|
 
 - **Home LAN IPv4 subnet:** `10.56.0.0/20`
 - **Home LAN IPv6 ULA block:** `fde4:ed21:b2c0:5600::/56` (covers all home VLANs)
@@ -81,11 +81,11 @@ PublicKey  = <opnsense-public-key>
 # AllowedIPs: tunnel IPs + entire home IPv4 LAN + entire home ULA /56 block
 AllowedIPs = 10.0.0.2/32, fde4:ed21:b2c0:56dd::2/128, 10.56.0.0/20, fde4:ed21:b2c0:5600::/56
 
-# ── Work machine ──────────────────────────────────────────────
+# ── Road warrior / client ─────────────────────────────────────
 [Peer]
-PublicKey  = <work-public-key>
+PublicKey  = <client-public-key>
 AllowedIPs = 10.0.0.3/32, fde4:ed21:b2c0:56dd::3/128
-# No Endpoint needed — work machine initiates the connection
+# No Endpoint needed — client initiates the connection
 ```
 
 > **Note:** `PostUp`/`PostDown` must be on a single unbroken line each. The `wg-quick` parser does not support backslash line continuations.
@@ -236,24 +236,24 @@ All steps performed in the OPNsense web UI.
 
 ---
 
-## Part 3 — Work Machine
+## Part 3 — Road Warrior / Client
 
 ### 3.1 Generate Keys
 
 **Linux/macOS:**
 
 ```bash
-wg genkey | tee work_private.key | wg pubkey > work_public.key
+wg genkey | tee client_private.key | wg pubkey > client_public.key
 ```
 
 **Windows:** Use the official WireGuard GUI — it generates the keypair automatically.
 
-### 3.2 WireGuard Config `work.conf`
+### 3.2 WireGuard Config `client.conf`
 
 ```ini
 [Interface]
 Address    = 10.0.0.3/24, fde4:ed21:b2c0:56dd::3/64
-PrivateKey = <work-private-key>
+PrivateKey = <client-private-key>
 DNS        = 10.56.0.1, fde4:ed21:b2c0:5600::254   # OPNsense MGMT (IPv4 + IPv6)
 
 [Peer]
@@ -263,15 +263,15 @@ AllowedIPs          = 10.0.0.0/24, 10.56.0.0/20, fde4:ed21:b2c0:56dd::/64, fde4:
 PersistentKeepalive = 25
 ```
 
-`AllowedIPs` routes tunnel traffic, the entire home IPv4 LAN, the tunnel IPv6 subnet, and the entire home ULA `/56` block through the VPS. Internet traffic from work remains local.
+`AllowedIPs` routes tunnel traffic, the entire home IPv4 LAN, the tunnel IPv6 subnet, and the entire home ULA `/56` block through the VPS. Internet traffic remains local on the client (split tunnel).
 
-### 3.3 Add Work Machine Peer to VPS
+### 3.3 Add Client Peer to VPS
 
-Once you have the work machine's public key, add it to the VPS:
+Once you have the client's public key, add it to the VPS:
 
 ```bash
 # Add live without dropping existing connections
-wg set wg0 peer <work-public-key> allowed-ips 10.0.0.3/32,fde4:ed21:b2c0:56dd::3/128
+wg set wg0 peer <client-public-key> allowed-ips 10.0.0.3/32,fde4:ed21:b2c0:56dd::3/128
 
 # Persist to config
 wg-quick save wg0
@@ -300,12 +300,12 @@ ping6 fde4:ed21:b2c0:56dd::2
 ping 10.56.0.1
 ping6 fde4:ed21:b2c0:5600::254
 
-# Ping work machine tunnel IPs (once work peer is connected)
+# Ping client tunnel IPs (once client peer is connected)
 ping 10.0.0.3
 ping6 fde4:ed21:b2c0:56dd::3
 ```
 
-### From Work Machine
+### From Road Warrior / Client
 
 ```bash
 # Ping VPS tunnel IPs
@@ -367,6 +367,6 @@ tcpdump -i wg0 icmp
 |Ping to `10.0.0.2` hangs|OPNsense firewall blocking ICMP on wg interface|Add pass rule for `10.0.0.0/24` on wg interface|
 |Can reach tunnel IPs but not home LAN|Missing static route or gateway on OPNsense|Add gateway `10.0.0.1` and route `10.0.0.0/24`|
 |IPv4 works but ULA IPv6 unreachable|Missing `ip6tables` FORWARD rules on VPS|Add `ip6tables -A FORWARD` rules to `PostUp`|
-|IPv6 ULA unreachable from work|Missing IPv6 gateway/route on OPNsense, or missing AllowedIPs entry|Add `wg-vps-tunnel_gw6` gateway, `56dd::/64` route, and ensure AllowedIPs includes `5600::/56`|
+|IPv6 ULA unreachable from client|Missing IPv6 gateway/route on OPNsense, or missing AllowedIPs entry|Add `wg-vps-tunnel_gw6` gateway, `56dd::/64` route, and ensure AllowedIPs includes `5600::/56`|
 |Large transfers fail|MTU overhead|Add `MTU = 1420` to all `[Interface]` blocks|
 |Home peer drops after IPv6 change|DDNS not updating fast enough|Check ddclient/DDNS updater logs; reduce TTL on DNS record|
