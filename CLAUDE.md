@@ -79,3 +79,7 @@ Local roles in `roles/` (not from Galaxy):
 ### Scripts submodule
 
 `scripts/` is a git submodule pointing to `https://git.reliyya.xyz/petar.cubela/scripts.git`. After cloning, run `git submodule update --init` to populate it.
+
+### Ansible playbooks 
+
+We collect ansible playbooks in the folder `playbooks`.
