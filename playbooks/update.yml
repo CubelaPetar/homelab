@@ -2,30 +2,33 @@
 - hosts:
     - homelab
     - vps
-    - hetzner
   become: true
 
   tasks:
-    - name: Perform a dist-upgrade.
+    - name: Update package cache and perform distribution upgrade
       ansible.builtin.apt:
         upgrade: dist
         update_cache: yes
+      description: Updates the apt package cache and performs a full distribution upgrade
 
     #- name: Install essential packages
     #  package:
     #    name: "{{ package_list }}"
     #    state: present
 
-    - name: Check if a reboot is required.
+    - name: Check if reboot is required after upgrade
       ansible.builtin.stat:
         path: /var/run/reboot-required
         get_checksum: no
       register: reboot_required_file
+      description: Checks for the existence of the reboot-required file to determine if a reboot is needed
 
-    - name: Reboot the server (if required).
+    - name: Reboot the server if required
       ansible.builtin.reboot:
       when: reboot_required_file.stat.exists == true
+      description: Reboots the system if a reboot is required after the upgrade process
 
-    - name: Remove dependencies that are no longer required.
+    - name: Remove unused dependencies
       ansible.builtin.apt:
         autoremove: yes
+      description: Removes packages that were automatically installed as dependencies but are no longer needed
