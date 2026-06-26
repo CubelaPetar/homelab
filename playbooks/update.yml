@@ -3,32 +3,42 @@
     - homelab
     - vps
   become: true
+  serial: 1
+
+  pre_tasks:
+    - name: Verify host is reachable before upgrading
+      ansible.builtin.ping:
 
   tasks:
     - name: Update package cache and perform distribution upgrade
       ansible.builtin.apt:
         upgrade: dist
         update_cache: yes
-      description: Updates the apt package cache and performs a full distribution upgrade
-
-    #- name: Install essential packages
-    #  package:
-    #    name: "{{ package_list }}"
-    #    state: present
+        autoclean: yes
 
     - name: Check if reboot is required after upgrade
       ansible.builtin.stat:
         path: /var/run/reboot-required
-        get_checksum: no
       register: reboot_required_file
-      description: Checks for the existence of the reboot-required file to determine if a reboot is needed
 
     - name: Reboot the server if required
       ansible.builtin.reboot:
-      when: reboot_required_file.stat.exists == true
-      description: Reboots the system if a reboot is required after the upgrade process
+        reboot_timeout: 300
+      when: reboot_required_file.stat.exists
 
     - name: Remove unused dependencies
       ansible.builtin.apt:
         autoremove: yes
-      description: Removes packages that were automatically installed as dependencies but are no longer needed
+
+    - name: Record whether this host was rebooted
+      ansible.builtin.set_fact:
+        was_rebooted: "{{ reboot_required_file.stat.exists }}"
+
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Print reboot summary
+      ansible.builtin.debug:
+        msg: "{{ item }} was rebooted"
+      loop: "{{ groups['homelab'] + groups['vps'] }}"
+      when: hostvars[item]['was_rebooted'] | default(false)
